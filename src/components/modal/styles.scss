@@ -1,0 +1,192 @@
+// Module options
+$module-options: #4c5866;
+$module-options-shadow: rgba(43, 135, 218, 0.15);
+$row-options: #29c4a9;
+$section-options: #2b87da;
+$section-specialty-options: #ff9232;
+$section-specialty-options-label: #ef5555;
+$section-fullwidth-options: #6c2eb9;
+
+.et-devtool-state-monitor-module {
+  .et-devtool-state-monitor-module {
+    padding: 0 0 0 20px;
+  }
+
+  &-meta {
+    padding: 10px 10px;
+    background: #efefef;
+    border-radius: 3px;
+    margin-bottom: 5px;
+    line-height: 1em;
+    position: relative;
+  }
+
+  &-state {
+    text-transform: uppercase;
+    font-weight: bold;
+    letter-spacing: 2px;
+    font-size: 10px;
+    position: absolute;
+    top: calc(100% + 10px);
+    left: 0px;
+    z-index: 10;
+
+    span {
+      padding: 5px;
+      border-radius: 3px;
+      margin: 20px 10px 10px 0;
+      padding: 3px 10px;
+      border: 1px solid;
+      color: white;
+    }
+  }
+
+  &-props {
+    padding: 30px 20px 20px;
+    margin: 10px 0;
+    background: #dfdfdf;
+    border-radius: 5px;
+  }
+
+  &--hovered>&-meta {
+    background-color: $module-options;
+    color: white;
+  }
+
+  &--selected>&-meta {
+    background-color: $row-options;
+    color: white;
+  }
+
+  &--dragged>&-meta {
+    background-color: $section-options;
+    color: white;
+  }
+
+  &--right-clicked>&-meta {
+    background: $section-specialty-options;
+    color: white;
+  }
+
+  &--on-clipboard>&-meta {
+    background-color: $section-fullwidth-options;
+    color: white;
+  }
+
+  &--edited>&-meta {
+    background-color: $section-specialty-options-label;
+    color: white;
+  }
+
+
+  &--state {
+    &-hovered {
+      background-color: $module-options;
+    }
+
+    &-selected {
+      background-color: $row-options;
+    }
+
+    &-dragged {
+      background-color: $section-options;
+    }
+
+    &-right-clicked {
+      background: $section-specialty-options;
+    }
+
+    &-on-clipboard {
+      background-color: $section-fullwidth-options;
+    }
+
+    &-edited {
+      background-color: $section-specialty-options-label;
+    }
+  }
+
+  &--name {
+    font-weight: bold;
+    font-size: 12px;
+    display: inline-block;
+    margin-right: 10px;
+    vertical-align: top;
+  }
+
+  &--id {
+    font-size: 11px;
+    display: inline-block;
+    opacity: .8;
+    vertical-align: top;
+    cursor: pointer;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  &--children {
+    border-left: 2px dotted #efefef;
+  }
+}
+
+.et-devtool-state-monitor-overview {
+  background: linear-gradient(0deg, rgba(255, 255, 255, 0.9) 70%, rgba(255, 255, 255, 0.3) 100%);
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+  padding: 40px 10px 20px;
+  margin-top: 20px;
+
+  h3 {
+    font-size: 14px;
+    font-weight: bold;
+    color: #6C2EB9;
+  }
+
+  &-selected {
+    .et-devtool-state-monitor-overview-value {
+      font-weight: bold;
+    }
+  }
+
+  &-keypress {
+    kbd {
+      padding: 3px 10px;
+      margin-right: 7px;
+      border-radius: 3px;
+      box-shadow: 0px 0px 4px #999;
+      background: white;
+      font-size: 13px;
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+  }
+
+  &-shortcut {
+    pre {
+      padding: 0;
+      margin: 0;
+      font-weight: bold;
+    }
+  }
+
+  &-view,
+  &-breakpoint,
+  &-attribute-state,
+  &-selected,
+  &-keypress,
+  &-shortcut {
+    display: flex;
+    margin-bottom: 10px;
+
+    h3 {
+      margin-right: 20px;
+      padding: 5px 0;
+    }
+
+    .et-devtool-state-monitor-overview-value {
+      height: 25px;
+    }
+  }
+}
