@@ -3,7 +3,7 @@
 Plugin Name: D5i Modal Dev State Monitor
 Plugin URI:
 Description: Modal that displays state data
-Version:     1.0.0
+Version:     0.1.0
 Author:      Elegant Themes
 Author URI:  https://elegantthemes.com
 License:     GPL2
@@ -54,8 +54,8 @@ function d5i_state_monitor_enqueue_scripts() {
     if ( et_builder_d5_enabled() && et_core_is_fb_enabled() ) {
         $plugin_dir_url = plugin_dir_url( __FILE__ );
 
-        wp_enqueue_script( "d5i-state-monitor-builder-bundle-script", "{$plugin_dir_url}scripts/bundle.js", array( 'et-frontend-builder' ), '1.0.0', true );
-        wp_enqueue_style( "d5i-state-monitor-builder-bundle-style", "{$plugin_dir_url}styles/bundle.css", array(), '1.0.0' );
+        wp_enqueue_script( "d5i-state-monitor-builder-bundle-script", "{$plugin_dir_url}scripts/bundle.js", array( 'et-frontend-builder' ), '0.1.0', true );
+        wp_enqueue_style( "d5i-state-monitor-builder-bundle-style", "{$plugin_dir_url}styles/bundle.css", array(), '0.1.0' );
     }
 }
 add_action( 'wp_enqueue_scripts', 'd5i_state_monitor_enqueue_scripts' );
