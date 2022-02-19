@@ -5,7 +5,7 @@ module.exports = {
   // Webpack starts bundling the assets from the following file.
   // @see https://webpack.js.org/concepts/#entry
   entry: {
-    bundle: './src/index.js',
+    bundle: './src/index.ts',
   },
 
   // Divi Visual Builder use of scripts that is already enqueued by WordPress and available
@@ -41,9 +41,15 @@ module.exports = {
     // understand JavaScript and JSON files.
     // @see https://webpack.js.org/concepts/#loaders
     rules: [
+      // Handle `.tsx` and `.ts` files.
       {
+        test: /\.tsx?$/,
+        use: 'ts-loader',
+        exclude: /node_modules/,
+      },
 
-        // Handle `.jsx` files.
+      // Handle `.jsx` files.
+      {
         test: /\.jsx?$/,
         exclude: /node_modules/,
         use: [
@@ -138,7 +144,7 @@ module.exports = {
   resolve: {
     // Allows extension to be leave off when importing.
     // @see https://webpack.js.org/configuration/resolve/#resolveextensions
-    extensions: ['.js', '.jsx'],
+    extensions: ['.js', '.jsx', '.tsx', '.ts'],
   },
 
   // Determine where the created bundles will be outputted.

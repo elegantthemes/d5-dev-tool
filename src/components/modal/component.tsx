@@ -46,7 +46,7 @@ const DevStateMonitor = (props) => {
   } = props;
 
   // State badge component.
-  const StateBadge = (active, slug) => (
+  const StateBadge = (active: boolean, slug: string) => (
     ! active ? null : (
       <span className={`et-devtool-state-monitor-module--state-${slug}`}>
         {slug}
@@ -131,7 +131,7 @@ const DevStateMonitor = (props) => {
         {propsMonitor}
         <div className="et-devtool-state-monitor-module--children">
           {(
-            isEmpty(module.children) ? null : module.children.map(childId => (
+            isEmpty(module.children) ? null : module.children.map((childId: string) => (
               <Module
                 key={`et-devtool-module-${childId}`}
                 module={modules[childId]}
