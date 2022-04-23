@@ -1323,6 +1323,66 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@divi/app-ui@link:../../themes/Divi/includes/builder/visual-builder/packages/app-ui::locator=d5i-modal-dev-state-monitor%40workspace%3A.":
+  version: 0.0.0-use.local
+  resolution: "@divi/app-ui@link:../../themes/Divi/includes/builder/visual-builder/packages/app-ui::locator=d5i-modal-dev-state-monitor%40workspace%3A."
+  languageName: node
+  linkType: soft
+
+"@divi/data@link:../../themes/Divi/includes/builder/visual-builder/packages/data::locator=d5i-modal-dev-state-monitor%40workspace%3A.":
+  version: 0.0.0-use.local
+  resolution: "@divi/data@link:../../themes/Divi/includes/builder/visual-builder/packages/data::locator=d5i-modal-dev-state-monitor%40workspace%3A."
+  languageName: node
+  linkType: soft
+
+"@divi/edit-post@link:../../themes/Divi/includes/builder/visual-builder/packages/edit-post::locator=d5i-modal-dev-state-monitor%40workspace%3A.":
+  version: 0.0.0-use.local
+  resolution: "@divi/edit-post@link:../../themes/Divi/includes/builder/visual-builder/packages/edit-post::locator=d5i-modal-dev-state-monitor%40workspace%3A."
+  languageName: node
+  linkType: soft
+
+"@divi/error-boundary@link:../../themes/Divi/includes/builder/visual-builder/packages/error-boundary::locator=d5i-modal-dev-state-monitor%40workspace%3A.":
+  version: 0.0.0-use.local
+  resolution: "@divi/error-boundary@link:../../themes/Divi/includes/builder/visual-builder/packages/error-boundary::locator=d5i-modal-dev-state-monitor%40workspace%3A."
+  languageName: node
+  linkType: soft
+
+"@divi/events@link:../../themes/Divi/includes/builder/visual-builder/packages/events::locator=d5i-modal-dev-state-monitor%40workspace%3A.":
+  version: 0.0.0-use.local
+  resolution: "@divi/events@link:../../themes/Divi/includes/builder/visual-builder/packages/events::locator=d5i-modal-dev-state-monitor%40workspace%3A."
+  languageName: node
+  linkType: soft
+
+"@divi/keyboard-shortcuts@link:../../themes/Divi/includes/builder/visual-builder/packages/keyboard-shortcuts::locator=d5i-modal-dev-state-monitor%40workspace%3A.":
+  version: 0.0.0-use.local
+  resolution: "@divi/keyboard-shortcuts@link:../../themes/Divi/includes/builder/visual-builder/packages/keyboard-shortcuts::locator=d5i-modal-dev-state-monitor%40workspace%3A."
+  languageName: node
+  linkType: soft
+
+"@divi/modal-library@link:../../themes/Divi/includes/builder/visual-builder/packages/modal-library::locator=d5i-modal-dev-state-monitor%40workspace%3A.":
+  version: 0.0.0-use.local
+  resolution: "@divi/modal-library@link:../../themes/Divi/includes/builder/visual-builder/packages/modal-library::locator=d5i-modal-dev-state-monitor%40workspace%3A."
+  languageName: node
+  linkType: soft
+
+"@divi/modal@link:../../themes/Divi/includes/builder/visual-builder/packages/modal::locator=d5i-modal-dev-state-monitor%40workspace%3A.":
+  version: 0.0.0-use.local
+  resolution: "@divi/modal@link:../../themes/Divi/includes/builder/visual-builder/packages/modal::locator=d5i-modal-dev-state-monitor%40workspace%3A."
+  languageName: node
+  linkType: soft
+
+"@divi/object-renderer@link:../../themes/Divi/includes/builder/visual-builder/packages/object-renderer::locator=d5i-modal-dev-state-monitor%40workspace%3A.":
+  version: 0.0.0-use.local
+  resolution: "@divi/object-renderer@link:../../themes/Divi/includes/builder/visual-builder/packages/object-renderer::locator=d5i-modal-dev-state-monitor%40workspace%3A."
+  languageName: node
+  linkType: soft
+
+"@divi/types@link:../../themes/Divi/includes/builder/visual-builder/packages/types::locator=d5i-modal-dev-state-monitor%40workspace%3A.":
+  version: 0.0.0-use.local
+  resolution: "@divi/types@link:../../themes/Divi/includes/builder/visual-builder/packages/types::locator=d5i-modal-dev-state-monitor%40workspace%3A."
+  languageName: node
+  linkType: soft
+
 "@gar/promisify@npm:^1.1.3":
   version: 1.1.3
   resolution: "@gar/promisify@npm:1.1.3"
@@ -1493,6 +1553,13 @@ __metadata:
   version: 0.16.2
   resolution: "@types/scheduler@npm:0.16.2"
   checksum: b6b4dcfeae6deba2e06a70941860fb1435730576d3689225a421280b7742318d1548b3d22c1f66ab68e414f346a9542f29240bc955b6332c5b11e561077583bc
+  languageName: node
+  linkType: hard
+
+"@types/seamless-immutable@npm:^7.1.16":
+  version: 7.1.16
+  resolution: "@types/seamless-immutable@npm:7.1.16"
+  checksum: 611c468114a0a2d80052d80bd33fa29a78ce8334a534407cfd971c65c46a900fac1d322e5e39f6cc08e204f4ec578d2333db0fddfca4c07ba681a2e82cccf73c
   languageName: node
   linkType: hard
 
@@ -2324,9 +2391,20 @@ __metadata:
     "@babel/plugin-proposal-class-properties": ^7.16.7
     "@babel/preset-env": ^7.16.11
     "@babel/preset-react": ^7.16.7
+    "@divi/app-ui": "link:../../themes/Divi/includes/builder/visual-builder/packages/app-ui"
+    "@divi/data": "link:../../themes/Divi/includes/builder/visual-builder/packages/data"
+    "@divi/edit-post": "link:../../themes/Divi/includes/builder/visual-builder/packages/edit-post"
+    "@divi/error-boundary": "link:../../themes/Divi/includes/builder/visual-builder/packages/error-boundary"
+    "@divi/events": "link:../../themes/Divi/includes/builder/visual-builder/packages/events"
+    "@divi/keyboard-shortcuts": "link:../../themes/Divi/includes/builder/visual-builder/packages/keyboard-shortcuts"
+    "@divi/modal": "link:../../themes/Divi/includes/builder/visual-builder/packages/modal"
+    "@divi/modal-library": "link:../../themes/Divi/includes/builder/visual-builder/packages/modal-library"
+    "@divi/object-renderer": "link:../../themes/Divi/includes/builder/visual-builder/packages/object-renderer"
+    "@divi/types": "link:../../themes/Divi/includes/builder/visual-builder/packages/types"
     "@types/jquery": ^3.5.13
     "@types/lodash": ^4.14.178
     "@types/react": 17.0.44
+    "@types/seamless-immutable": ^7.1.16
     "@types/wordpress__i18n": ^3.11.0
     babel-loader: ^8.2.3
     classnames: ^2.3.1

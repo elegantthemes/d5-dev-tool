@@ -16,6 +16,7 @@
     "@types/jquery": "^3.5.13",
     "@types/lodash": "^4.14.178",
     "@types/react": "17.0.44",
+    "@types/seamless-immutable": "^7.1.16",
     "@types/wordpress__i18n": "^3.11.0",
     "babel-loader": "^8.2.3",
     "css-loader": "^6.6.0",
@@ -30,6 +31,16 @@
     "webpack-cli": "^4.9.2"
   },
   "dependencies": {
+    "@divi/app-ui": "link:../../themes/Divi/includes/builder/visual-builder/packages/app-ui",
+    "@divi/data": "link:../../themes/Divi/includes/builder/visual-builder/packages/data",
+    "@divi/edit-post": "link:../../themes/Divi/includes/builder/visual-builder/packages/edit-post",
+    "@divi/error-boundary": "link:../../themes/Divi/includes/builder/visual-builder/packages/error-boundary",
+    "@divi/events": "link:../../themes/Divi/includes/builder/visual-builder/packages/events",
+    "@divi/keyboard-shortcuts": "link:../../themes/Divi/includes/builder/visual-builder/packages/keyboard-shortcuts",
+    "@divi/modal": "link:../../themes/Divi/includes/builder/visual-builder/packages/modal",
+    "@divi/modal-library": "link:../../themes/Divi/includes/builder/visual-builder/packages/modal-library",
+    "@divi/object-renderer": "link:../../themes/Divi/includes/builder/visual-builder/packages/object-renderer",
+    "@divi/types": "link:../../themes/Divi/includes/builder/visual-builder/packages/types",
     "classnames": "^2.3.1"
   },
   "packageManager": "yarn@3.2.0"
