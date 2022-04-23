@@ -20,7 +20,7 @@ export const DevStateMonitorContainer = withSelect((selectStore) => {
   const editPostStoreSelectors = selectStore('divi/edit-post');
   const eventsStoreSelectors = selectStore('divi/events');
   const rightClickOptionsSelectors = selectStore('divi/right-click-options');
-  const modalSelectors = selectStore('divi/modals');
+  const modalSelectors = selectStore('divi/modal-library');
 
   // Modal state.
   const modalState = modalSelectors.getActiveModal(type);
@@ -60,7 +60,7 @@ export const DevStateMonitorContainer = withSelect((selectStore) => {
     // Expanded module prop ids.
     expandedModuleIds,
     setExpandedModuleIds: (moduleIds) => {
-      dispatch('divi/modals').setAttributes({
+      dispatch('divi/modal-library').setAttributes({
         name: 'divi/dev-state-monitor',
         attributes: {
           expandedModuleIds: moduleIds,

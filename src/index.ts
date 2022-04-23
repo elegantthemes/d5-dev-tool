@@ -19,11 +19,11 @@ if (window.top !== window) {
     event.preventDefault();
 
     // Open registered modal, divi/dev-clipboard.
-    dispatch('divi/modals').open({ name });
+    dispatch('divi/modal-library').open({ name });
   });
 
   // On script load, register `divi/clipboard` modal to modals registry.
-  dispatch('divi/modals').addModal({
+  dispatch('divi/modal-library').addModal({
     name,
     type,
     component: DevStateMonitorContainer,
