@@ -1478,14 +1478,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:^17.0.39":
-  version: 17.0.39
-  resolution: "@types/react@npm:17.0.39"
+"@types/react@npm:17.0.44":
+  version: 17.0.44
+  resolution: "@types/react@npm:17.0.44"
   dependencies:
     "@types/prop-types": "*"
     "@types/scheduler": "*"
     csstype: ^3.0.2
-  checksum: bf04d3c2894559012710d595553e12b422d3b91cd8f4f7e122d8cb044ba9c2ba17f6e8a4e09581359cc5509ddc59cd8c8fabd6774f3505a40a45393f074d6e6e
+  checksum: ebee02778ca08f954c316dc907802264e0121c87b8fa2e7e0156ab0ef2a1b0a09d968c016a3600ec4c9a17dc09b4274f292d9b15a1a5369bb7e4072def82808f
   languageName: node
   linkType: hard
 
@@ -2326,7 +2326,7 @@ __metadata:
     "@babel/preset-react": ^7.16.7
     "@types/jquery": ^3.5.13
     "@types/lodash": ^4.14.178
-    "@types/react": ^17.0.39
+    "@types/react": 17.0.44
     "@types/wordpress__i18n": ^3.11.0
     babel-loader: ^8.2.3
     classnames: ^2.3.1
