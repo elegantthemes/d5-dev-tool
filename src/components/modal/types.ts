@@ -6,20 +6,18 @@ import {
 
 // Internal dependencies.
 import {
-  ModuleFlatObject,
-  ModuleFlatObjects,
-} from '@divi/edit-post/src/store/types';
-import { Shortcut } from '@divi/keyboard-shortcuts/src/store/types';
-import {
   AttrState,
   Breakpoint,
+  ModuleFlatObject,
+  ModuleFlatObjects,
 } from '@divi/types';
-import { ViewType } from '@divi/app-ui/src/store/types';
+import { Shortcut } from '@divi/keyboard-shortcuts';
+import { ViewType } from '@divi/app-ui';
 import {
   HoveredModule,
   SelectedModule,
-} from '@divi/events/src/store/types';
-import { ModalStates } from '@divi/modal-library/src/store/types';
+} from '@divi/events';
+import { ModalStates } from '@divi/modal';
 
 
 export type ContaninerProps = ModalStates;

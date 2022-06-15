@@ -10,7 +10,8 @@ import {
   dispatch,
   withSelect,
 } from '@divi/data';
-import { SelectedModules } from '@divi/events/src/store/types';
+import { SelectedModules } from '@divi/events';
+import {} from '@divi/modal-library';
 
 // Local dependencies.
 import { DevStateMonitor } from './component';

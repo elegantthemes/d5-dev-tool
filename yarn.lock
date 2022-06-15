@@ -1501,6 +1501,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/google.maps@npm:^3.49.2":
+  version: 3.49.2
+  resolution: "@types/google.maps@npm:3.49.2"
+  checksum: ca2cb7842dfbc10551b5a33a052bd1c90dab21c13d5632601d87bc908064516a3f90b0b7eb517ce1024ea98734e490e2a90028c5534c52a82ceffb2e1b241fc9
+  languageName: node
+  linkType: hard
+
 "@types/jquery@npm:^3.5.13":
   version: 3.5.13
   resolution: "@types/jquery@npm:3.5.13"
@@ -2401,6 +2408,7 @@ __metadata:
     "@divi/modal-library": "link:../../themes/Divi/includes/builder/visual-builder/packages/modal-library"
     "@divi/object-renderer": "link:../../themes/Divi/includes/builder/visual-builder/packages/object-renderer"
     "@divi/types": "link:../../themes/Divi/includes/builder/visual-builder/packages/types"
+    "@types/google.maps": ^3.49.2
     "@types/jquery": ^3.5.13
     "@types/lodash": ^4.14.178
     "@types/react": 17.0.44
