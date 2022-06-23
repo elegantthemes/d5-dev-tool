@@ -13,6 +13,15 @@
     "@babel/plugin-proposal-class-properties": "^7.16.7",
     "@babel/preset-env": "^7.16.11",
     "@babel/preset-react": "^7.16.7",
+    "@divi/types": "link:../../themes/Divi/includes/builder/visual-builder/packages/types",
+    "@types/divi__app-ui": "link:../../themes/Divi/includes/builder/visual-builder/packages/types-divi__app-ui",
+    "@types/divi__data": "link:../../themes/Divi/includes/builder/visual-builder/packages/types-divi__data",
+    "@types/divi__error-boundary": "link:../../themes/Divi/includes/builder/visual-builder/packages/types-divi__error-boundary",
+    "@types/divi__events": "link:../../themes/Divi/includes/builder/visual-builder/packages/types-divi__events",
+    "@types/divi__keyboard-shortcuts": "link:../../themes/Divi/includes/builder/visual-builder/packages/types-divi__keyboard-shortcuts",
+    "@types/divi__modal": "link:../../themes/Divi/includes/builder/visual-builder/packages/types-divi__modal",
+    "@types/divi__modal-library": "link:../../themes/Divi/includes/builder/visual-builder/packages/types-divi__modal-library",
+    "@types/divi__object-renderer": "link:../../themes/Divi/includes/builder/visual-builder/packages/types-divi__object-renderer",
     "@types/google.maps": "^3.49.2",
     "@types/jquery": "^3.5.13",
     "@types/lodash": "^4.14.178",
@@ -32,16 +41,6 @@
     "webpack-cli": "^4.9.2"
   },
   "dependencies": {
-    "@divi/app-ui": "link:../../themes/Divi/includes/builder/visual-builder/packages/app-ui",
-    "@divi/data": "link:../../themes/Divi/includes/builder/visual-builder/packages/data",
-    "@divi/edit-post": "link:../../themes/Divi/includes/builder/visual-builder/packages/edit-post",
-    "@divi/error-boundary": "link:../../themes/Divi/includes/builder/visual-builder/packages/error-boundary",
-    "@divi/events": "link:../../themes/Divi/includes/builder/visual-builder/packages/events",
-    "@divi/keyboard-shortcuts": "link:../../themes/Divi/includes/builder/visual-builder/packages/keyboard-shortcuts",
-    "@divi/modal": "link:../../themes/Divi/includes/builder/visual-builder/packages/modal",
-    "@divi/modal-library": "link:../../themes/Divi/includes/builder/visual-builder/packages/modal-library",
-    "@divi/object-renderer": "link:../../themes/Divi/includes/builder/visual-builder/packages/object-renderer",
-    "@divi/types": "link:../../themes/Divi/includes/builder/visual-builder/packages/types",
     "classnames": "^2.3.1"
   },
   "packageManager": "yarn@3.2.0"
