@@ -24,9 +24,13 @@ import { ObjectRenderer } from '@divi/object-renderer';
 import { ErrorBoundary } from '@divi/error-boundary';
 
 // Local dependencies.
+import {
+  DevStateMonitorProps,
+  ModuleProps,
+} from './types';
 import './styles.scss';
 
-const DevStateMonitor = (props) => {
+const DevStateMonitor = (props: DevStateMonitorProps) => {
   const {
     name,
     modules,
@@ -46,7 +50,7 @@ const DevStateMonitor = (props) => {
   } = props;
 
   // State badge component.
-  const StateBadge = (active, slug) => (
+  const StateBadge = (active: boolean, slug: string) => (
     ! active ? null : (
       <span className={`et-devtool-state-monitor-module--state-${slug}`}>
         {slug}
@@ -55,7 +59,7 @@ const DevStateMonitor = (props) => {
   );
 
   // Recursive module list component.
-  const Module = ({ module }) => {
+  const Module = ({ module }: ModuleProps) => {
     // Hover state.
     const isHovered    = get(hoveredModule, 'id') === module.id;
     const stateHovered = StateBadge(isHovered, 'hovered');
@@ -131,7 +135,7 @@ const DevStateMonitor = (props) => {
         {propsMonitor}
         <div className="et-devtool-state-monitor-module--children">
           {(
-            isEmpty(module.children) ? null : module.children.map(childId => (
+            isEmpty(module.children) ? null : module.children.map((childId: string) => (
               <Module
                 key={`et-devtool-module-${childId}`}
                 module={modules[childId]}

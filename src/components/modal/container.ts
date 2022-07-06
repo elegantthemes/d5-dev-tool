@@ -1,14 +1,17 @@
 // External dependencies.
+import { FC } from 'react';
 import {
   get,
   map,
 } from 'lodash';
 
-// WordPress dependencies
+// Internal dependencies
 import {
   dispatch,
   withSelect,
 } from '@divi/data';
+import { SelectedModules } from '@divi/events';
+import {} from '@divi/modal-library';
 
 // Local dependencies.
 import { DevStateMonitor } from './component';
@@ -20,7 +23,7 @@ export const DevStateMonitorContainer = withSelect((selectStore) => {
   const editPostStoreSelectors = selectStore('divi/edit-post');
   const eventsStoreSelectors = selectStore('divi/events');
   const rightClickOptionsSelectors = selectStore('divi/right-click-options');
-  const modalSelectors = selectStore('divi/modals');
+  const modalSelectors = selectStore('divi/modal-library');
 
   // Modal state.
   const modalState = modalSelectors.getActiveModal(type);
@@ -32,7 +35,7 @@ export const DevStateMonitorContainer = withSelect((selectStore) => {
   const singleModalState = modalSelectors.getActiveModal('single');
 
   // Module ids.
-  const getModuleIds = (modules) => map(modules, module => module.id);
+  const getModuleIds = (modules: SelectedModules) => map(modules, module => module.id);
 
   // Right clicks.
   const rightClick = rightClickOptionsSelectors.getState();
@@ -43,7 +46,7 @@ export const DevStateMonitorContainer = withSelect((selectStore) => {
   return {
     modules: editPostStoreSelectors.getContent(),
     hoveredModule: eventsStoreSelectors.getHoveredModule(),
-    selectedModules: getModuleIds(eventsStoreSelectors.getSelectedModules()),
+    selectedModules: getModuleIds(eventsStoreSelectors.getSelectedModules(false)),
     draggedModules: getModuleIds(eventsStoreSelectors.getDraggedModules().asMutable({ deep: true })),
     pressedKeys: selectStore('divi/keyboard-shortcuts').getPressedKeys(),
     currentShortcut: selectStore('divi/keyboard-shortcuts').getCurrentShortcut(),
@@ -59,8 +62,8 @@ export const DevStateMonitorContainer = withSelect((selectStore) => {
 
     // Expanded module prop ids.
     expandedModuleIds,
-    setExpandedModuleIds: (moduleIds) => {
-      dispatch('divi/modals').setAttributes({
+    setExpandedModuleIds: (moduleIds: string[]) => {
+      dispatch('divi/modal-library').setAttributes({
         name: 'divi/dev-state-monitor',
         attributes: {
           expandedModuleIds: moduleIds,
@@ -73,4 +76,4 @@ export const DevStateMonitorContainer = withSelect((selectStore) => {
 
     rightClickedModuleId,
   };
-})(DevStateMonitor);
+})(DevStateMonitor as FC);

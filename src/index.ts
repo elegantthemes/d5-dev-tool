@@ -15,15 +15,15 @@ if (window.top !== window) {
 
   // Listen to click event on top window's admin bar item. The condition above ensures that the
   // following is only executed in app window.
-  window.top.jQuery('#wp-admin-bar-d5i-modal-dev-state-monitor a').on('click', (event) => {
+  window.top.jQuery('#wp-admin-bar-d5i-modal-dev-state-monitor a').on('click', (event: JQuery.Event) => {
     event.preventDefault();
 
     // Open registered modal, divi/dev-clipboard.
-    dispatch('divi/modals').open({ name });
+    dispatch('divi/modal-library').open({ name });
   });
 
   // On script load, register `divi/clipboard` modal to modals registry.
-  dispatch('divi/modals').addModal({
+  dispatch('divi/modal-library').addModal({
     name,
     type,
     component: DevStateMonitorContainer,
