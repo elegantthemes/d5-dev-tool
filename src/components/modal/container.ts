@@ -71,7 +71,7 @@ export const DevStateMonitorContainer = withSelect((selectStore) => {
       });
     },
 
-    // @todo (D5i) to be updated once new selector has been made.
+    // @todo (D5) to be updated once new selector has been made.
     lastModuleClipboard: {},
 
     rightClickedModuleId,
