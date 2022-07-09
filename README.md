@@ -29,3 +29,11 @@ Technically, examples that can be drawn from this extension samples:
 - [Registered onClick event on admin bar item on top window.](https://github.com/elegantthemes/d5i-modal-dev-state-monitor/blob/main/src/index.ts#L14-L31)
 - [Using typed component from components imported as externals](https://github.com/elegantthemes/d5i-modal-dev-state-monitor/blob/main/src/components/modal/component.tsx#L17-L24)
 - [Using Higher Order Component to retrieve data from store and pass it into custom modal component.](https://github.com/elegantthemes/d5i-modal-dev-state-monitor/blob/main/src/components/modal/container.ts#L22-L79)
+
+## Screenshots
+![Click here to open D5 Modal Dev State Monitor](https://user-images.githubusercontent.com/916442/178093897-5846e59c-8f95-40ec-b328-e0cecf034bbb.png)
+Click here to open D5 Modal Dev State Monitor.
+
+
+![State monitor modal features](https://user-images.githubusercontent.com/916442/178093900-1e70d508-8bd9-4b2d-a54a-8475b206e075.png)
+State monitor modal features.
