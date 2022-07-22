@@ -64,8 +64,26 @@ function d5_state_monitor_enqueue_scripts() {
     if ( et_builder_d5_enabled() && et_core_is_fb_enabled() ) {
         $plugin_dir_url = plugin_dir_url( __FILE__ );
 
-        wp_enqueue_script( "d5-state-monitor-builder-bundle-script", "{$plugin_dir_url}scripts/bundle.js", array( 'divi-visual-builder' ), '0.1.0', true );
-        wp_enqueue_style( "d5-state-monitor-builder-bundle-style", "{$plugin_dir_url}styles/bundle.css", array(), '0.1.0' );
+        wp_enqueue_script(
+            "d5-state-monitor-builder-bundle-script",
+            "{$plugin_dir_url}scripts/bundle.js",
+            array(
+                'divi-visual-builder',
+                'divi-data',
+                'divi-error-boundary',
+                'divi-modal',
+                'divi-object-renderer'
+            ),
+            '0.1.0',
+            true
+        );
+
+        wp_enqueue_style(
+            "d5-state-monitor-builder-bundle-style",
+            "{$plugin_dir_url}styles/bundle.css",
+            array(),
+            '0.1.0'
+        );
     }
 }
 add_action( 'et_vb_assets_after_enqueue_package_script', 'd5_state_monitor_enqueue_scripts' );
