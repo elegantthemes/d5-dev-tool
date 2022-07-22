@@ -68,4 +68,4 @@ function d5_state_monitor_enqueue_scripts() {
         wp_enqueue_style( "d5-state-monitor-builder-bundle-style", "{$plugin_dir_url}styles/bundle.css", array(), '0.1.0' );
     }
 }
-add_action( 'et_fb_enqueue_assets', 'd5_state_monitor_enqueue_scripts' );
+add_action( 'et_vb_assets_after_enqueue_package_script', 'd5_state_monitor_enqueue_scripts' );
