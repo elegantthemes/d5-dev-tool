@@ -34,7 +34,7 @@ along with D5 Modal Dev State Monitor. If not, see https://www.gnu.org/licenses/
 function d5_state_monitor_admin_bar_link( $admin_bar ) {
 
 	// Only display this admin bar item on D5 Visual Builder.
-	if ( et_builder_d5_enabled() && et_core_is_fb_enabled() ) {
+	if ( function_exists( 'et_builder_d5_enabled' ) && et_builder_d5_enabled() && et_core_is_fb_enabled() ) {
         $d5_dev_tools_id = 'd5-dev-tools';
 
         // Main menu.
@@ -61,7 +61,7 @@ add_action( 'admin_bar_menu', 'd5_state_monitor_admin_bar_link', 700 );
  * @since ??
  */
 function d5_state_monitor_enqueue_scripts() {
-    if ( et_builder_d5_enabled() && et_core_is_fb_enabled() ) {
+    if ( function_exists( 'et_builder_d5_enabled' ) && et_builder_d5_enabled() && et_core_is_fb_enabled() ) {
         $plugin_dir_url = plugin_dir_url( __FILE__ );
 
         wp_enqueue_script(
