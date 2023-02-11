@@ -5,6 +5,7 @@
   "repository": "https://github.com/elegantthemes/d5i-modal-dev-state-monitor",
   "author": "Elegant Themes",
   "scripts": {
+    "setup-yarn": "yarn set version 3.2.0 && yarn config set nodeLinker node-modules",
     "start": "NODE_ENV=development webpack -w --config webpack.config.js --progress",
     "build": "NODE_ENV=production webpack --config webpack.config.js --progress"
   },
@@ -21,7 +22,9 @@
     "@types/divi__keyboard-shortcuts": "link:../../themes/Divi/includes/builder-5/visual-builder/packages/types-divi__keyboard-shortcuts",
     "@types/divi__modal": "link:../../themes/Divi/includes/builder-5/visual-builder/packages/types-divi__modal",
     "@types/divi__modal-library": "link:../../themes/Divi/includes/builder-5/visual-builder/packages/types-divi__modal-library",
+    "@types/divi__module": "link:../../themes/Divi/includes/builder-5/visual-builder/packages/types-divi__module",
     "@types/divi__object-renderer": "link:../../themes/Divi/includes/builder-5/visual-builder/packages/types-divi__object-renderer",
+    "@types/divi__right-click-options": "link:../../themes/Divi/includes/builder-5/visual-builder/packages/types-divi__right-click-options",
     "@types/google.maps": "^3.49.2",
     "@types/jquery": "^3.5.13",
     "@types/lodash": "^4.14.178",
