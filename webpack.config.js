@@ -30,6 +30,7 @@ module.exports = {
     '@divi/error-boundary': ['divi', 'errorBoundary'],
     '@divi/modal': ['divi', 'modal'],
     '@divi/object-renderer': ['divi', 'objectRenderer'],
+    '@divi/module': ['divi', 'module'],
   },
 
   // This option determine how different types of module within the project will be treated.

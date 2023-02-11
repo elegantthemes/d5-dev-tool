@@ -24,6 +24,7 @@ export const DevStateMonitorContainer = withSelect((selectStore) => {
   const eventsStoreSelectors = selectStore('divi/events');
   const rightClickOptionsSelectors = selectStore('divi/right-click-options');
   const modalSelectors = selectStore('divi/modal-library');
+  const moduleSelectors = selectStore('divi/module');
 
   // Modal state.
   const modalState = modalSelectors.getActiveModal(type);
@@ -45,6 +46,7 @@ export const DevStateMonitorContainer = withSelect((selectStore) => {
 
   return {
     modules: editPostStoreSelectors.getContent(),
+    scripts: moduleSelectors.getScripts(),
     hoveredModule: eventsStoreSelectors.getHoveredModule(),
     selectedModules: getModuleIds(eventsStoreSelectors.getSelectedModules(false)),
     draggedModules: getModuleIds(eventsStoreSelectors.getDraggedModules().asMutable({ deep: true })),

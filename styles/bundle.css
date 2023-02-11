@@ -141,3 +141,10 @@
 .et-devtool-state-monitor-overview-view .et-devtool-state-monitor-overview-value, .et-devtool-state-monitor-overview-breakpoint .et-devtool-state-monitor-overview-value, .et-devtool-state-monitor-overview-attribute-state .et-devtool-state-monitor-overview-value, .et-devtool-state-monitor-overview-selected .et-devtool-state-monitor-overview-value, .et-devtool-state-monitor-overview-keypress .et-devtool-state-monitor-overview-value, .et-devtool-state-monitor-overview-shortcut .et-devtool-state-monitor-overview-value {
   height: 25px;
 }
+
+.et-vb-dev-state-monitor-script {
+  margin-top: 20px;
+}
+.et-vb-dev-state-monitor-script:first-child {
+  margin-top: 0;
+}

@@ -11,6 +11,9 @@ import {
   ModuleFlatObject,
   ModuleFlatObjects,
 } from '@divi/types';
+import {
+  EditPostStoreState
+} from '@divi/edit-post';
 import { Shortcut } from '@divi/keyboard-shortcuts';
 import { ViewType } from '@divi/app-ui';
 import {
@@ -25,6 +28,7 @@ export type ContaninerProps = ModalStates;
 export interface DevStateMonitorProps {
   name: ModalStates['name'];
   modules: ModuleFlatObjects;
+  scripts: EditPostStoreState['scripts'];
   hoveredModule: HoveredModule,
   selectedModules: string[],
   draggedModules: string[],
@@ -38,6 +42,7 @@ export interface DevStateMonitorProps {
   attributeState: AttrState;
   breakpoint: Breakpoint;
   view: ViewType;
+  tab: string;
 }
 
 export interface ModuleProps {

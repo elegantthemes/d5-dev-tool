@@ -1,3 +1,5 @@
+import jQuery from 'jquery';
+
 // Divi dependencies
 import { dispatch } from '@divi/data';
 
@@ -7,6 +9,12 @@ import {
   name,
   type
 } from './components/modal';
+
+declare global {
+  interface Window {
+    jQuery: typeof jQuery;
+  }
+}
 
 // Open divi/dev-state-monitor, a registered modal, when state-monitor menu item on admin bar is clicked.
 // This ensure that the following function is registered on app window.

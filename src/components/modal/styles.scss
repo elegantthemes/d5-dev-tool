@@ -190,3 +190,11 @@ $section-fullwidth-options: #6c2eb9;
     }
   }
 }
+
+.et-vb-dev-state-monitor-script {
+  margin-top: 20px;
+
+  &:first-child {
+    margin-top: 0;
+  }
+}

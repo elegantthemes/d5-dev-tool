@@ -1462,9 +1462,21 @@ __metadata:
   languageName: node
   linkType: soft
 
+"@types/divi__module@link:../../themes/Divi/includes/builder-5/visual-builder/packages/types-divi__module::locator=d5i-modal-dev-state-monitor%40workspace%3A.":
+  version: 0.0.0-use.local
+  resolution: "@types/divi__module@link:../../themes/Divi/includes/builder-5/visual-builder/packages/types-divi__module::locator=d5i-modal-dev-state-monitor%40workspace%3A."
+  languageName: node
+  linkType: soft
+
 "@types/divi__object-renderer@link:../../themes/Divi/includes/builder-5/visual-builder/packages/types-divi__object-renderer::locator=d5i-modal-dev-state-monitor%40workspace%3A.":
   version: 0.0.0-use.local
   resolution: "@types/divi__object-renderer@link:../../themes/Divi/includes/builder-5/visual-builder/packages/types-divi__object-renderer::locator=d5i-modal-dev-state-monitor%40workspace%3A."
+  languageName: node
+  linkType: soft
+
+"@types/divi__right-click-options@link:../../themes/Divi/includes/builder-5/visual-builder/packages/types-divi__right-click-options::locator=d5i-modal-dev-state-monitor%40workspace%3A.":
+  version: 0.0.0-use.local
+  resolution: "@types/divi__right-click-options@link:../../themes/Divi/includes/builder-5/visual-builder/packages/types-divi__right-click-options::locator=d5i-modal-dev-state-monitor%40workspace%3A."
   languageName: node
   linkType: soft
 
@@ -2400,7 +2412,9 @@ __metadata:
     "@types/divi__keyboard-shortcuts": "link:../../themes/Divi/includes/builder-5/visual-builder/packages/types-divi__keyboard-shortcuts"
     "@types/divi__modal": "link:../../themes/Divi/includes/builder-5/visual-builder/packages/types-divi__modal"
     "@types/divi__modal-library": "link:../../themes/Divi/includes/builder-5/visual-builder/packages/types-divi__modal-library"
+    "@types/divi__module": "link:../../themes/Divi/includes/builder-5/visual-builder/packages/types-divi__module"
     "@types/divi__object-renderer": "link:../../themes/Divi/includes/builder-5/visual-builder/packages/types-divi__object-renderer"
+    "@types/divi__right-click-options": "link:../../themes/Divi/includes/builder-5/visual-builder/packages/types-divi__right-click-options"
     "@types/google.maps": ^3.49.2
     "@types/jquery": ^3.5.13
     "@types/lodash": ^4.14.178

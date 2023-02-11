@@ -1,6 +1,6 @@
 <?php
 /*
-Plugin Name: D5 Modal Dev State Monitor
+Plugin Name: D5 Extension Example: Modal Dev State Monitor
 Plugin URI:
 Description: Modal that displays state data
 Version:     0.1.0

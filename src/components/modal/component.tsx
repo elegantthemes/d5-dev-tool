@@ -1,6 +1,7 @@
 // External dependencies.
 import React from 'react';
 import {
+  forEach,
   get,
   includes,
   isEmpty,
@@ -17,7 +18,7 @@ import { __ } from '@wordpress/i18n';
 import {
   WrapperContainer,
   Header,
-  BodyContainer,
+  BodyPanelWrapperContainer,
   PanelContainer,
 } from '@divi/modal';
 import { ObjectRenderer } from '@divi/object-renderer';
@@ -29,6 +30,21 @@ import {
   ModuleProps,
 } from './types';
 import './styles.scss';
+
+const ScriptList = ({ scripts }: { scripts: DevStateMonitorProps['scripts'] }) => {
+  const scriptList = [];
+
+  forEach(scripts, (scriptItems, scriptName) => {
+    scriptList.push((
+      <div key={`state-monitor-script-${scriptName}`} className="et-vb-dev-state-monitor-script">
+        <h2 className="et-vb-dev-state-monitor-script-heading">{scriptName}</h2>
+        <ObjectRenderer values={scriptItems} />
+      </div>
+    ))
+  });
+
+  return scriptList;
+}
 
 const DevStateMonitor = (props: DevStateMonitorProps) => {
   const {
@@ -47,6 +63,8 @@ const DevStateMonitor = (props: DevStateMonitorProps) => {
     attributeState,
     breakpoint,
     view,
+    tab,
+    scripts,
   } = props;
 
   // State badge component.
@@ -158,12 +176,13 @@ const DevStateMonitor = (props: DevStateMonitorProps) => {
         expandable
         snappable
         modalName={name}
+        modalActiveTab={tab ? tab : 'layout'}
       >
         <Header
           name={__('State Monitor', 'et_builder')}
         />
-        <BodyContainer>
-          <PanelContainer id="state-monitor" opened>
+        <BodyPanelWrapperContainer>
+          <PanelContainer id="layout" label={__('Layout', 'et_builder')}>
             <div style={{
               padding: '20px 20px 40px 20px',
             }}
@@ -219,7 +238,14 @@ const DevStateMonitor = (props: DevStateMonitorProps) => {
               </div>
             </div>
           </PanelContainer>
-        </BodyContainer>
+          <PanelContainer id="scripts" label={__('Scripts', 'et_builder')}>
+            <div style={{
+              padding: '20px 20px 40px 20px',
+            }}>
+              <ScriptList scripts={scripts} />
+            </div>
+          </PanelContainer>
+        </BodyPanelWrapperContainer>
       </WrapperContainer>
     </ErrorBoundary>
   );
