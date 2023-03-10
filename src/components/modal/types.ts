@@ -22,12 +22,20 @@ import {
 } from '@divi/events';
 import { ModalStates } from '@divi/modal';
 
+// @types/divi__global-layouts type package doesn't exist, so we'll manually create it.
+interface GlobalLayoutItem {
+  content: ModuleFlatObjects;
+  modulesMap: ModuleFlatObjects[];
+  owners: string[];
+  id: string;
+}
 
 export type ContaninerProps = ModalStates;
 
 export interface DevStateMonitorProps {
   name: ModalStates['name'];
   modules: ModuleFlatObjects;
+  globalModules: GlobalLayoutItem[];
   scripts: EditPostStoreState['scripts'];
   hoveredModule: HoveredModule,
   selectedModules: string[],

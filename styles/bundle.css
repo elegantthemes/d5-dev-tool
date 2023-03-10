@@ -78,6 +78,9 @@
 .et-devtool-state-monitor-module--state-edited {
   background-color: #ef5555;
 }
+.et-devtool-state-monitor-module--state-global {
+  background-color: #97d000;
+}
 .et-devtool-state-monitor-module--name {
   font-weight: bold;
   font-size: 12px;
@@ -147,4 +150,14 @@
 }
 .et-vb-dev-state-monitor-script:first-child {
   margin-top: 0;
+}
+
+.et-devtool-state-monitor-global-module-item {
+  margin-bottom: 40px;
+  border: 3px solid #97d000;
+  padding: 15px;
+  border-radius: 10px;
+}
+.et-devtool-state-monitor-global-module-item .et-devtool-state-monitor-module-state {
+  display: none;
 }

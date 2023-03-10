@@ -44,8 +44,32 @@ export const DevStateMonitorContainer = withSelect((selectStore) => {
     ? get(rightClick, ['owner', 'id'])
     : '';
 
+  // Modules.
+  const modules = editPostStoreSelectors.getContent();
+
+  // Get global module ids. Get global module id based on content module's.
+  // Automatically remove duplicate id found.
+  const globalModuleIds = Array.from(new Set(Object
+    .entries(modules)
+    .filter(module => {
+      const globalModule = module[1]?.props?.attrs?.globalModule;
+
+      return 'string' === typeof globalModule && '' !== globalModule;
+    })
+    .map(module => module[1]?.props?.attrs?.globalModule)));
+
+  const globalModules = globalModuleIds.map(id => {
+    const globalModule = selectStore('divi/global-layouts').getLayout(id);
+
+    return {
+      id,
+      ...globalModule,
+    }
+  });
+
   return {
-    modules: editPostStoreSelectors.getContent(),
+    modules,
+    globalModules,
     scripts: moduleSelectors.getScripts(),
     hoveredModule: eventsStoreSelectors.getHoveredModule(),
     selectedModules: getModuleIds(eventsStoreSelectors.getSelectedModules(false)),

@@ -5,6 +5,7 @@ import {
   get,
   includes,
   isEmpty,
+  isString,
   map,
   noop,
   without,
@@ -50,6 +51,7 @@ const DevStateMonitor = (props: DevStateMonitorProps) => {
   const {
     name,
     modules,
+    globalModules,
     hoveredModule,
     selectedModules,
     draggedModules,
@@ -66,12 +68,11 @@ const DevStateMonitor = (props: DevStateMonitorProps) => {
     tab,
     scripts,
   } = props;
-
   // State badge component.
-  const StateBadge = (active: boolean, slug: string) => (
+  const StateBadge = (active: boolean, slug: string, label: string = '') => (
     ! active ? null : (
       <span className={`et-devtool-state-monitor-module--state-${slug}`}>
-        {slug}
+        {slug}{label}
       </span>
     )
   );
@@ -101,6 +102,11 @@ const DevStateMonitor = (props: DevStateMonitorProps) => {
     // Edited state
     const isEdited    = module.id === activeModalSetting;
     const stateEdited = StateBadge(isEdited, 'edited');
+
+    // Global module state.
+    const globalId = module?.props?.attrs?.globalModule;
+    const isGlobal = isString(globalId) && '' !== globalId;
+    const stateGlobal = StateBadge(isGlobal, 'global', `- ${globalId}`);
 
     // Props monitor
     const isPropsExpanded = includes(expandedModuleIds, module.id);
@@ -142,12 +148,13 @@ const DevStateMonitor = (props: DevStateMonitorProps) => {
 
           </span>
           <div className="et-devtool-state-monitor-module-state">
-            {stateHovered}
+            {stateGlobal}
             {stateSelected}
             {stateDragged}
             {stateRightClicked}
             {stateOnClipboard}
             {stateEdited}
+            {stateHovered}
           </div>
         </div>
         {propsMonitor}
@@ -177,6 +184,7 @@ const DevStateMonitor = (props: DevStateMonitorProps) => {
         snappable
         modalName={name}
         modalActiveTab={tab ? tab : 'layout'}
+        multiPanels
       >
         <Header
           name={__('State Monitor', 'et_builder')}
@@ -243,6 +251,21 @@ const DevStateMonitor = (props: DevStateMonitorProps) => {
               padding: '20px 20px 40px 20px',
             }}>
               <ScriptList scripts={scripts} />
+            </div>
+          </PanelContainer>
+          <PanelContainer id="global-modules" label={__('Global Modules', 'et_builder')}>
+            <div style={{
+              padding: '20px 20px 40px 20px',
+            }}>
+              {globalModules.map(globalModule => (
+                <div
+                  key={`global-module-item-${globalModule.id}`}
+                  className="et-devtool-state-monitor-global-module-item"
+                >
+                  <h3>id: {globalModule.id}</h3>
+                  <Module module={globalModule?.content?.root} />
+                </div>
+              ))}
             </div>
           </PanelContainer>
         </BodyPanelWrapperContainer>
