@@ -36,7 +36,7 @@ export const DevStateMonitorContainer = withSelect((selectStore) => {
   const singleModalState = modalSelectors.getActiveModal('single');
 
   // Module ids.
-  const getModuleIds = (modules: SelectedModules) => map(modules, module => module.id);
+  const getModuleIds = (modules: SelectedModules) => map(modules, module => module?.id);
 
   // Right clicks.
   const rightClick = rightClickOptionsSelectors.getState();

@@ -80,27 +80,27 @@ const DevStateMonitor = (props: DevStateMonitorProps) => {
   // Recursive module list component.
   const Module = ({ module }: ModuleProps) => {
     // Hover state.
-    const isHovered    = get(hoveredModule, 'id') === module.id;
+    const isHovered    = get(hoveredModule, 'id') === module?.id;
     const stateHovered = StateBadge(isHovered, 'hovered');
 
     // Selected state.
-    const isSelected    = includes(selectedModules, module.id);
+    const isSelected    = includes(selectedModules, module?.id);
     const stateSelected = StateBadge(isSelected, 'selected');
 
     // Dragged state
-    const isDragged    = includes(draggedModules, module.id);
+    const isDragged    = includes(draggedModules, module?.id);
     const stateDragged = StateBadge(isDragged, 'dragged');
 
     // Right click state.
-    const isRightClicked    = rightClickedModuleId === module.id;
+    const isRightClicked    = rightClickedModuleId === module?.id;
     const stateRightClicked = StateBadge(isRightClicked, 'right-clicked');
 
     // Cliboard state
-    const isOnClipboard    = get(lastModuleClipboard, ['id']) === module.id;
+    const isOnClipboard    = get(lastModuleClipboard, ['id']) === module?.id;
     const stateOnClipboard = StateBadge(isOnClipboard, 'on-clipboard');
 
     // Edited state
-    const isEdited    = module.id === activeModalSetting;
+    const isEdited    = module?.id === activeModalSetting;
     const stateEdited = StateBadge(isEdited, 'edited');
 
     // Global module state.
@@ -109,7 +109,7 @@ const DevStateMonitor = (props: DevStateMonitorProps) => {
     const stateGlobal = StateBadge(isGlobal, 'global', `- ${globalId}`);
 
     // Props monitor
-    const isPropsExpanded = includes(expandedModuleIds, module.id);
+    const isPropsExpanded = includes(expandedModuleIds, module?.id);
     const propsMonitor    = ! isPropsExpanded
       ? null
       : (
@@ -138,13 +138,13 @@ const DevStateMonitor = (props: DevStateMonitorProps) => {
             onKeyPress={noop}
             onClick={() => {
               const updatedExpandedModuleIds = isPropsExpanded
-                ? without(expandedModuleIds, module.id)
-                : [].concat(expandedModuleIds).concat(module.id);
+                ? without(expandedModuleIds, module?.id)
+                : [].concat(expandedModuleIds).concat(module?.id);
 
               setExpandedModuleIds(updatedExpandedModuleIds);
             }}
           >
-            {module.id}
+            {module?.id}
 
           </span>
           <div className="et-devtool-state-monitor-module-state">
@@ -259,10 +259,10 @@ const DevStateMonitor = (props: DevStateMonitorProps) => {
             }}>
               {globalModules.map(globalModule => (
                 <div
-                  key={`global-module-item-${globalModule.id}`}
+                  key={`global-module-item-${globalModule?.id}`}
                   className="et-devtool-state-monitor-global-module-item"
                 >
-                  <h3>id: {globalModule.id}</h3>
+                  <h3>id: {globalModule?.id}</h3>
                   <Module module={globalModule?.content?.root} />
                 </div>
               ))}
