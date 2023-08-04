@@ -13,6 +13,7 @@ import {
 } from '@divi/data';
 import { SelectedModules } from '@divi/events';
 import {} from '@divi/modal-library';
+import { ModuleFlatObject } from '@divi/types';
 
 // Local dependencies.
 import { DevStateMonitor } from './component';
@@ -52,12 +53,12 @@ export const DevStateMonitorContainer = withSelect((selectStore: typeof select) 
   // Automatically remove duplicate id found.
   const globalModuleIds = Array.from(new Set(Object
     .entries(modules)
-    .filter(module => {
+    .filter((module: [string, ModuleFlatObject]) => {
       const globalModule = module[1]?.props?.attrs?.globalModule;
 
       return 'string' === typeof globalModule && '' !== globalModule;
     })
-    .map(module => module[1]?.props?.attrs?.globalModule)));
+    .map((module: [string, ModuleFlatObject]) => module[1]?.props?.attrs?.globalModule)));
 
   const globalModules = globalModuleIds.map(id => {
     const globalModule = selectStore('divi/global-layouts').getLayout(id);
