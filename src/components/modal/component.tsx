@@ -132,7 +132,7 @@ const DevStateMonitor = (props: DevStateMonitorProps) => {
       })}
       >
         <div className="et-devtool-state-monitor-module-meta">
-          <span className="et-devtool-state-monitor-module--name">{module.name}</span>
+          <span className="et-devtool-state-monitor-module--name">{module?.name}</span>
           <span
             className="et-devtool-state-monitor-module--id"
             role="button"
@@ -162,7 +162,7 @@ const DevStateMonitor = (props: DevStateMonitorProps) => {
         {propsMonitor}
         <div className="et-devtool-state-monitor-module--children">
           {(
-            isEmpty(module.children) ? null : module.children.map((childId: string) => (
+            isEmpty(module?.children) ? null : module?.children?.map((childId: string) => (
               <Module
                 key={`et-devtool-module-${childId}`}
                 module={modules[childId]}
@@ -241,7 +241,7 @@ const DevStateMonitor = (props: DevStateMonitorProps) => {
                   <h3>Shortcuts</h3>
                   <div className="et-devtool-state-monitor-overview-value">
                     <pre>
-                      {currentShortcut.name}
+                      {currentShortcut?.name}
                     </pre>
                   </div>
                 </div>

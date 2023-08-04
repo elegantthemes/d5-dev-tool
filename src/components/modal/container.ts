@@ -86,7 +86,7 @@ export const DevStateMonitorContainer = withSelect((selectStore: typeof select) 
 
 
     // Module Settings.
-    activeModalSetting: 'divi/module' === singleModalState.name && singleModalState.owner,
+    activeModalSetting: 'divi/module' === singleModalState?.name && singleModalState?.owner,
 
     // Expanded module prop ids.
     expandedModuleIds,
