@@ -13,6 +13,7 @@ import {
 } from '@divi/data';
 import { SelectedModules } from '@divi/events';
 import {} from '@divi/modal-library';
+import { ModuleFlatObject } from '@divi/types';
 
 // Local dependencies.
 import { DevStateMonitor } from './component';
@@ -37,7 +38,7 @@ export const DevStateMonitorContainer = withSelect((selectStore: typeof select) 
   const singleModalState = modalSelectors.getActiveModal('single');
 
   // Module ids.
-  const getModuleIds = (modules: SelectedModules) => map(modules, module => module.id);
+  const getModuleIds = (modules: SelectedModules) => map(modules, module => module?.id);
 
   // Right clicks.
   const rightClick = rightClickOptionsSelectors.getState();
@@ -45,8 +46,32 @@ export const DevStateMonitorContainer = withSelect((selectStore: typeof select) 
     ? get(rightClick, ['owner', 'id'])
     : '';
 
+  // Modules.
+  const modules = editPostStoreSelectors.getContent();
+
+  // Get global module ids. Get global module id based on content module's.
+  // Automatically remove duplicate id found.
+  const globalModuleIds = Array.from(new Set(Object
+    .entries(modules)
+    .filter((module: [string, ModuleFlatObject]) => {
+      const globalModule = module[1]?.props?.attrs?.globalModule;
+
+      return 'string' === typeof globalModule && '' !== globalModule;
+    })
+    .map((module: [string, ModuleFlatObject]) => module[1]?.props?.attrs?.globalModule)));
+
+  const globalModules = globalModuleIds.map(id => {
+    const globalModule = selectStore('divi/global-layouts').getLayout(id);
+
+    return {
+      id,
+      ...globalModule,
+    }
+  });
+
   return {
-    modules: editPostStoreSelectors.getContent(),
+    modules,
+    globalModules,
     scripts: moduleSelectors.getScripts(),
     hoveredModule: eventsStoreSelectors.getHoveredModule(),
     selectedModules: getModuleIds(eventsStoreSelectors.getSelectedModules(false)),
@@ -61,7 +86,7 @@ export const DevStateMonitorContainer = withSelect((selectStore: typeof select) 
 
 
     // Module Settings.
-    activeModalSetting: 'divi/module' === singleModalState.name && singleModalState.owner,
+    activeModalSetting: 'divi/module' === singleModalState?.name && singleModalState?.owner,
 
     // Expanded module prop ids.
     expandedModuleIds,

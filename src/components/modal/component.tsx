@@ -5,6 +5,7 @@ import {
   get,
   includes,
   isEmpty,
+  isString,
   map,
   noop,
   without,
@@ -52,6 +53,7 @@ const DevStateMonitor = (props: DevStateMonitorProps) => {
   const {
     name,
     modules,
+    globalModules,
     hoveredModule,
     selectedModules,
     draggedModules,
@@ -68,12 +70,11 @@ const DevStateMonitor = (props: DevStateMonitorProps) => {
     tab,
     scripts,
   } = props;
-
   // State badge component.
-  const StateBadge = (active: boolean, slug: string) => (
+  const StateBadge = (active: boolean, slug: string, label: string = '') => (
     ! active ? null : (
       <span className={`et-devtool-state-monitor-module--state-${slug}`}>
-        {slug}
+        {slug}{label}
       </span>
     )
   );
@@ -81,31 +82,36 @@ const DevStateMonitor = (props: DevStateMonitorProps) => {
   // Recursive module list component.
   const Module = ({ module }: ModuleProps) => {
     // Hover state.
-    const isHovered    = get(hoveredModule, 'id') === module.id;
+    const isHovered    = get(hoveredModule, 'id') === module?.id;
     const stateHovered = StateBadge(isHovered, 'hovered');
 
     // Selected state.
-    const isSelected    = includes(selectedModules, module.id);
+    const isSelected    = includes(selectedModules, module?.id);
     const stateSelected = StateBadge(isSelected, 'selected');
 
     // Dragged state
-    const isDragged    = includes(draggedModules, module.id);
+    const isDragged    = includes(draggedModules, module?.id);
     const stateDragged = StateBadge(isDragged, 'dragged');
 
     // Right click state.
-    const isRightClicked    = rightClickedModuleId === module.id;
+    const isRightClicked    = rightClickedModuleId === module?.id;
     const stateRightClicked = StateBadge(isRightClicked, 'right-clicked');
 
     // Cliboard state
-    const isOnClipboard    = get(lastModuleClipboard, ['id']) === module.id;
+    const isOnClipboard    = get(lastModuleClipboard, ['id']) === module?.id;
     const stateOnClipboard = StateBadge(isOnClipboard, 'on-clipboard');
 
     // Edited state
-    const isEdited    = module.id === activeModalSetting;
+    const isEdited    = module?.id === activeModalSetting;
     const stateEdited = StateBadge(isEdited, 'edited');
 
+    // Global module state.
+    const globalId = module?.props?.attrs?.globalModule;
+    const isGlobal = isString(globalId) && '' !== globalId;
+    const stateGlobal = StateBadge(isGlobal, 'global', `- ${globalId}`);
+
     // Props monitor
-    const isPropsExpanded = includes(expandedModuleIds, module.id);
+    const isPropsExpanded = includes(expandedModuleIds, module?.id);
     const propsMonitor    = ! isPropsExpanded
       ? null
       : (
@@ -126,7 +132,7 @@ const DevStateMonitor = (props: DevStateMonitorProps) => {
       })}
       >
         <div className="et-devtool-state-monitor-module-meta">
-          <span className="et-devtool-state-monitor-module--name">{module.name}</span>
+          <span className="et-devtool-state-monitor-module--name">{module?.name}</span>
           <span
             className="et-devtool-state-monitor-module--id"
             role="button"
@@ -134,28 +140,29 @@ const DevStateMonitor = (props: DevStateMonitorProps) => {
             onKeyPress={noop}
             onClick={() => {
               const updatedExpandedModuleIds = isPropsExpanded
-                ? without(expandedModuleIds, module.id)
-                : [].concat(expandedModuleIds).concat(module.id);
+                ? without(expandedModuleIds, module?.id)
+                : [].concat(expandedModuleIds).concat(module?.id);
 
               setExpandedModuleIds(updatedExpandedModuleIds);
             }}
           >
-            {module.id}
+            {module?.id}
 
           </span>
           <div className="et-devtool-state-monitor-module-state">
-            {stateHovered}
+            {stateGlobal}
             {stateSelected}
             {stateDragged}
             {stateRightClicked}
             {stateOnClipboard}
             {stateEdited}
+            {stateHovered}
           </div>
         </div>
         {propsMonitor}
         <div className="et-devtool-state-monitor-module--children">
           {(
-            isEmpty(module.children) ? null : module.children.map((childId: string) => (
+            isEmpty(module?.children) ? null : module?.children?.map((childId: string) => (
               <Module
                 key={`et-devtool-module-${childId}`}
                 module={modules[childId]}
@@ -179,6 +186,7 @@ const DevStateMonitor = (props: DevStateMonitorProps) => {
         snappable
         modalName={name}
         modalActiveTab={tab ? tab : 'layout'}
+        multiPanels
       >
         <Header
           name={__('State Monitor', 'et_builder')}
@@ -233,7 +241,7 @@ const DevStateMonitor = (props: DevStateMonitorProps) => {
                   <h3>Shortcuts</h3>
                   <div className="et-devtool-state-monitor-overview-value">
                     <pre>
-                      {currentShortcut.name}
+                      {currentShortcut?.name}
                     </pre>
                   </div>
                 </div>
@@ -245,6 +253,21 @@ const DevStateMonitor = (props: DevStateMonitorProps) => {
               padding: '20px 20px 40px 20px',
             }}>
               <ScriptList scripts={scripts} />
+            </div>
+          </PanelContainer>
+          <PanelContainer id="global-modules" label={__('Global Modules', 'et_builder')}>
+            <div style={{
+              padding: '20px 20px 40px 20px',
+            }}>
+              {globalModules.map(globalModule => (
+                <div
+                  key={`global-module-item-${globalModule?.id}`}
+                  className="et-devtool-state-monitor-global-module-item"
+                >
+                  <h3>id: {globalModule?.id}</h3>
+                  <Module module={globalModule?.content?.root} />
+                </div>
+              ))}
             </div>
           </PanelContainer>
         </BodyPanelWrapperContainer>
