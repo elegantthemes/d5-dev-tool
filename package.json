@@ -5,7 +5,6 @@
   "repository": "https://github.com/elegantthemes/d5i-modal-dev-state-monitor",
   "author": "Elegant Themes",
   "scripts": {
-    "setup-yarn": "yarn set version 3.2.0 && yarn config set nodeLinker node-modules",
     "start": "NODE_ENV=development webpack -w --config webpack.config.js --progress",
     "build": "NODE_ENV=production webpack --config webpack.config.js --progress"
   },
@@ -14,17 +13,17 @@
     "@babel/plugin-proposal-class-properties": "^7.16.7",
     "@babel/preset-env": "^7.16.11",
     "@babel/preset-react": "^7.16.7",
-    "@divi/types": "link:../../themes/Divi/includes/builder-5/visual-builder/packages/types",
-    "@types/divi__app-ui": "link:../../themes/Divi/includes/builder-5/visual-builder/packages/types-divi__app-ui",
-    "@types/divi__data": "link:../../themes/Divi/includes/builder-5/visual-builder/packages/types-divi__data",
-    "@types/divi__error-boundary": "link:../../themes/Divi/includes/builder-5/visual-builder/packages/types-divi__error-boundary",
-    "@types/divi__events": "link:../../themes/Divi/includes/builder-5/visual-builder/packages/types-divi__events",
-    "@types/divi__keyboard-shortcuts": "link:../../themes/Divi/includes/builder-5/visual-builder/packages/types-divi__keyboard-shortcuts",
-    "@types/divi__modal": "link:../../themes/Divi/includes/builder-5/visual-builder/packages/types-divi__modal",
-    "@types/divi__modal-library": "link:../../themes/Divi/includes/builder-5/visual-builder/packages/types-divi__modal-library",
-    "@types/divi__module": "link:../../themes/Divi/includes/builder-5/visual-builder/packages/types-divi__module",
-    "@types/divi__object-renderer": "link:../../themes/Divi/includes/builder-5/visual-builder/packages/types-divi__object-renderer",
-    "@types/divi__right-click-options": "link:../../themes/Divi/includes/builder-5/visual-builder/packages/types-divi__right-click-options",
+    "@divi/types": "npm:divi-types@^1.0.0",
+    "@types/divi__app-ui": "npm:divi-types-app-ui@^1.0.0",
+    "@types/divi__data": "npm:divi-types-data@^1.0.0",
+    "@types/divi__error-boundary": "npm:divi-types-error-boundary@^1.0.0",
+    "@types/divi__events": "npm:divi-types-events@^1.0.0",
+    "@types/divi__keyboard-shortcuts": "npm:divi-types-keyboard-shortcuts@^1.0.0",
+    "@types/divi__modal": "npm:divi-types-modal@^1.0.0",
+    "@types/divi__modal-library": "npm:divi-types-modal-library@^1.0.0",
+    "@types/divi__module": "npm:divi-types-module@^1.0.0",
+    "@types/divi__object-renderer": "npm:divi-types-object-renderer@^1.0.0",
+    "@types/divi__right-click-options": "npm:divi-types-right-click-options@^1.0.0",
     "@types/google.maps": "^3.49.2",
     "@types/jquery": "^3.5.13",
     "@types/lodash": "^4.14.178",
@@ -45,6 +44,5 @@
   },
   "dependencies": {
     "classnames": "^2.3.1"
-  },
-  "packageManager": "yarn@3.2.0"
+  }
 }

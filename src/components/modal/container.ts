@@ -9,6 +9,7 @@ import {
 import {
   dispatch,
   withSelect,
+  select,
 } from '@divi/data';
 import { SelectedModules } from '@divi/events';
 import {} from '@divi/modal-library';
@@ -19,7 +20,7 @@ import { DevStateMonitor } from './component';
 export const name = 'divi/dev-state-monitor';
 export const type = 'multi';
 
-export const DevStateMonitorContainer = withSelect((selectStore) => {
+export const DevStateMonitorContainer = withSelect((selectStore: typeof select) => {
   const editPostStoreSelectors = selectStore('divi/edit-post');
   const eventsStoreSelectors = selectStore('divi/events');
   const rightClickOptionsSelectors = selectStore('divi/right-click-options');

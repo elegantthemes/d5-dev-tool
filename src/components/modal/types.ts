@@ -12,10 +12,10 @@ import {
   ModuleFlatObjects,
 } from '@divi/types';
 import {
-  EditPostStoreState
-} from '@divi/edit-post';
+  ModuleStoreState
+} from '@divi/module';
 import { Shortcut } from '@divi/keyboard-shortcuts';
-import { ViewType } from '@divi/app-ui';
+import { ViewType } from '@divi/types';
 import {
   HoveredModule,
   SelectedModule,
@@ -36,7 +36,7 @@ export interface DevStateMonitorProps {
   name: ModalStates['name'];
   modules: ModuleFlatObjects;
   globalModules: GlobalLayoutItem[];
-  scripts: EditPostStoreState['scripts'];
+  scripts: ModuleStoreState['scripts'];
   hoveredModule: HoveredModule,
   selectedModules: string[],
   draggedModules: string[],

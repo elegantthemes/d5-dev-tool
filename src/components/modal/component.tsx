@@ -1,5 +1,5 @@
 // External dependencies.
-import React from 'react';
+import React, { ReactElement } from 'react';
 import {
   forEach,
   get,
@@ -33,18 +33,20 @@ import {
 import './styles.scss';
 
 const ScriptList = ({ scripts }: { scripts: DevStateMonitorProps['scripts'] }) => {
-  const scriptList = [];
+  const scriptList: ReactElement[] = [];
 
   forEach(scripts, (scriptItems, scriptName) => {
-    scriptList.push((
+    const scriptItem = (
       <div key={`state-monitor-script-${scriptName}`} className="et-vb-dev-state-monitor-script">
         <h2 className="et-vb-dev-state-monitor-script-heading">{scriptName}</h2>
         <ObjectRenderer values={scriptItems} />
       </div>
-    ))
+    );
+
+    scriptList.push(scriptItem);
   });
 
-  return scriptList;
+  return (<div>{scriptList}</div>);
 }
 
 const DevStateMonitor = (props: DevStateMonitorProps) => {
