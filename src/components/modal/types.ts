@@ -51,6 +51,7 @@ export interface DevStateMonitorProps {
   breakpoint: Breakpoint;
   view: ViewType;
   tab: string;
+  serializedLayout: string;
 }
 
 export interface ModuleProps {

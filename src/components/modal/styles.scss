@@ -214,3 +214,16 @@ $global-module: #97d000;
     display: none;
   }
 }
+
+.et-vb-modal-panel[data-id="saved"] {
+  h3 {
+    margin: 20px 20px 0;
+  }
+
+  pre {
+    text-wrap: wrap;
+    padding: 20px;
+    background-color: #efefef;
+    margin: 10px 10px 20px 20px;
+  }
+}

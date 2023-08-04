@@ -68,6 +68,7 @@ const DevStateMonitor = (props: DevStateMonitorProps) => {
     breakpoint,
     view,
     tab,
+    serializedLayout,
     scripts,
   } = props;
   // State badge component.
@@ -248,6 +249,10 @@ const DevStateMonitor = (props: DevStateMonitorProps) => {
               </div>
             </div>
           </PanelContainer>
+          <PanelContainer id="saved" label={__('Saved', 'et_builder')}>
+            <h3>{__('Currently Saved Layout')}</h3>
+            <pre>{serializedLayout}</pre>
+          </PanelContainer>
           <PanelContainer id="scripts" label={__('Scripts', 'et_builder')}>
             <div style={{
               padding: '20px 20px 40px 20px',
@@ -255,7 +260,7 @@ const DevStateMonitor = (props: DevStateMonitorProps) => {
               <ScriptList scripts={scripts} />
             </div>
           </PanelContainer>
-          <PanelContainer id="global-modules" label={__('Global Modules', 'et_builder')}>
+          <PanelContainer id="global-modules" label={__('Global', 'et_builder')}>
             <div style={{
               padding: '20px 20px 40px 20px',
             }}>

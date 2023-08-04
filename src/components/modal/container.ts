@@ -78,6 +78,7 @@ export const DevStateMonitorContainer = withSelect((selectStore: typeof select) 
     draggedModules: getModuleIds(eventsStoreSelectors.getDraggedModules().asMutable({ deep: true })),
     pressedKeys: selectStore('divi/keyboard-shortcuts').getPressedKeys(),
     currentShortcut: selectStore('divi/keyboard-shortcuts').getCurrentShortcut(),
+    serializedLayout: selectStore('divi/serialized-post').getState(['postContent', 'content']),
 
     // App View.
     view: selectStore('divi/app-ui').getView(),
