@@ -89,4 +89,4 @@ function d5_state_monitor_enqueue_scripts() {
 		);
 	}
 }
-add_action( 'et_vb_assets_after_enqueue_package_script', 'd5_state_monitor_enqueue_scripts' );
+add_action( 'divi_visual_builder_assets_after_enqueue_package_script', 'd5_state_monitor_enqueue_scripts' );
