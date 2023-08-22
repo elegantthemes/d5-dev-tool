@@ -136,13 +136,6 @@ $global-module: #97d000;
 }
 
 .et-devtool-state-monitor-overview {
-  background: linear-gradient(0deg, rgba(255, 255, 255, 0.9) 70%, rgba(255, 255, 255, 0.3) 100%);
-  position: sticky;
-  bottom: 0;
-  z-index: 10;
-  padding: 40px 10px 20px;
-  margin-top: 20px;
-
   h3 {
     font-size: 14px;
     font-weight: bold;
@@ -226,4 +219,53 @@ $global-module: #97d000;
     background-color: #efefef;
     margin: 10px 10px 20px 20px;
   }
+}
+
+// Content Panel.
+$content-panel-nav-width: 100px;
+
+.et-devtool-content-panel-wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: stretch;
+  gap: 10px;
+
+  &-nav {
+    width: $content-panel-nav-width;
+    display: flex;
+    flex-direction: column;
+
+    button {
+      border: none;
+      border-bottom: 1px solid #dfdfdf;
+      border-right: 1px solid #dfdfdf;
+      background: #f9f9f9;
+      padding: 10px 15px;
+      cursor: pointer;
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      &:hover {
+        background: #f4f4f4;
+      }
+
+      &.active {
+        border-right: none;
+        background: #ffffff;
+      }
+    }
+  }
+}
+
+.et-devtool-content-panels {
+  width: calc(100% - $content-panel-nav-width);
+}
+
+.et-devtool-content-panel {
+  padding: 10px;
+  display: block;
 }

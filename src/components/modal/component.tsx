@@ -26,6 +26,8 @@ import { ObjectRenderer } from '@divi/object-renderer';
 import { ErrorBoundary } from '@divi/error-boundary';
 
 // Local dependencies.
+import { ContentPanel } from '../content-panel';
+import { ContentPanelWrapper } from '../content-panel-wrapper';
 import {
   DevStateMonitorProps,
   ModuleProps,
@@ -186,93 +188,108 @@ const DevStateMonitor = (props: DevStateMonitorProps) => {
         expandable
         snappable
         modalName={name}
-        modalActiveTab={tab ? tab : 'layout'}
+        modalActiveTab={tab ? tab : 'tools'}
         multiPanels
       >
         <Header
           name={__('State Monitor', 'et_builder')}
         />
         <BodyPanelWrapperContainer>
-          <PanelContainer id="layout" label={__('Layout', 'et_builder')}>
+          <PanelContainer id="states" label={__('States', 'et_builder')}>
             <div style={{
               padding: '20px 20px 40px 20px',
             }}
             >
-              <Module module={modules.root} />
-              <div
-                className={classnames({
-                  'et-devtool-state-monitor-overview': true,
-                })}
-              >
-                <div className="et-devtool-state-monitor-overview-view">
-                  <h3>View</h3>
-                  <div className="et-devtool-state-monitor-overview-value">
-                    {view}
-                  </div>
-                </div>
-                <div className="et-devtool-state-monitor-overview-breakpoint">
-                  <h3>Breakpoint</h3>
-                  <div className="et-devtool-state-monitor-overview-value">
-                    {breakpoint}
-                  </div>
-                </div>
-                <div className="et-devtool-state-monitor-overview-attribute-state">
-                  <h3>Attribute State</h3>
-                  <div className="et-devtool-state-monitor-overview-value">
-                    {attributeState}
-                  </div>
-                </div>
+              <ContentPanelWrapper>
+                <ContentPanel id="layout" label={__('Layout', 'et_builder')}>
+                  <Module module={modules.root} />
+                </ContentPanel>
+                <ContentPanel id="saved" label={__('Saved', 'et_builder')}>
+                  <pre>{serializedLayout}</pre>
+                </ContentPanel>
+                <ContentPanel id="scripts" label={__('Scripts', 'et_builder')}>
+                  <ScriptList scripts={scripts} />
+                </ContentPanel>
+                <ContentPanel id="global" label={__('Global', 'et_builder')}>
+                  {globalModules.map(globalModule => (
+                    <div
+                      key={`global-module-item-${globalModule?.id}`}
+                      className="et-devtool-state-monitor-global-module-item"
+                    >
+                      <h3>id: {globalModule?.id}</h3>
+                      <Module module={globalModule?.content?.root} />
+                    </div>
+                  ))}
+                </ContentPanel>
+                <ContentPanel id="app-state" label={__('App State', 'et_builder')}>
+                  <div
+                    className={classnames({
+                      'et-devtool-state-monitor-overview': true,
+                    })}
+                  >
+                    <div className="et-devtool-state-monitor-overview-view">
+                      <h3>View</h3>
+                      <div className="et-devtool-state-monitor-overview-value">
+                        {view}
+                      </div>
+                    </div>
+                    <div className="et-devtool-state-monitor-overview-breakpoint">
+                      <h3>Breakpoint</h3>
+                      <div className="et-devtool-state-monitor-overview-value">
+                        {breakpoint}
+                      </div>
+                    </div>
+                    <div className="et-devtool-state-monitor-overview-attribute-state">
+                      <h3>Attribute State</h3>
+                      <div className="et-devtool-state-monitor-overview-value">
+                        {attributeState}
+                      </div>
+                    </div>
 
-                <div className="et-devtool-state-monitor-overview-selected">
-                  <h3>Selected</h3>
-                  <div className="et-devtool-state-monitor-overview-value">
-                    {selectedModules.length}
-                    {selectedModules.length > 1 ? ' Modules' : ' Module'}
+                    <div className="et-devtool-state-monitor-overview-selected">
+                      <h3>Selected</h3>
+                      <div className="et-devtool-state-monitor-overview-value">
+                        {selectedModules.length}
+                        {selectedModules.length > 1 ? ' Modules' : ' Module'}
+                      </div>
+                    </div>
                   </div>
-                </div>
-                <div className="et-devtool-state-monitor-overview-keypress">
-                  <h3>Keypress</h3>
-                  <div className="et-devtool-state-monitor-overview-value">
-                    {map(pressedKeys, key => (
-                      <kbd key={`et-devtool-state-monitor-overview-key-${key}`}>{key}</kbd>
-                    ))}
+                </ContentPanel>
+                <ContentPanel id="keyboard" label={__('Keyboard', 'et_builder')}>
+                  <div
+                    className={classnames({
+                      'et-devtool-state-monitor-overview': true,
+                    })}
+                  >
+                    <div className="et-devtool-state-monitor-overview-keypress">
+                      <h3>Keypress</h3>
+                      <div className="et-devtool-state-monitor-overview-value">
+                        {map(pressedKeys, key => (
+                          <kbd key={`et-devtool-state-monitor-overview-key-${key}`}>{key}</kbd>
+                        ))}
+                      </div>
+                    </div>
+                    <div className="et-devtool-state-monitor-overview-shortcut">
+                      <h3>Shortcuts</h3>
+                      <div className="et-devtool-state-monitor-overview-value">
+                        <pre>
+                          {currentShortcut?.name}
+                        </pre>
+                      </div>
+                    </div>
                   </div>
-                </div>
-                <div className="et-devtool-state-monitor-overview-shortcut">
-                  <h3>Shortcuts</h3>
-                  <div className="et-devtool-state-monitor-overview-value">
-                    <pre>
-                      {currentShortcut?.name}
-                    </pre>
-                  </div>
-                </div>
-              </div>
+                </ContentPanel>
+              </ContentPanelWrapper>
             </div>
           </PanelContainer>
-          <PanelContainer id="saved" label={__('Saved', 'et_builder')}>
-            <h3>{__('Currently Saved Layout')}</h3>
-            <pre>{serializedLayout}</pre>
-          </PanelContainer>
-          <PanelContainer id="scripts" label={__('Scripts', 'et_builder')}>
-            <div style={{
-              padding: '20px 20px 40px 20px',
-            }}>
-              <ScriptList scripts={scripts} />
+          <PanelContainer id="tools" label={__('Tools', 'et_builder')}>
+            <div style={{ padding: '15px' }}>
+              Coming Soon
             </div>
           </PanelContainer>
-          <PanelContainer id="global-modules" label={__('Global', 'et_builder')}>
-            <div style={{
-              padding: '20px 20px 40px 20px',
-            }}>
-              {globalModules.map(globalModule => (
-                <div
-                  key={`global-module-item-${globalModule?.id}`}
-                  className="et-devtool-state-monitor-global-module-item"
-                >
-                  <h3>id: {globalModule?.id}</h3>
-                  <Module module={globalModule?.content?.root} />
-                </div>
-              ))}
+          <PanelContainer id="references" label={__('References', 'et_builder')}>
+            <div style={{ padding: '15px' }}>
+              Coming Soon
             </div>
           </PanelContainer>
         </BodyPanelWrapperContainer>
