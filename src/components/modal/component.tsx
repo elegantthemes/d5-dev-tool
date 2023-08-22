@@ -6,8 +6,10 @@ import {
   includes,
   isEmpty,
   isString,
+  keys,
   map,
   noop,
+  reduce,
   without,
 } from 'lodash';
 import classnames from 'classnames';
@@ -28,6 +30,7 @@ import { ErrorBoundary } from '@divi/error-boundary';
 // Local dependencies.
 import { ContentPanel } from '../content-panel';
 import { ContentPanelWrapper } from '../content-panel-wrapper';
+import { ReferencesTreeView } from '../references-tree-view';
 import {
   DevStateMonitorProps,
   ModuleProps,
@@ -177,6 +180,13 @@ const DevStateMonitor = (props: DevStateMonitorProps) => {
     );
   };
 
+  const diviModuleExports = reduce<Record<string, unknown>, Record<string, string[]>>(window?.divi, (result, value, category) => {
+    if (!isEmpty(value)) {
+      result[category] = keys(value);
+    }
+    return result;
+  }, {});
+
   return (
     <ErrorBoundary
       key="et-vb-divi-modals--dev-state-monitor"
@@ -288,8 +298,8 @@ const DevStateMonitor = (props: DevStateMonitorProps) => {
             </div>
           </PanelContainer>
           <PanelContainer id="references" label={__('References', 'et_builder')}>
-            <div style={{ padding: '15px' }}>
-              Coming Soon
+            <div style={{ padding: '20px' }}>
+              <ReferencesTreeView data={diviModuleExports} />
             </div>
           </PanelContainer>
         </BodyPanelWrapperContainer>
