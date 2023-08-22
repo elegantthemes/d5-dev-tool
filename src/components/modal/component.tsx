@@ -188,7 +188,7 @@ const DevStateMonitor = (props: DevStateMonitorProps) => {
         expandable
         snappable
         modalName={name}
-        modalActiveTab={tab ? tab : 'tools'}
+        modalActiveTab={tab ? tab : 'states'}
         multiPanels
       >
         <Header
