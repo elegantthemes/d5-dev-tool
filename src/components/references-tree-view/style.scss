@@ -1,0 +1,42 @@
+.et-vb-divi-devtools-tree-view {
+  .et-vb-divi-devtools-tree-view-item-title {
+    padding: 10px 10px;
+    background: #efefef;
+    border-radius: 3px;
+    margin-bottom: 5px;
+    line-height: 1em;
+    font-weight: bold;
+    font-size: 12px;
+    cursor: pointer;
+    
+    &:hover {
+      background: #dfdfdf;
+    }
+  }
+  
+  .et-vb-divi-devtools-tree-view-item-list {
+    margin-left: 20px;
+    margin-bottom: 20px;
+    font-size: 12px;
+    cursor: default;
+  }
+  
+  .et-vb-divi-devtools-tree-view-search-input {
+    background-color: #efefef;
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 5px 10px;
+    border-radius: 3px;
+    border-color: #aaaaaa;
+    font-size: 12px;
+  }
+  .et-vb-divi-devtools-tree-view-warning {
+    padding: 5px 10px;
+    margin-bottom: 10px;
+    border-radius: 3px;
+    border: 1px solid #ffa831;
+    font-size: 12px;
+    background-color: rgb(255, 244, 229);
+    color: rgb(102, 60, 0);
+  }
+}
