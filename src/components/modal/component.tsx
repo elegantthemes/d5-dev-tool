@@ -299,7 +299,20 @@ const DevStateMonitor = (props: DevStateMonitorProps) => {
           </PanelContainer>
           <PanelContainer id="references" label={__('References', 'et_builder')}>
             <div style={{ padding: '20px' }}>
-              <ReferencesTreeView data={diviModuleExports} />
+              <ContentPanelWrapper>
+                <ContentPanel id="packages" label={__('Packages', 'et_builder')}>
+                  <ReferencesTreeView data={diviModuleExports} />
+                </ContentPanel>
+                <ContentPanel id="data-stores" label={__('Data Stores', 'et_builder')}>
+                  Coming Soon
+                </ContentPanel>
+                <ContentPanel id="filters" label={__('Filters', 'et_builder')}>
+                  Coming Soon
+                </ContentPanel>
+                <ContentPanel id="actions" label={__('Actions', 'et_builder')}>
+                  Coming Soon
+                </ContentPanel>
+              </ContentPanelWrapper>
             </div>
           </PanelContainer>
         </BodyPanelWrapperContainer>
