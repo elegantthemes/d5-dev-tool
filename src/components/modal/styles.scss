@@ -222,7 +222,7 @@ $global-module: #97d000;
 }
 
 // Content Panel.
-$content-panel-nav-width: 110px;
+$content-panel-nav-width: 120px;
 
 .et-devtool-content-panel-wrapper {
   width: 100%;
@@ -244,6 +244,7 @@ $content-panel-nav-width: 110px;
       background: #f9f9f9;
       padding: 10px 15px;
       cursor: pointer;
+      font-size: 12px;
 
       &:last-child {
         border-bottom: none;

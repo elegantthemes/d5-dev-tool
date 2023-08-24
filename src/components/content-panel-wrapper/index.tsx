@@ -22,9 +22,6 @@ export const ContentPanelWrapper = ({ children }: { children: ReactElement<{id: 
               className={child?.props?.id === activePanel ? "active" : null}
               onClick={(event: MouseEvent<HTMLButtonElement>) => {
                 event.preventDefault();
-
-                console.log(event.currentTarget.getAttribute("data-id"));
-
                 setActivePanel(event.currentTarget.getAttribute("data-id"));
               }}
             >

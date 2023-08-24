@@ -1,16 +1,3 @@
-import { DevStateMonitor } from './component';
-import {
-  name,
-  type,
-  DevStateMonitorContainer,
-} from './container';
-
-const component = DevStateMonitorContainer;
-
-export {
-  DevStateMonitor,
-  DevStateMonitorContainer,
-  name,
-  type,
-  component,
-};
+export const name = 'divi/dev-state-monitor';
+export const type = 'multi';
+export { DevStateMonitor } from './component';

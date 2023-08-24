@@ -1,0 +1,1 @@
+export { ContentGlobalContainer } from './container';

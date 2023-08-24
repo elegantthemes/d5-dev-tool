@@ -1,32 +1,33 @@
 // External dependencies.
-import { FC } from 'react';
 import {
   get,
   map,
 } from 'lodash';
 
-// Internal dependencies
+// Divi dependencies
 import {
   dispatch,
   withSelect,
   select,
 } from '@divi/data';
 import { SelectedModules } from '@divi/events';
-import {} from '@divi/modal-library';
+import { } from '@divi/modal-library';
 import { ModuleFlatObject } from '@divi/types';
 
 // Local dependencies.
-import { DevStateMonitor } from './component';
+import { ContentGlobal } from './component';
 
 export const name = 'divi/dev-state-monitor';
 export const type = 'multi';
 
-export const DevStateMonitorContainer = withSelect((selectStore: typeof select) => {
+/**
+ * Container component for the ContentGlobal component.
+ */
+export const ContentGlobalContainer = withSelect((selectStore: typeof select) => {
   const editPostStoreSelectors = selectStore('divi/edit-post');
   const eventsStoreSelectors = selectStore('divi/events');
   const rightClickOptionsSelectors = selectStore('divi/right-click-options');
   const modalSelectors = selectStore('divi/modal-library');
-  const moduleSelectors = selectStore('divi/module');
 
   // Modal state.
   const modalState = modalSelectors.getActiveModal(type);
@@ -70,27 +71,17 @@ export const DevStateMonitorContainer = withSelect((selectStore: typeof select) 
   });
 
   return {
-    modules,
     globalModules,
-    scripts: moduleSelectors.getScripts(),
-    hoveredModule: eventsStoreSelectors.getHoveredModule(),
-    selectedModules: getModuleIds(eventsStoreSelectors.getSelectedModules(false)),
-    draggedModules: getModuleIds(eventsStoreSelectors.getDraggedModules().asMutable({ deep: true })),
-    pressedKeys: selectStore('divi/keyboard-shortcuts').getPressedKeys(),
-    currentShortcut: selectStore('divi/keyboard-shortcuts').getCurrentShortcut(),
-    serializedLayout: selectStore('divi/serialized-post').getState(['postContent', 'content']),
-
-    // App View.
-    view: selectStore('divi/app-ui').getView(),
-    breakpoint: selectStore('divi/app-ui').getBreakpoint(),
-    attributeState: selectStore('divi/app-ui').getAttributeState(),
-
-
-    // Module Settings.
     activeModalSetting: 'divi/module' === singleModalState?.name && singleModalState?.owner,
-
-    // Expanded module prop ids.
+    draggedModules: getModuleIds(eventsStoreSelectors.getDraggedModules().asMutable({ deep: true })),
     expandedModuleIds,
+    hoveredModule: eventsStoreSelectors.getHoveredModule(),
+
+    // @todo (D5) to be updated once new selector has been made.
+    lastModuleClipboard: {},
+    modules,
+    rightClickedModuleId,
+    selectedModules: getModuleIds(eventsStoreSelectors.getSelectedModules(false)),
     setExpandedModuleIds: (moduleIds: string[]) => {
       dispatch('divi/modal-library').setAttributes({
         name: 'divi/dev-state-monitor',
@@ -99,10 +90,5 @@ export const DevStateMonitorContainer = withSelect((selectStore: typeof select) 
         },
       });
     },
-
-    // @todo (D5) to be updated once new selector has been made.
-    lastModuleClipboard: {},
-
-    rightClickedModuleId,
   };
-})(DevStateMonitor as FC);
+})(ContentGlobal);

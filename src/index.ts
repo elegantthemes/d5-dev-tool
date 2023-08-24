@@ -5,7 +5,7 @@ import { dispatch } from '@divi/data';
 
 // Local dependencies
 import {
-  DevStateMonitorContainer,
+  DevStateMonitor,
   name,
   type
 } from './components/modal';
@@ -34,6 +34,6 @@ if (window.top !== window) {
   dispatch('divi/modal-library').addModal({
     name,
     type,
-    component: DevStateMonitorContainer,
+    component: DevStateMonitor,
   });
 }

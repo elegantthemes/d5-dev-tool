@@ -1,0 +1,1 @@
+export { ModuleTreeView } from './component';
