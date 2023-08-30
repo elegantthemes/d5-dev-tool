@@ -5,7 +5,7 @@ import { dispatch } from '@divi/data';
 
 // Local dependencies
 import {
-  DevStateMonitor,
+  Divi5DevTool,
   name,
   type
 } from './components/modal';
@@ -16,7 +16,7 @@ declare global {
   }
 }
 
-// Open divi/dev-state-monitor, a registered modal, when state-monitor menu item on admin bar is clicked.
+// Open divi/divi-5-dev-tool, a registered modal, when state-monitor menu item on admin bar is clicked.
 // This ensure that the following function is registered on app window.
 // @todo this top / window detection should be abstracted into util function.
 if (window.top !== window) {
@@ -34,6 +34,6 @@ if (window.top !== window) {
   dispatch('divi/modal-library').addModal({
     name,
     type,
-    component: DevStateMonitor,
+    component: Divi5DevTool,
   });
 }

@@ -1,28 +1,28 @@
 <?php
 /*
-Plugin Name: D5 Extension Example: Modal Dev State Monitor
-Plugin URI:
-Description: Modal that displays state data
+Plugin Name: Divi 5 Dev Tool
+Plugin URI:  https://github.com/elegantthemes/d5-dev-tool
+Description: A Divi 5 extension with various tools for developers.
 Version:     0.1.0
 Author:      Elegant Themes
 Author URI:  https://elegantthemes.com
 License:     GPL2
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
-Text Domain: d5-modal-dev-state-monitor
+Text Domain: divi-5-dev-tool
 Domain Path: /languages
 
-D5 Modal Dev State Monitor is free software: you can redistribute it and/or modify
+Divi 5 Dev Tool is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 2 of the License, or
 any later version.
 
-D5 Modal Dev State Monitor is distributed in the hope that it will be useful,
+Divi 5 Dev Tool is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with D5 Modal Dev State Monitor. If not, see https://www.gnu.org/licenses/gpl-2.0.html.
+along with Divi 5 Dev Tool. If not, see https://www.gnu.org/licenses/gpl-2.0.html.
 */
 
 /**
@@ -34,13 +34,13 @@ function d5_state_monitor_admin_bar_link( $admin_bar ) {
 
 	// Only display this admin bar item on D5 Visual Builder.
 	if ( function_exists( 'et_builder_d5_enabled' ) && et_builder_d5_enabled() && et_core_is_fb_enabled() ) {
-		$d5_dev_tools_id = 'd5-dev-tools';
+		$d5_dev_tools_id = 'divi-5-dev-tool';
 
 		// Main menu.
 		$admin_bar->add_node(
 			array(
 				'id'    => $d5_dev_tools_id,
-				'title' => __( 'D5 Dev Tools', 'd5-modal-dev-state-monitor' ),
+				'title' => __( 'Divi 5 Dev Tool', 'divi-5-dev-tool' ),
 				'href'  => '#',
 			)
 		);
