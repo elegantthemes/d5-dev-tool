@@ -1,4 +1,8 @@
+// External dependencies.
 import React, { ReactNode } from "react";
+
+// Local dependencies.
+import './styles.scss';
 
 /**
  * Content panel component.
@@ -10,5 +14,5 @@ export const ContentPanel = ({
   label: string;
   children: ReactNode;
 }) => {
-  return <div className="et-devtool-content-panel">{children}</div>;
+  return <div className="d5-dev-tool-content-panel">{children}</div>;
 };

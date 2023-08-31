@@ -17,7 +17,7 @@ import { ModuleFlatObject } from '@divi/types';
 // Local dependencies.
 import { ContentGlobal } from './component';
 
-export const name = 'divi/dev-state-monitor';
+export const name = 'divi/divi-5-dev-tool';
 export const type = 'multi';
 
 /**
@@ -84,7 +84,7 @@ export const ContentGlobalContainer = withSelect((selectStore: typeof select) =>
     selectedModules: getModuleIds(eventsStoreSelectors.getSelectedModules(false)),
     setExpandedModuleIds: (moduleIds: string[]) => {
       dispatch('divi/modal-library').setAttributes({
-        name: 'divi/dev-state-monitor',
+        name: 'divi/divi-5-dev-tool',
         attributes: {
           expandedModuleIds: moduleIds,
         },

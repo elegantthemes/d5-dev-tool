@@ -27,18 +27,19 @@ import { ContentScriptsContainer } from '../content-scripts';
 import { ContentAppStatesContainer } from '../content-app-states';
 import { ContentKeyboardContainer } from '../content-keyboard';
 import { ContentGlobalContainer } from '../content-global';
+import { ContentClipboardContainer } from '../content-clipboard';
 import { ReferencesTreeView } from '../references-tree-view';
-import { DevStateMonitorProps } from './types';
+import { Divi5DevToolProps } from './types';
 import './styles.scss';
 
 
 /**
- * Dev state monitor modal component.
+ * Divi 5 Dev Tool modal component.
  */
-const DevStateMonitor = ({
+const Divi5DevTool = ({
   name,
   tab
-}: DevStateMonitorProps) => {
+}: Divi5DevToolProps) => {
   const diviModuleExports = reduce<Record<string, unknown>, Record<string, string[]>>(window?.divi, (result, value, category) => {
     if (!isEmpty(value)) {
       result[category] = keys(value);
@@ -48,8 +49,8 @@ const DevStateMonitor = ({
 
   return (
     <ErrorBoundary
-      key="et-vb-divi-modals--dev-state-monitor"
-      componentName="et-vb-divi-modals--dev-state-monitor"
+      key="et-vb-divi-modals--dev-tool"
+      componentName="et-vb-divi-modals--dev-tool"
     >
       <WrapperContainer
         draggable
@@ -61,7 +62,7 @@ const DevStateMonitor = ({
         multiPanels
       >
         <Header
-          name={__('State Monitor', 'et_builder')}
+          name={__('Divi 5 Dev Tool', 'et_builder')}
         />
         <BodyPanelWrapperContainer>
           <PanelContainer id="states" label={__('States', 'et_builder')}>
@@ -87,6 +88,9 @@ const DevStateMonitor = ({
                 </ContentPanel>
                 <ContentPanel id="keyboard" label={__('Keyboard', 'et_builder')}>
                   <ContentKeyboardContainer />
+                </ContentPanel>
+                <ContentPanel id="clipboard" label={__('Clipboard', 'et_builder')}>
+                  <ContentClipboardContainer />
                 </ContentPanel>
               </ContentPanelWrapper>
             </div>
@@ -121,5 +125,5 @@ const DevStateMonitor = ({
 };
 
 export {
-  DevStateMonitor,
+  Divi5DevTool,
 };

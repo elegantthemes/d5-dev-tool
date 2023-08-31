@@ -1,3 +1,3 @@
-export const name = 'divi/dev-state-monitor';
+export const name = 'divi/divi-5-dev-tool';
 export const type = 'multi';
-export { DevStateMonitor } from './component';
+export { Divi5DevTool } from './component';

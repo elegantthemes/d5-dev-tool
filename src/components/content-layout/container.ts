@@ -15,7 +15,7 @@ import { SelectedModules } from '@divi/events';
 // Local dependencies.
 import { ContentLayout } from './component';
 
-export const name = 'divi/dev-state-monitor';
+export const name = 'divi/divi-5-dev-tool';
 export const type = 'multi';
 
 /**
@@ -61,7 +61,7 @@ export const ContentLayoutContainer = withSelect((selectStore: typeof select) =>
     selectedModules: getModuleIds(eventsStoreSelectors.getSelectedModules(false)),
     setExpandedModuleIds: (moduleIds: string[]) => {
       dispatch('divi/modal-library').setAttributes({
-        name: 'divi/dev-state-monitor',
+        name: 'divi/divi-5-dev-tool',
         attributes: {
           expandedModuleIds: moduleIds,
         },

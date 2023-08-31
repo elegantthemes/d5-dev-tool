@@ -1,8 +1,8 @@
 {
-  "name": "d5i-modal-dev-state-monitor",
+  "name": "divi-5-dev-tool",
   "version": "0.1.0",
   "private": true,
-  "repository": "https://github.com/elegantthemes/d5i-modal-dev-state-monitor",
+  "repository": "https://github.com/elegantthemes/d5-dev-tool",
   "author": "Elegant Themes",
   "scripts": {
     "start": "NODE_ENV=development webpack -w --config webpack.config.js --progress",
@@ -15,6 +15,7 @@
     "@babel/preset-react": "^7.16.7",
     "@divi/types": "npm:divi-types@^1.0.3",
     "@types/divi__app-ui": "npm:divi-types-app-ui@^1.0.3",
+    "@types/divi__clipboard": "npm:divi-types-clipboard@^1.0.5",
     "@types/divi__data": "npm:divi-types-data@^1.0.3",
     "@types/divi__error-boundary": "npm:divi-types-error-boundary@^1.0.3",
     "@types/divi__events": "npm:divi-types-events@^1.0.3",

@@ -4,11 +4,18 @@ import {
   forEach,
 } from 'lodash';
 
+// WordPress dependencies.
+import {
+  sprintf,
+  __,
+} from '@wordpress/i18n';
+
 // Divi dependencies.
 import { ObjectRenderer } from '@divi/object-renderer';
 
 // Local dependencies.
 import { ContentScriptsProps } from './types';
+import './styles.scss';
 
 
 /**
@@ -21,9 +28,19 @@ export const ContentScripts = ({
 
   forEach(scripts, (scriptItems, scriptName) => {
     const scriptItem = (
-      <div key={`state-monitor-script-${scriptName}`} className="et-vb-dev-state-monitor-script">
-        <h2 className="et-vb-dev-state-monitor-script-heading">{scriptName}</h2>
-        <ObjectRenderer values={scriptItems} />
+      <div key={`dev-tool-script-${scriptName}`} className="d5-dev-tool-script">
+        <h2 className="d5-dev-tool-script-heading">{scriptName}</h2>
+        {Object.keys(scriptItems)?.length
+          ? (
+            <ObjectRenderer values={scriptItems} />
+          )
+          : (
+            <div className="d5-dev-tool-no-items">
+              {sprintf(__('No %s found', 'divi-5-dev-tool'), scriptName)}
+            </div>
+          )
+        }
+
       </div>
     );
 
