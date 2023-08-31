@@ -15,20 +15,20 @@ export const ContentKeyboard = ({
 }: ContentKeyboardProps) => (
   <div
     className={classnames({
-      'et-devtool-state-monitor-overview': true,
+      'd5-dev-tool-overview': true,
     })}
   >
-    <div className="et-devtool-state-monitor-overview-keypress">
+    <div className="d5-dev-tool-overview-keypress">
       <h3>Keypress</h3>
-      <div className="et-devtool-state-monitor-overview-value">
+      <div className="d5-dev-tool-overview-value">
         {map(pressedKeys, key => (
-          <kbd key={`et-devtool-state-monitor-overview-key-${key}`}>{key}</kbd>
+          <kbd key={`d5-dev-tool-overview-key-${key}`}>{key}</kbd>
         ))}
       </div>
     </div>
-    <div className="et-devtool-state-monitor-overview-shortcut">
+    <div className="d5-dev-tool-overview-shortcut">
       <h3>Shortcuts</h3>
-      <div className="et-devtool-state-monitor-overview-value">
+      <div className="d5-dev-tool-overview-value">
         <pre>
           {currentShortcut?.name}
         </pre>

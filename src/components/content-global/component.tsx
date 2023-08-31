@@ -24,7 +24,7 @@ export const ContentGlobal = ({
   globalModules.map(globalModule => (
     <div
       key={`global-module-item-${globalModule?.id}`}
-      className="et-devtool-state-monitor-global-module-item"
+      className="d5-dev-tool-global-module-item"
     >
       <h3>id: {globalModule?.id}</h3>
       <ModuleTreeView

@@ -21,8 +21,8 @@ export const ContentScripts = ({
 
   forEach(scripts, (scriptItems, scriptName) => {
     const scriptItem = (
-      <div key={`state-monitor-script-${scriptName}`} className="et-vb-dev-state-monitor-script">
-        <h2 className="et-vb-dev-state-monitor-script-heading">{scriptName}</h2>
+      <div key={`dev-tool-script-${scriptName}`} className="et-vb-dev-tool-script">
+        <h2 className="et-vb-dev-tool-script-heading">{scriptName}</h2>
         <ObjectRenderer values={scriptItems} />
       </div>
     );

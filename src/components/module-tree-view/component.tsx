@@ -21,7 +21,7 @@ import { ModuleTreeViewProps } from './types';
  */
 const StateBadge = (active: boolean, slug: string, label: string = '') => (
   !active ? null : (
-    <span className={`et-devtool-state-monitor-module--state-${slug}`}>
+    <span className={`d5-dev-tool-module--state-${slug}`}>
       {slug}{label}
     </span>
   )
@@ -80,26 +80,26 @@ export const ModuleTreeView = ({
     const propsMonitor = !isPropsExpanded
       ? null
       : (
-        <div className="et-devtool-state-monitor-module-props">
+        <div className="d5-dev-tool-module-props">
           <ObjectRenderer values={module} />
         </div>
       );
 
     return (
       <div className={classnames({
-        'et-devtool-state-monitor-module': true,
-        'et-devtool-state-monitor-module--hovered': isHovered,
-        'et-devtool-state-monitor-module--selected': isSelected,
-        'et-devtool-state-monitor-module--dragged': isDragged,
-        'et-devtool-state-monitor-module--right-clicked': isRightClicked,
-        'et-devtool-state-monitor-module--on-clipboard': isOnClipboard,
-        'et-devtool-state-monitor-module--edited': isEdited,
+        'd5-dev-tool-module': true,
+        'd5-dev-tool-module--hovered': isHovered,
+        'd5-dev-tool-module--selected': isSelected,
+        'd5-dev-tool-module--dragged': isDragged,
+        'd5-dev-tool-module--right-clicked': isRightClicked,
+        'd5-dev-tool-module--on-clipboard': isOnClipboard,
+        'd5-dev-tool-module--edited': isEdited,
       })}
       >
-        <div className="et-devtool-state-monitor-module-meta">
-          <span className="et-devtool-state-monitor-module--name">{module?.name}</span>
+        <div className="d5-dev-tool-module-meta">
+          <span className="d5-dev-tool-module--name">{module?.name}</span>
           <span
-            className="et-devtool-state-monitor-module--id"
+            className="d5-dev-tool-module--id"
             role="button"
             tabIndex={0}
             onKeyPress={noop}
@@ -114,7 +114,7 @@ export const ModuleTreeView = ({
             {module?.id}
 
           </span>
-          <div className="et-devtool-state-monitor-module-state">
+          <div className="d5-dev-tool-module-state">
             {stateGlobal}
             {stateSelected}
             {stateDragged}
@@ -125,7 +125,7 @@ export const ModuleTreeView = ({
           </div>
         </div>
         {propsMonitor}
-        <div className="et-devtool-state-monitor-module--children">
+        <div className="d5-dev-tool-module--children">
           {(
             isEmpty(module?.children) ? null : module?.children?.map((childId: string) => (
               <Module

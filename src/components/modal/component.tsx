@@ -48,8 +48,8 @@ const Divi5DevTool = ({
 
   return (
     <ErrorBoundary
-      key="et-vb-divi-modals--dev-state-monitor"
-      componentName="et-vb-divi-modals--dev-state-monitor"
+      key="et-vb-divi-modals--dev-tool"
+      componentName="et-vb-divi-modals--dev-tool"
     >
       <WrapperContainer
         draggable

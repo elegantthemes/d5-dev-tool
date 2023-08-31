@@ -16,14 +16,14 @@ declare global {
   }
 }
 
-// Open divi/divi-5-dev-tool, a registered modal, when state-monitor menu item on admin bar is clicked.
+// Open divi/divi-5-dev-tool, a registered modal, when dev-tool menu item on admin bar is clicked.
 // This ensure that the following function is registered on app window.
 // @todo this top / window detection should be abstracted into util function.
 if (window.top !== window) {
 
   // Listen to click event on top window's admin bar item. The condition above ensures that the
   // following is only executed in app window.
-  window.top.jQuery('#wp-admin-bar-d5-modal-dev-state-monitor > a, #wp-admin-bar-divi-5-dev-tool > a').on('click', (event: JQuery.Event) => {
+  window.top.jQuery('#wp-admin-bar-divi-5-dev-tool > a').on('click', (event: JQuery.Event) => {
     event.preventDefault();
 
     // Open registered modal, divi/dev-clipboard.

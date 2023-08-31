@@ -8,8 +8,8 @@ $section-specialty-options-label: #ef5555;
 $section-fullwidth-options: #6c2eb9;
 $global-module: #97d000;
 
-.et-devtool-state-monitor-module {
-  .et-devtool-state-monitor-module {
+.d5-dev-tool-module {
+  .d5-dev-tool-module {
     padding: 0 0 0 20px;
   }
 
@@ -135,7 +135,7 @@ $global-module: #97d000;
   }
 }
 
-.et-devtool-state-monitor-overview {
+.d5-dev-tool-overview {
   h3 {
     font-size: 14px;
     font-weight: bold;
@@ -143,7 +143,7 @@ $global-module: #97d000;
   }
 
   &-selected {
-    .et-devtool-state-monitor-overview-value {
+    .d5-dev-tool-overview-value {
       font-weight: bold;
     }
   }
@@ -183,13 +183,13 @@ $global-module: #97d000;
       padding: 5px 0;
     }
 
-    .et-devtool-state-monitor-overview-value {
+    .d5-dev-tool-overview-value {
       height: 25px;
     }
   }
 }
 
-.et-vb-dev-state-monitor-script {
+.et-vb-dev-tool-script {
   margin-top: 20px;
 
   &:first-child {
@@ -197,13 +197,13 @@ $global-module: #97d000;
   }
 }
 
-.et-devtool-state-monitor-global-module-item {
+.d5-dev-tool-global-module-item {
   margin-bottom: 40px;
   border: 3px solid #97d000;
   padding: 15px;
   border-radius: 10px;
 
-  .et-devtool-state-monitor-module-state {
+  .d5-dev-tool-module-state {
     display: none;
   }
 }

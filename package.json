@@ -2,7 +2,7 @@
   "name": "divi-5-dev-tool",
   "version": "0.1.0",
   "private": true,
-  "repository": "https://github.com/elegantthemes/d5i-modal-dev-state-monitor",
+  "repository": "https://github.com/elegantthemes/d5-dev-tool",
   "author": "Elegant Themes",
   "scripts": {
     "start": "NODE_ENV=development webpack -w --config webpack.config.js --progress",
