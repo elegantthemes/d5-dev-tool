@@ -8,6 +8,12 @@ $section-specialty-options-label: #ef5555;
 $section-fullwidth-options: #6c2eb9;
 $global-module: #97d000;
 
+.d5-dev-tool {
+  &-no-items {
+    color: #AFAFAF;
+  }
+}
+
 .d5-dev-tool-module {
   .d5-dev-tool-module {
     padding: 0 0 0 20px;

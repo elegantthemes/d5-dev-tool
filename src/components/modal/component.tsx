@@ -27,6 +27,7 @@ import { ContentScriptsContainer } from '../content-scripts';
 import { ContentAppStatesContainer } from '../content-app-states';
 import { ContentKeyboardContainer } from '../content-keyboard';
 import { ContentGlobalContainer } from '../content-global';
+import { ContentClipboardContainer } from '../content-clipboard';
 import { ReferencesTreeView } from '../references-tree-view';
 import { Divi5DevToolProps } from './types';
 import './styles.scss';
@@ -87,6 +88,9 @@ const Divi5DevTool = ({
                 </ContentPanel>
                 <ContentPanel id="keyboard" label={__('Keyboard', 'et_builder')}>
                   <ContentKeyboardContainer />
+                </ContentPanel>
+                <ContentPanel id="clipboard" label={__('Clipboard', 'et_builder')}>
+                  <ContentClipboardContainer />
                 </ContentPanel>
               </ContentPanelWrapper>
             </div>
