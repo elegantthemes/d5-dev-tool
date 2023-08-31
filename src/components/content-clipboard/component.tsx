@@ -22,7 +22,7 @@ import {
   ClipboardItemProps,
   ClipboardPayloadItemProps,
 } from './types';
-import './style.scss';
+import './styles.scss';
 
 /**
  * Component for rendering clipboard item's payload item.

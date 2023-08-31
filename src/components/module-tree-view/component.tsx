@@ -15,6 +15,7 @@ import { ObjectRenderer } from '@divi/object-renderer';
 
 // Local dependencies.
 import { ModuleTreeViewProps } from './types';
+import './styles.scss';
 
 /**
  * State badge component.
@@ -129,7 +130,7 @@ export const ModuleTreeView = ({
           {(
             isEmpty(module?.children) ? null : module?.children?.map((childId: string) => (
               <Module
-                key={`et-devtool-module-${childId}`}
+                key={`d5-dev-tool-module-${childId}`}
                 module={modules[childId]}
               />
             ))

@@ -7,6 +7,7 @@ import { __ } from '@wordpress/i18n';
 // Local dependencies.
 import { ModuleTreeView } from '../module-tree-view';
 import { ContentGlobalProps } from './types';
+import './styles.scss';
 
 
 /**

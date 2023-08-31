@@ -1,3 +1,4 @@
+// External dependencies.
 import React, {
   Children,
   isValidElement,
@@ -6,6 +7,9 @@ import React, {
   MouseEvent
 } from "react";
 
+// Local dependencies.
+import './styles.scss';
+
 /**
  * Wrapper of content panel component.
  */
@@ -13,8 +17,8 @@ export const ContentPanelWrapper = ({ children }: { children: ReactElement<{id: 
   const [activePanel, setActivePanel] = useState(children[0]?.props?.id);
 
   return (
-    <div className="et-devtool-content-panel-wrapper">
-      <div className="et-devtool-content-panel-wrapper-nav">
+    <div className="d5-dev-tool-content-panel-wrapper">
+      <div className="d5-dev-tool-content-panel-wrapper-nav">
         {Children.map(children, (child) => {
           return isValidElement(child) ? (
             <button
@@ -30,7 +34,7 @@ export const ContentPanelWrapper = ({ children }: { children: ReactElement<{id: 
           ) : null;
         })}
       </div>
-      <div className="et-devtool-content-panels">
+      <div className="d5-dev-tool-content-panels">
         {Children.map(children, (child) => {
           return isValidElement(child) && child.props.id === activePanel
             ? child

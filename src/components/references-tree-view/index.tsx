@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Fuse from 'fuse.js';
 import { map, kebabCase, keys, toPairs } from 'lodash';
 import { ReferencesTreeViewProps } from './types';
-import './style.scss';
+import './styles.scss';
 
 /**
  * Renders a tree view of the references.

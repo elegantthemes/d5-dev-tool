@@ -1,0 +1,128 @@
+@import '../../colors.scss';
+
+.d5-dev-tool-module {
+  .d5-dev-tool-module {
+    padding: 0 0 0 20px;
+  }
+
+  &-meta {
+    padding: 10px 10px;
+    background: #efefef;
+    border-radius: 3px;
+    margin-bottom: 5px;
+    line-height: 1em;
+    position: relative;
+  }
+
+  &-state {
+    text-transform: uppercase;
+    font-weight: bold;
+    letter-spacing: 2px;
+    font-size: 10px;
+    position: absolute;
+    top: calc(100% + 10px);
+    left: 0px;
+    z-index: 10;
+
+    span {
+      padding: 5px;
+      border-radius: 3px;
+      margin: 20px 10px 10px 0;
+      padding: 3px 10px;
+      border: 1px solid;
+      color: white;
+    }
+  }
+
+  &-props {
+    padding: 30px 20px 20px;
+    margin: 10px 0;
+    background: #dfdfdf;
+    border-radius: 5px;
+  }
+
+  &--hovered>&-meta {
+    background-color: $module-options;
+    color: white;
+  }
+
+  &--selected>&-meta {
+    background-color: $row-options;
+    color: white;
+  }
+
+  &--dragged>&-meta {
+    background-color: $section-options;
+    color: white;
+  }
+
+  &--right-clicked>&-meta {
+    background: $section-specialty-options;
+    color: white;
+  }
+
+  &--on-clipboard>&-meta {
+    background-color: $section-fullwidth-options;
+    color: white;
+  }
+
+  &--edited>&-meta {
+    background-color: $section-specialty-options-label;
+    color: white;
+  }
+
+
+  &--state {
+    &-hovered {
+      background-color: $module-options;
+    }
+
+    &-selected {
+      background-color: $row-options;
+    }
+
+    &-dragged {
+      background-color: $section-options;
+    }
+
+    &-right-clicked {
+      background: $section-specialty-options;
+    }
+
+    &-on-clipboard {
+      background-color: $section-fullwidth-options;
+    }
+
+    &-edited {
+      background-color: $section-specialty-options-label;
+    }
+
+    &-global {
+      background-color: $global-module;
+    }
+  }
+
+  &--name {
+    font-weight: bold;
+    font-size: 12px;
+    display: inline-block;
+    margin-right: 10px;
+    vertical-align: top;
+  }
+
+  &--id {
+    font-size: 11px;
+    display: inline-block;
+    opacity: .8;
+    vertical-align: top;
+    cursor: pointer;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  &--children {
+    border-left: 2px dotted #efefef;
+  }
+}

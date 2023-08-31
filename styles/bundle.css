@@ -1,125 +1,62 @@
-/*!**********************************************************************************************************************************************************************************************!*\
-  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[2].use[1]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[2].use[2]!./src/components/content-clipboard/style.scss ***!
-  \**********************************************************************************************************************************************************************************************/
-.d5-dev-tool-clipboard-items {
-  display: flex;
-  flex-direction: column-reverse;
-}
-.d5-dev-tool-clipboard-item {
+/*!*******************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[2].use[1]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[2].use[2]!./src/components/content-panel/styles.scss ***!
+  \*******************************************************************************************************************************************************************************************/
+.d5-dev-tool-content-panel {
   padding: 10px;
-  margin-bottom: 10px;
-  background-color: rgba(240, 245, 249, 0.6);
-  border-radius: 5px;
-  font-size: 12px;
-  position: relative;
-}
-.d5-dev-tool-clipboard-item:last-child {
-  border: 2px solid #4c5866;
-}
-.d5-dev-tool-clipboard-item-type {
-  display: inline-block;
-  padding: 1px 10px;
-  background-color: #4c5866;
-  color: white;
-  border-radius: 3px;
-  font-size: 11px;
-  font-weight: bold;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-}
-.d5-dev-tool-clipboard-item-type--modules {
-  background-color: #29c4a9;
-}
-.d5-dev-tool-clipboard-item-type--moduleFieldAttribute {
-  background-color: #2b87da;
-}
-.d5-dev-tool-clipboard-item-type--moduleGroupAttributes {
-  background-color: #ff9232;
-}
-.d5-dev-tool-clipboard-item-type--moduleGroupTabAttributes {
-  background-color: #6c2eb9;
-}
-.d5-dev-tool-clipboard-item-type--moduleAttributes {
-  background-color: #ef5555;
-}
-.d5-dev-tool-clipboard-item-index {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  font-size: 13px;
-  font-weight: bold;
-  color: #bfbfbf;
-}
-.d5-dev-tool-clipboard-item-origin {
-  font-size: 12px;
-  opacity: 0.8;
-  margin: 10px 0 0;
-}
-.d5-dev-tool-clipboard-item-payload {
-  padding: 10px 15px;
-  margin: 10px 0;
-  background: rgba(0, 0, 0, 0.05);
-  border-radius: 5px;
-}
-.d5-dev-tool-clipboard-item-payload-item {
-  margin-bottom: 10px;
-}
-.d5-dev-tool-clipboard-item-payload-item-title {
-  font-weight: bold;
   display: block;
-  margin-top: 15px;
-  color: #000;
 }
-.d5-dev-tool-clipboard-item-payload-item-title:first-child {
-  margin-top: 0;
+.d5-dev-tool-content-panel pre {
+  text-wrap: wrap;
+  margin: 10px 10px 20px 20px;
+  background-color: #4C5866;
+  color: #88dfbe;
+  font-family: monospace;
+  font-weight: 700;
+  padding: 20px 30px;
+  font-size: 13px;
 }
-/*!*************************************************************************************************************************************************************************************************!*\
-  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[2].use[1]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[2].use[2]!./src/components/references-tree-view/style.scss ***!
-  \*************************************************************************************************************************************************************************************************/
-.et-vb-divi-devtools-tree-view .et-vb-divi-devtools-tree-view-item-title {
-  padding: 10px 10px;
-  background: #efefef;
-  border-radius: 3px;
-  margin-bottom: 5px;
-  line-height: 1em;
-  font-weight: bold;
-  font-size: 12px;
-  cursor: pointer;
-}
-.et-vb-divi-devtools-tree-view .et-vb-divi-devtools-tree-view-item-title:hover {
-  background: #dfdfdf;
-}
-.et-vb-divi-devtools-tree-view .et-vb-divi-devtools-tree-view-item-list {
-  margin-left: 20px;
-  margin-bottom: 20px;
-  font-size: 12px;
-  cursor: default;
-}
-.et-vb-divi-devtools-tree-view .et-vb-divi-devtools-tree-view-search-input {
-  background-color: #efefef;
+/*!***************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[2].use[1]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[2].use[2]!./src/components/content-panel-wrapper/styles.scss ***!
+  \***************************************************************************************************************************************************************************************************/
+.d5-dev-tool-content-panel-wrapper {
   width: 100%;
-  margin-bottom: 10px;
-  padding: 5px 10px;
-  border-radius: 3px;
-  border-color: #aaaaaa;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: stretch;
+  gap: 10px;
+}
+.d5-dev-tool-content-panel-wrapper-nav {
+  width: 120px;
+  display: flex;
+  flex-direction: column;
+}
+.d5-dev-tool-content-panel-wrapper-nav button {
+  border: none;
+  border-bottom: 1px solid #dfdfdf;
+  border-right: 1px solid #dfdfdf;
+  background: #f9f9f9;
+  padding: 10px 15px;
+  cursor: pointer;
   font-size: 12px;
 }
-.et-vb-divi-devtools-tree-view .et-vb-divi-devtools-tree-view-warning {
-  padding: 5px 10px;
-  margin-bottom: 10px;
-  border-radius: 3px;
-  border: 1px solid #ffa831;
-  font-size: 12px;
-  background-color: rgb(255, 244, 229);
-  color: rgb(102, 60, 0);
+.d5-dev-tool-content-panel-wrapper-nav button:last-child {
+  border-bottom: none;
 }
-/*!***********************************************************************************************************************************************************************************!*\
-  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[2].use[1]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[2].use[2]!./src/components/modal/styles.scss ***!
-  \***********************************************************************************************************************************************************************************/
-.d5-dev-tool-no-items {
-  color: #AFAFAF;
+.d5-dev-tool-content-panel-wrapper-nav button:hover {
+  background: #f4f4f4;
+}
+.d5-dev-tool-content-panel-wrapper-nav button.active {
+  border-right: none;
+  background: #ffffff;
 }
 
+.d5-dev-tool-content-panels {
+  width: calc(100% - 120px);
+}
+/*!**********************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[2].use[1]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[2].use[2]!./src/components/module-tree-view/styles.scss ***!
+  \**********************************************************************************************************************************************************************************************/
 .d5-dev-tool-module .d5-dev-tool-module {
   padding: 0 0 0 20px;
 }
@@ -220,6 +157,148 @@
 .d5-dev-tool-module--children {
   border-left: 2px dotted #efefef;
 }
+/*!*********************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[2].use[1]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[2].use[2]!./src/components/content-scripts/styles.scss ***!
+  \*********************************************************************************************************************************************************************************************/
+.d5-dev-tool-script {
+  margin-top: 20px;
+}
+.d5-dev-tool-script:first-child {
+  margin-top: 0;
+}
+/*!********************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[2].use[1]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[2].use[2]!./src/components/content-global/styles.scss ***!
+  \********************************************************************************************************************************************************************************************/
+.d5-dev-tool-global-module-item {
+  margin-bottom: 40px;
+  border: 3px solid #97d000;
+  padding: 15px;
+  border-radius: 10px;
+}
+.d5-dev-tool-global-module-item .d5-dev-tool-module-state {
+  display: none;
+}
+/*!***********************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[2].use[1]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[2].use[2]!./src/components/content-clipboard/styles.scss ***!
+  \***********************************************************************************************************************************************************************************************/
+.d5-dev-tool-clipboard-items {
+  display: flex;
+  flex-direction: column-reverse;
+}
+.d5-dev-tool-clipboard-item {
+  padding: 10px;
+  margin-bottom: 10px;
+  background-color: rgba(240, 245, 249, 0.6);
+  border-radius: 5px;
+  font-size: 12px;
+  position: relative;
+}
+.d5-dev-tool-clipboard-item:last-child {
+  border: 2px solid #4c5866;
+}
+.d5-dev-tool-clipboard-item-type {
+  display: inline-block;
+  padding: 1px 10px;
+  background-color: #4c5866;
+  color: white;
+  border-radius: 3px;
+  font-size: 11px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+.d5-dev-tool-clipboard-item-type--modules {
+  background-color: #29c4a9;
+}
+.d5-dev-tool-clipboard-item-type--moduleFieldAttribute {
+  background-color: #2b87da;
+}
+.d5-dev-tool-clipboard-item-type--moduleGroupAttributes {
+  background-color: #ff9232;
+}
+.d5-dev-tool-clipboard-item-type--moduleGroupTabAttributes {
+  background-color: #6c2eb9;
+}
+.d5-dev-tool-clipboard-item-type--moduleAttributes {
+  background-color: #ef5555;
+}
+.d5-dev-tool-clipboard-item-index {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 13px;
+  font-weight: bold;
+  color: #bfbfbf;
+}
+.d5-dev-tool-clipboard-item-origin {
+  font-size: 12px;
+  opacity: 0.8;
+  margin: 10px 0 0;
+}
+.d5-dev-tool-clipboard-item-payload {
+  padding: 10px 15px;
+  margin: 10px 0;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 5px;
+}
+.d5-dev-tool-clipboard-item-payload-item {
+  margin-bottom: 10px;
+}
+.d5-dev-tool-clipboard-item-payload-item-title {
+  font-weight: bold;
+  display: block;
+  margin-top: 15px;
+  color: #000;
+}
+.d5-dev-tool-clipboard-item-payload-item-title:first-child {
+  margin-top: 0;
+}
+/*!**************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[2].use[1]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[2].use[2]!./src/components/references-tree-view/styles.scss ***!
+  \**************************************************************************************************************************************************************************************************/
+.et-vb-divi-devtools-tree-view .et-vb-divi-devtools-tree-view-item-title {
+  padding: 10px 10px;
+  background: #efefef;
+  border-radius: 3px;
+  margin-bottom: 5px;
+  line-height: 1em;
+  font-weight: bold;
+  font-size: 12px;
+  cursor: pointer;
+}
+.et-vb-divi-devtools-tree-view .et-vb-divi-devtools-tree-view-item-title:hover {
+  background: #dfdfdf;
+}
+.et-vb-divi-devtools-tree-view .et-vb-divi-devtools-tree-view-item-list {
+  margin-left: 20px;
+  margin-bottom: 20px;
+  font-size: 12px;
+  cursor: default;
+}
+.et-vb-divi-devtools-tree-view .et-vb-divi-devtools-tree-view-search-input {
+  background-color: #efefef;
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 5px 10px;
+  border-radius: 3px;
+  border-color: #aaaaaa;
+  font-size: 12px;
+}
+.et-vb-divi-devtools-tree-view .et-vb-divi-devtools-tree-view-warning {
+  padding: 5px 10px;
+  margin-bottom: 10px;
+  border-radius: 3px;
+  border: 1px solid #ffa831;
+  font-size: 12px;
+  background-color: rgb(255, 244, 229);
+  color: rgb(102, 60, 0);
+}
+/*!***********************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[2].use[1]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[2].use[2]!./src/components/modal/styles.scss ***!
+  \***********************************************************************************************************************************************************************************/
+.d5-dev-tool-no-items {
+  color: #AFAFAF;
+}
 
 .d5-dev-tool-overview h3 {
   font-size: 14px;
@@ -254,73 +333,4 @@
 }
 .d5-dev-tool-overview-view .d5-dev-tool-overview-value, .d5-dev-tool-overview-breakpoint .d5-dev-tool-overview-value, .d5-dev-tool-overview-attribute-state .d5-dev-tool-overview-value, .d5-dev-tool-overview-selected .d5-dev-tool-overview-value, .d5-dev-tool-overview-keypress .d5-dev-tool-overview-value, .d5-dev-tool-overview-shortcut .d5-dev-tool-overview-value {
   height: 25px;
-}
-
-.et-vb-dev-tool-script {
-  margin-top: 20px;
-}
-.et-vb-dev-tool-script:first-child {
-  margin-top: 0;
-}
-
-.d5-dev-tool-global-module-item {
-  margin-bottom: 40px;
-  border: 3px solid #97d000;
-  padding: 15px;
-  border-radius: 10px;
-}
-.d5-dev-tool-global-module-item .d5-dev-tool-module-state {
-  display: none;
-}
-
-.et-vb-modal-panel[data-id=saved] h3 {
-  margin: 20px 20px 0;
-}
-.et-vb-modal-panel[data-id=saved] pre {
-  text-wrap: wrap;
-  padding: 20px;
-  background-color: #efefef;
-  margin: 10px 10px 20px 20px;
-}
-
-.et-devtool-content-panel-wrapper {
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  align-items: stretch;
-  gap: 10px;
-}
-.et-devtool-content-panel-wrapper-nav {
-  width: 120px;
-  display: flex;
-  flex-direction: column;
-}
-.et-devtool-content-panel-wrapper-nav button {
-  border: none;
-  border-bottom: 1px solid #dfdfdf;
-  border-right: 1px solid #dfdfdf;
-  background: #f9f9f9;
-  padding: 10px 15px;
-  cursor: pointer;
-  font-size: 12px;
-}
-.et-devtool-content-panel-wrapper-nav button:last-child {
-  border-bottom: none;
-}
-.et-devtool-content-panel-wrapper-nav button:hover {
-  background: #f4f4f4;
-}
-.et-devtool-content-panel-wrapper-nav button.active {
-  border-right: none;
-  background: #ffffff;
-}
-
-.et-devtool-content-panels {
-  width: calc(100% - 120px);
-}
-
-.et-devtool-content-panel {
-  padding: 10px;
-  display: block;
 }
