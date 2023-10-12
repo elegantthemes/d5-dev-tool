@@ -1,0 +1,70 @@
+.tool-generate-module-settings-configuration {
+  // Field label.
+  .field-label {
+    margin-bottom: 5px;
+  }
+
+  // Select Module.
+  .select-module-wrapper {
+    margin-bottom: 20px;
+  }
+
+  // Module Metadata Textarea.
+  .edit-metadata-wrapper {
+    margin-bottom: 20px;
+
+    textarea {
+      width: 100%;
+      min-height: 250px;
+      background: rgb(76, 88, 102);
+      color: rgb(41, 196, 169);
+      font-weight: bold;
+      font-family: monospace;
+      padding: 20px;
+      border-radius: 5px;
+      border-style: none;
+
+      &:focus {
+        background-color: darken(rgb(76, 88, 102), 5);
+      }
+    }
+  }
+
+  // Conversion Button.
+  .convert-metadata-into-module-settings-configuration {
+    margin-bottom: 20px;
+  }
+
+  .convert-button {
+    background-color: rgb(41, 196, 169);
+    color: rgb(255, 255, 255);
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 14px;
+    cursor: pointer;
+
+    &:hover {
+      background-color: darken(rgb(41, 196, 169), 5);
+    }
+
+    &:active {
+      background-color: darken(rgb(41, 196, 169), 10);
+    }
+  }
+
+  // Generated module settings configuration.
+  .module-settings-configuration {
+    width: 100%;
+    min-height: 250px;
+    background: rgb(76, 88, 102);
+    color: rgb(41, 196, 169);
+    font-weight: bold;
+    font-family: monospace;
+    padding: 20px;
+    border-radius: 5px;
+    border-style: none;
+    margin: 0;
+  }
+}

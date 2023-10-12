@@ -16,6 +16,7 @@ import {
   BodyPanelWrapperContainer,
   PanelContainer,
 } from '@divi/modal';
+import { generateModuleSettingsConfiguration } from '@divi/module-library';
 import { ErrorBoundary } from '@divi/error-boundary';
 
 // Local dependencies.
@@ -29,6 +30,7 @@ import { ContentKeyboardContainer } from '../content-keyboard';
 import { ContentGlobalContainer } from '../content-global';
 import { ContentClipboardContainer } from '../content-clipboard';
 import { ReferencesTreeView } from '../references-tree-view';
+import { ToolGenerateModuleSettingsConfigurationContainer } from '../tool-generate-module-settings-configuration';
 import { Divi5DevToolProps } from './types';
 import './styles.scss';
 
@@ -59,7 +61,7 @@ const Divi5DevTool = ({
         snappable
         modalName={name}
         modalActiveTab={tab ? tab : 'states'}
-        multiPanels
+        multiPanels={false}
       >
         <Header
           name={__('Divi 5 Dev Tool', 'et_builder')}
@@ -96,8 +98,19 @@ const Divi5DevTool = ({
             </div>
           </PanelContainer>
           <PanelContainer id="tools" label={__('Tools', 'et_builder')}>
-            <div style={{ padding: '15px' }}>
-              Coming Soon
+            <div style={{ padding: '20px' }}>
+              <ContentPanelWrapper>
+                <ContentPanel id="generate-module-settings-config" label={__('Generate Module Settings Configuration', 'et_builder')}>
+                  {generateModuleSettingsConfiguration ? (
+                    <ToolGenerateModuleSettingsConfigurationContainer />
+                  ) : (
+                    __('You need to use at least Divi 5 Dev Beta 4 for this tool to work')
+                  )}
+                </ContentPanel>
+                <ContentPanel id="module-metadata" label={__('Module Metadata', 'et_builder')}>
+                  Coming Soon
+                </ContentPanel>
+              </ContentPanelWrapper>
             </div>
           </PanelContainer>
           <PanelContainer id="references" label={__('References', 'et_builder')}>
