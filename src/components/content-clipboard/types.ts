@@ -1,7 +1,7 @@
 import {
   ClipboardItem,
   ClipboardType,
-} from "@divi/clipboard";
+} from "@divi/types";
 
 export interface ClipboardPayloadItemProps {
   name: keyof ClipboardItem['payload'];

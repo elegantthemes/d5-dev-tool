@@ -28,10 +28,12 @@ module.exports = {
     // Divi dependencies.
     '@divi/data': ['divi', 'data'],
     '@divi/error-boundary': ['divi', 'errorBoundary'],
-    '@divi/modal': ['divi', 'modal'],
-    '@divi/object-renderer': ['divi', 'objectRenderer'],
-    '@divi/module': ['divi', 'module'],
+    '@divi/field-library': ['divi', 'fieldLibrary'],
     '@divi/global-layouts': ['divi', 'globalLayouts'],
+    '@divi/modal': ['divi', 'modal'],
+    '@divi/module-library': ['divi', 'moduleLibrary'],
+    '@divi/module': ['divi', 'module'],
+    '@divi/object-renderer': ['divi', 'objectRenderer'],
   },
 
   // This option determine how different types of module within the project will be treated.

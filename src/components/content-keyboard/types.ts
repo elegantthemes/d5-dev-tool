@@ -5,9 +5,9 @@ import {
 } from 'seamless-immutable';
 
 // Divi dependencies.
-import { Shortcut } from '@divi/keyboard-shortcuts';
+import { KeyboardShortcuts } from '@divi/types';
 
 export interface ContentKeyboardProps {
   pressedKeys: ImmutableArray<string>;
-  currentShortcut: ImmutableObject<Shortcut>;
+  currentShortcut: ImmutableObject<KeyboardShortcuts.Shortcut>;
 }
