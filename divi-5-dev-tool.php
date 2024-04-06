@@ -3,7 +3,7 @@
 Plugin Name: Divi 5 Dev Tool
 Plugin URI:  https://github.com/elegantthemes/d5-dev-tool
 Description: A Divi 5 extension with various tools for developers.
-Version:     0.1.1
+Version:     0.1.2
 Author:      Elegant Themes
 Author URI:  https://elegantthemes.com
 License:     GPL2
@@ -67,7 +67,7 @@ function divi_5_dev_tool_enqueue_scripts() {
 				'divi-modal',
 				'divi-object-renderer',
 			),
-			'0.1.1',
+			'0.1.2',
 			true
 		);
 
@@ -75,7 +75,7 @@ function divi_5_dev_tool_enqueue_scripts() {
 			'divi-5-dev-tool-builder-bundle-style',
 			"{$plugin_dir_url}styles/bundle.css",
 			array(),
-			'0.1.1'
+			'0.1.2'
 		);
 	}
 }

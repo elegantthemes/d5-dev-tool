@@ -19,11 +19,11 @@ module.exports = {
     jquery: 'jQuery',
     underscore: '_',
     lodash: 'lodash',
-    react: 'React',
-    'react-dom': 'ReactDOM',
+    react: ['vendor', 'React'],
+    'react-dom': ['vendor', 'ReactDOM'],
 
     // WordPress dependencies.
-    '@wordpress/i18n': ['wp', 'i18n'],
+    '@wordpress/i18n': ['vendor', 'wp', 'i18n'],
 
     // Divi dependencies.
     '@divi/data': ['divi', 'data'],
