@@ -29,6 +29,7 @@ import { ContentAppStatesContainer } from '../content-app-states';
 import { ContentKeyboardContainer } from '../content-keyboard';
 import { ContentGlobalContainer } from '../content-global';
 import { ContentClipboardContainer } from '../content-clipboard';
+import { ContentEventsContainer } from '../content-events'
 import { ReferencesTreeView } from '../references-tree-view';
 import { ToolGenerateModuleSettingsConfigurationContainer } from '../tool-generate-module-settings-configuration';
 import { Divi5DevToolProps } from './types';
@@ -87,6 +88,9 @@ const Divi5DevTool = ({
                 </ContentPanel>
                 <ContentPanel id="app-state" label={__('App State', 'et_builder')}>
                   <ContentAppStatesContainer />
+                </ContentPanel>
+                <ContentPanel id="events" label={__('Events', 'et_builder')}>
+                  <ContentEventsContainer />
                 </ContentPanel>
                 <ContentPanel id="keyboard" label={__('Keyboard', 'et_builder')}>
                   <ContentKeyboardContainer />

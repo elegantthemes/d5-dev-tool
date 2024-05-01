@@ -7,7 +7,6 @@ import { dispatch } from '@divi/data';
 import {
   Divi5DevTool,
   name,
-  type
 } from './components/modal';
 
 declare global {
@@ -33,7 +32,11 @@ if (window.top !== window) {
   // On script load, register `divi/clipboard` modal to modals registry.
   dispatch('divi/modal-library').addModal({
     name,
-    type,
-    component: Divi5DevTool,
+    type:            'multiInstanceModal',
+    sidebarPosition: 'left',
+    component:       Divi5DevTool,
+    dimension: {
+      width: 500,
+    }
   });
 }

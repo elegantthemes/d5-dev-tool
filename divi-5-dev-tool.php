@@ -67,7 +67,7 @@ function divi_5_dev_tool_enqueue_scripts() {
 				'divi-modal',
 				'divi-object-renderer',
 			),
-			'0.1.2',
+			'0.1.2.' . rand(1, 10000000),
 			true
 		);
 
