@@ -39,4 +39,14 @@ if (window.top !== window) {
       width: 500,
     }
   });
+
+  // Automatically open modal on load.
+  dispatch('divi/modal-library').open({ name });
+
+  dispatch('divi/app-ui').setElementProperty({
+    elementName:   'sidebarLeft',
+    propertyGroup: 'dimension',
+    propertyName:  'width',
+    value: 500
+  })
 }

@@ -2,11 +2,8 @@
 import {
   ModuleFlatObject,
   ModuleFlatObjects,
+  type Events,
 } from "@divi/types";
-import {
-  HoveredModule,
-  SelectedModule,
-} from '@divi/events';
 
 export interface ModuleProps {
   module: ModuleFlatObject;
@@ -16,8 +13,8 @@ export interface ContentLayoutProps {
   activeModalSetting?: string;
   draggedModules: string[],
   expandedModuleIds?: string[];
-  hoveredModule: HoveredModule;
-  lastModuleClipboard: SelectedModule;
+  hoveredModule: Events.Hovered.Module;
+  lastModuleClipboard: Events.Store.ImmutableState['selectedModules'];
   modules: ModuleFlatObjects;
   rightClickedModuleId: string;
   selectedModules: string[];
