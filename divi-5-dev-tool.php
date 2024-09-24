@@ -25,6 +25,9 @@ You should have received a copy of the GNU General Public License
 along with Divi 5 Dev Tool. If not, see https://www.gnu.org/licenses/gpl-2.0.html.
 */
 
+use ET\Builder\Framework\Utility\Conditions;
+use ET\Builder\VisualBuilder\Assets\PackageBuildManager;
+
 /**
  * Add custom item on admin bar for `Divi 5 Dev Tool`
  *
@@ -54,29 +57,47 @@ add_action( 'admin_bar_menu', 'divi_5_dev_tool_admin_bar_link', 700 );
  * @since ??
  */
 function divi_5_dev_tool_enqueue_scripts() {
-	if ( function_exists( 'et_builder_d5_enabled' ) && et_builder_d5_enabled() && et_core_is_fb_enabled() ) {
+	if ( ( function_exists( 'et_builder_d5_enabled' ) && et_builder_d5_enabled() && et_core_is_fb_enabled() ) || Conditions::is_tb_admin_screen() ) {
 		$plugin_dir_url = plugin_dir_url( __FILE__ );
 
-		wp_enqueue_script(
-			'divi-5-dev-tool-builder-bundle-script',
-			"{$plugin_dir_url}scripts/bundle.js",
-			array(
-				'divi-visual-builder',
-				'divi-data',
-				'divi-error-boundary',
-				'divi-modal',
-				'divi-object-renderer',
-			),
-			'0.1.2.' . rand(1, 10000000),
-			true
-		);
-
-		wp_enqueue_style(
-			'divi-5-dev-tool-builder-bundle-style',
-			"{$plugin_dir_url}styles/bundle.css",
-			array(),
-			'0.1.2'
-		);
+		PackageBuildManager::register( [
+			'name'    => 'divi-5-dev-tool-builder-bundle',
+			'version' => '0.1.2.' . rand(1, 10000000),
+			'script'  => [
+				'src'                => "{$plugin_dir_url}scripts/bundle.js",
+				'deps'               => [
+					// 'divi-visual-builder',
+					'divi-data',
+					'divi-error-boundary',
+					'divi-modal',
+					'divi-object-renderer',
+				],
+				'args'               => true,
+				'data_app_window'    => [],
+				'data_top_window'    => [],
+				'enqueue_top_window' => false,
+				'enqueue_app_window' => true,
+			],
+			'style' => [
+				'src'                => "{$plugin_dir_url}styles/bundle.css",
+				'deps'               => [],
+				'args'               => [],
+				'enqueue_top_window' => true,
+				'enqueue_app_window' => false,
+				'media'              => 'all',
+			]
+		] );
 	}
 }
-add_action( 'divi_visual_builder_assets_after_enqueue_package_script', 'divi_5_dev_tool_enqueue_scripts' );
+add_action( 'et_fb_framework_loaded', 'divi_5_dev_tool_enqueue_scripts', 20 );
+
+/**
+ * Enqueue object renderer on top window
+ */
+function divi_5_dev_tool_enqueue_object_renderer_on_top_window( $params ) {
+	// Enqueue object renderer style on top window. Layout panel needs it.
+	$params['style']['enqueue_top_window'] = true;
+
+	return $params;
+}
+add_filter( 'divi_visual_builder_package_build_params_divi-object-renderer', 'divi_5_dev_tool_enqueue_object_renderer_on_top_window' );
