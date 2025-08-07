@@ -59,7 +59,7 @@ add_action( 'admin_bar_menu', 'divi_5_dev_tool_admin_bar_link', 700 );
  * @since ??
  */
 function divi_5_dev_tool_enqueue_scripts() {
-	if ( ( function_exists( 'et_builder_d5_enabled' ) && et_builder_d5_enabled() && et_core_is_fb_enabled() ) || Conditions::is_tb_admin_screen() ) {
+	if ( ( function_exists( 'et_builder_d5_enabled' ) && et_builder_d5_enabled() && et_core_is_fb_enabled() ) || ( class_exists( 'ET\Builder\Framework\Utility\Conditions' ) && Conditions::is_tb_admin_screen() ) ) {
 		$plugin_dir_url = plugin_dir_url( __FILE__ );
 
 		PackageBuildManager::register_package_build( [
@@ -116,7 +116,7 @@ require_once plugin_dir_path( __FILE__ ) . 'includes/ajax-handlers.php';
  * Enqueue WordPress AJAX nonce for dev tool.
  */
 function divi_5_dev_tool_localize_script() {
-	if ( ( function_exists( 'et_builder_d5_enabled' ) && et_builder_d5_enabled() && et_core_is_fb_enabled() ) || Conditions::is_tb_admin_screen() ) {
+	if ( ( function_exists( 'et_builder_d5_enabled' ) && et_builder_d5_enabled() && et_core_is_fb_enabled() ) || ( class_exists( 'ET\Builder\Framework\Utility\Conditions' ) && Conditions::is_tb_admin_screen() ) ) {
 		wp_localize_script(
 			'divi-5-dev-tool-builder-bundle',
 			'divi5DevToolAjax',
