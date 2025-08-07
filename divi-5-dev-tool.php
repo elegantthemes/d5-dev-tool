@@ -60,7 +60,7 @@ function divi_5_dev_tool_enqueue_scripts() {
 	if ( ( function_exists( 'et_builder_d5_enabled' ) && et_builder_d5_enabled() && et_core_is_fb_enabled() ) || Conditions::is_tb_admin_screen() ) {
 		$plugin_dir_url = plugin_dir_url( __FILE__ );
 
-		PackageBuildManager::register( [
+		PackageBuildManager::register_package_build( [
 			'name'    => 'divi-5-dev-tool-builder-bundle',
 			'version' => '0.1.2.' . rand(1, 10000000),
 			'script'  => [
@@ -73,6 +73,8 @@ function divi_5_dev_tool_enqueue_scripts() {
 					'divi-object-renderer',
 				],
 				'args'               => true,
+				'defer'              => false,
+				'async'              => false,
 				'data_app_window'    => [],
 				'data_top_window'    => [],
 				'enqueue_top_window' => false,
