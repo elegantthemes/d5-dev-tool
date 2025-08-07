@@ -254,6 +254,227 @@
   margin-top: 0;
 }
 /*!**************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[2].use[1]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[2].use[2]!./src/components/content-divi-options/styles.scss ***!
+  \**************************************************************************************************************************************************************************************************/
+.d5-dev-tool-divi-options-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #e0e0e0;
+}
+.d5-dev-tool-divi-options-header-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+}
+.d5-dev-tool-divi-options-header-actions {
+  display: flex;
+  gap: 8px;
+}
+.d5-dev-tool-divi-options-loading {
+  text-align: center;
+  padding: 40px 20px;
+  color: #666;
+}
+.d5-dev-tool-divi-options-error {
+  background-color: #ffebee;
+  border: 1px solid #f44336;
+  border-radius: 4px;
+  padding: 12px;
+  margin-bottom: 16px;
+  color: #c62828;
+}
+.d5-dev-tool-divi-options-empty {
+  text-align: center;
+  padding: 40px 20px;
+  color: #999;
+  font-style: italic;
+}
+.d5-dev-tool-editable-object {
+  margin-bottom: 8px;
+}
+.d5-dev-tool-editable-object-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 6px;
+  background-color: #f8f9fa;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  margin-bottom: 4px;
+}
+.d5-dev-tool-editable-object-property-name {
+  font-weight: 600;
+  color: #333;
+  font-family: monospace;
+  font-size: 13px;
+  flex: 1;
+  margin-right: 8px;
+}
+.d5-dev-tool-editable-object-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 20px;
+  padding: 0 5px;
+  background-color: transparent;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.d5-dev-tool-editable-object-toggle:hover {
+  background-color: #e9ecef;
+  border-color: #999;
+}
+.d5-dev-tool-editable-object-toggle .d5-dev-tool-caret-fallback {
+  font-size: 12px;
+  line-height: 1;
+}
+.d5-dev-tool-editable-object-depth {
+  font-size: 10px;
+  color: #666;
+  background-color: #e0e0e0;
+  padding: 2px 4px;
+  border-radius: 8px;
+  white-space: nowrap;
+}
+.d5-dev-tool-editable-object-content {
+  padding-left: 16px;
+  border-left: 2px solid #e9ecef;
+  margin-left: 8px;
+}
+.d5-dev-tool-editable-object-item {
+  margin-bottom: 6px;
+}
+.d5-dev-tool-editable-object-item:last-child {
+  margin-bottom: 0;
+}
+
+.d5-dev-tool-object-delete {
+  margin-left: auto;
+}
+.d5-dev-tool-object-delete:hover {
+  background-color: #f8d7da;
+  border-color: #dc3545;
+  color: #dc3545;
+}
+
+.d5-dev-tool-editable-value {
+  background-color: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  margin-bottom: 8px;
+}
+.d5-dev-tool-editable-value-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 8px;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #e0e0e0;
+}
+.d5-dev-tool-editable-value-name {
+  font-weight: 500;
+  color: #333;
+  font-family: monospace;
+}
+.d5-dev-tool-editable-value-actions {
+  display: flex;
+  gap: 4px;
+}
+.d5-dev-tool-editable-value-content {
+  padding: 6px 8px;
+}
+.d5-dev-tool-editable-value-input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 13px;
+  resize: vertical;
+  min-height: 32px;
+}
+.d5-dev-tool-editable-value-input:focus {
+  outline: none;
+  border-color: #007cba;
+  box-shadow: 0 0 0 2px rgba(0, 124, 186, 0.2);
+}
+.d5-dev-tool-editable-value-display {
+  font-family: monospace;
+  font-size: 13px;
+  color: #333;
+  white-space: pre-wrap;
+  word-break: break-word;
+  padding: 2px 0;
+}
+
+.d5-dev-tool-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 6px;
+  border: none;
+  border-radius: 3px;
+  background-color: #fff;
+  cursor: pointer;
+  font-size: 11px;
+  line-height: 1;
+  transition: all 0.2s ease;
+}
+.d5-dev-tool-btn:hover {
+  background-color: #f5f5f5;
+  border-color: #999;
+}
+.d5-dev-tool-btn--edit:hover {
+  background-color: #e8f4f8;
+}
+.d5-dev-tool-btn--delete:hover {
+  background-color: #fce8e8;
+}
+.d5-dev-tool-btn--confirm-delete {
+  color: #fff;
+  background-color: #d63638;
+  border-color: #d63638;
+}
+.d5-dev-tool-btn--confirm-delete:hover {
+  background-color: #b32d2e;
+}
+.d5-dev-tool-btn--save {
+  color: #fff;
+  background-color: #00a32a;
+  border-color: #00a32a;
+}
+.d5-dev-tool-btn--save:hover {
+  background-color: #008a20;
+}
+.d5-dev-tool-btn--cancel {
+  color: #666;
+  border-color: #999;
+}
+.d5-dev-tool-btn--cancel:hover {
+  background-color: #f0f0f0;
+}
+.d5-dev-tool-btn--refresh {
+  color: #0073aa;
+  border-color: #0073aa;
+  font-size: 11px;
+  padding: 4px 8px;
+}
+.d5-dev-tool-btn--refresh:hover {
+  background-color: #e8f4f8;
+}
+
+.d5-dev-tool-no-items {
+  text-align: center;
+  padding: 40px 20px;
+  color: #666;
+  font-style: italic;
+}
+/*!**************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[2].use[1]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[2].use[2]!./src/components/references-tree-view/styles.scss ***!
   \**************************************************************************************************************************************************************************************************/
 .et-vb-divi-devtools-tree-view .et-vb-divi-devtools-tree-view-item-title {

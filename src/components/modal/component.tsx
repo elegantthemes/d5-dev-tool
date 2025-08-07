@@ -30,6 +30,7 @@ import { ContentKeyboardContainer } from '../content-keyboard';
 import { ContentGlobalContainer } from '../content-global';
 import { ContentClipboardContainer } from '../content-clipboard';
 import { ContentEventsContainer } from '../content-events'
+import { ContentDiviOptionsContainer } from '../content-divi-options';
 import { ReferencesTreeView } from '../references-tree-view';
 import { ToolGenerateModuleSettingsConfigurationContainer } from '../tool-generate-module-settings-configuration';
 import { Divi5DevToolProps } from './types';
@@ -97,6 +98,9 @@ const Divi5DevTool = ({
                 </ContentPanel>
                 <ContentPanel id="clipboard" label={__('Clipboard', 'et_builder')}>
                   <ContentClipboardContainer />
+                </ContentPanel>
+                <ContentPanel id="divi-options" label={__('Divi Options', 'et_builder')}>
+                  <ContentDiviOptionsContainer />
                 </ContentPanel>
               </ContentPanelWrapper>
             </div>
