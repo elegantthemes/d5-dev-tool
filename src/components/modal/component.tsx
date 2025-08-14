@@ -32,6 +32,7 @@ import { ContentClipboardContainer } from '../content-clipboard';
 import { ContentEventsContainer } from '../content-events'
 import { ContentDiviOptionsContainer } from '../content-divi-options';
 import { ContentPresetsContainer } from '../content-presets';
+import { ContentAddNewContainer } from '../content-add-new';
 import { ReferencesTreeView } from '../references-tree-view';
 import { ToolGenerateModuleSettingsConfigurationContainer } from '../tool-generate-module-settings-configuration';
 import { Divi5DevToolProps } from './types';
@@ -112,6 +113,9 @@ const Divi5DevTool = ({
           <PanelContainer id="tools" label={__('Tools', 'et_builder')}>
             <div style={{ padding: '20px' }}>
               <ContentPanelWrapper>
+                <ContentPanel id="add-new" label={__('Add New', 'et_builder')}>
+                  <ContentAddNewContainer />
+                </ContentPanel>
                 <ContentPanel id="generate-module-settings-config" label={__('Generate Module Settings Configuration', 'et_builder')}>
                   {generateModuleSettingsConfiguration ? (
                     <ToolGenerateModuleSettingsConfigurationContainer />

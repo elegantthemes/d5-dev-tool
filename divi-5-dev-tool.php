@@ -121,8 +121,10 @@ function divi_5_dev_tool_localize_script() {
 			'divi-5-dev-tool-builder-bundle',
 			'divi5DevToolAjax',
 			array(
-				'ajaxUrl' => admin_url( 'admin-ajax.php' ),
-				'nonce'   => wp_create_nonce( 'divi_5_dev_tool_nonce' ),
+				'ajaxUrl'    => admin_url( 'admin-ajax.php' ),
+				'nonce'      => wp_create_nonce( 'divi_5_dev_tool_nonce' ),
+				'newPostUrl' => admin_url( 'post-new.php' ),
+				'newPageUrl' => admin_url( 'post-new.php?post_type=page' ),
 			)
 		);
 	}

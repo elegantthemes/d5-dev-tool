@@ -574,6 +574,81 @@
   outline: 2px solid #0073aa;
   outline-offset: 2px;
 }
+/*!*********************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[2].use[1]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[2].use[2]!./src/components/content-add-new/styles.scss ***!
+  \*********************************************************************************************************************************************************************************************/
+.content-add-new {
+  padding: 20px 0;
+}
+.content-add-new__description {
+  margin-bottom: 20px;
+}
+.content-add-new__description p {
+  margin: 0;
+  color: #666;
+  font-size: 14px;
+  line-height: 1.4;
+}
+.content-add-new__buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.content-add-new__button {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  background: #fff;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: left;
+  width: 100%;
+}
+.content-add-new__button:hover {
+  border-color: #007cba;
+  background: #f8f9fa;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 124, 186, 0.1);
+}
+.content-add-new__button:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 4px rgba(0, 124, 186, 0.2);
+}
+.content-add-new__button:focus {
+  outline: none;
+  border-color: #007cba;
+  box-shadow: 0 0 0 2px rgba(0, 124, 186, 0.2);
+}
+.content-add-new__button--post:hover {
+  border-color: #00a32a;
+  box-shadow: 0 2px 8px rgba(0, 163, 42, 0.1);
+}
+.content-add-new__button--post:focus {
+  border-color: #00a32a;
+  box-shadow: 0 0 0 2px rgba(0, 163, 42, 0.2);
+}
+.content-add-new__button--page:hover {
+  border-color: #8b5cf6;
+  box-shadow: 0 2px 8px rgba(139, 92, 246, 0.1);
+}
+.content-add-new__button--page:focus {
+  border-color: #8b5cf6;
+  box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.2);
+}
+.content-add-new__button-icon {
+  font-size: 20px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+.content-add-new__button-text {
+  color: #1e1e1e;
+  font-weight: 500;
+}
 /*!**************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[2].use[1]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[2].use[2]!./src/components/references-tree-view/styles.scss ***!
   \**************************************************************************************************************************************************************************************************/
