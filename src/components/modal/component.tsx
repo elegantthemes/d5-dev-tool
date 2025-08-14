@@ -31,6 +31,7 @@ import { ContentGlobalContainer } from '../content-global';
 import { ContentClipboardContainer } from '../content-clipboard';
 import { ContentEventsContainer } from '../content-events'
 import { ContentDiviOptionsContainer } from '../content-divi-options';
+import { ContentPresetsContainer } from '../content-presets';
 import { ReferencesTreeView } from '../references-tree-view';
 import { ToolGenerateModuleSettingsConfigurationContainer } from '../tool-generate-module-settings-configuration';
 import { Divi5DevToolProps } from './types';
@@ -101,6 +102,9 @@ const Divi5DevTool = ({
                 </ContentPanel>
                 <ContentPanel id="divi-options" label={__('Divi Options', 'et_builder')}>
                   <ContentDiviOptionsContainer />
+                </ContentPanel>
+                <ContentPanel id="presets" label={__('Presets', 'et_builder')}>
+                  <ContentPresetsContainer />
                 </ContentPanel>
               </ContentPanelWrapper>
             </div>

@@ -1,0 +1,120 @@
+// Presets styles - following the same pattern as Divi Options
+.d5-dev-tool-presets {
+  &-loading {
+    padding: 20px;
+    text-align: center;
+    color: #666;
+  }
+
+  &-error {
+    padding: 15px;
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+    border-radius: 4px;
+    margin-bottom: 15px;
+  }
+
+  &-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #e0e0e0;
+    margin-bottom: 20px;
+
+    &-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #333;
+    }
+
+    &-actions {
+      display: flex;
+      gap: 10px;
+    }
+  }
+
+  &-empty {
+    padding: 40px 20px;
+    text-align: center;
+    color: #666;
+    font-style: italic;
+  }
+
+  &-content {
+    // Content styles will be inherited from the EditableObjectRenderer
+  }
+
+  &-sections {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+  }
+
+  &-section {
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    padding: 20px;
+    background-color: #f9f9f9;
+
+    h3 {
+      margin: 0 0 15px 0;
+      font-size: 16px;
+      font-weight: 600;
+      color: #333;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+  }
+
+  &-imported-badge {
+    background-color: #28a745;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+  }
+
+  &-import-status {
+    padding: 15px;
+    background-color: #e9ecef;
+    border-radius: 4px;
+    border-left: 4px solid #007cba;
+
+    p {
+      margin: 0;
+      font-size: 14px;
+      color: #333;
+    }
+  }
+}
+
+// Button styles for refresh action
+.d5-dev-tool-btn {
+  &--refresh {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background-color: #0073aa;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: #005a87;
+    }
+
+    &:focus {
+      outline: 2px solid #0073aa;
+      outline-offset: 2px;
+    }
+  }
+}

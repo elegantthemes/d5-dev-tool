@@ -374,7 +374,171 @@ function divi_5_dev_tool_delete_divi_option() {
 	}
 }
 
+/**
+ * AJAX handler for getting all presets data.
+ */
+function divi_5_dev_tool_get_presets() {
+	// Check nonce for security.
+	if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'divi_5_dev_tool_nonce' ) ) {
+		wp_die( 'Security check failed' );
+	}
+
+	// Check user capabilities.
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_die( 'Insufficient permissions' );
+	}
+
+	// Use the GlobalPreset class to get data (same as SettingsDataCallbacks)
+	if ( class_exists( 'ET\Builder\Packages\GlobalData\GlobalPreset' ) ) {
+		$preset_data = array(
+			'data'                 => \ET\Builder\Packages\GlobalData\GlobalPreset::get_data(),
+			'legacyData'           => \ET\Builder\Packages\GlobalData\GlobalPreset::get_legacy_data(),
+			'isLegacyDataImported' => 'yes' === \ET\Builder\Packages\GlobalData\GlobalPreset::is_legacy_presets_imported(),
+		);
+	} else {
+		// Fallback to direct option access if class is not available
+		$preset_data = array(
+			'data'                 => get_option( 'builder_global_presets_d5', array() ),
+			'legacyData'           => get_option( 'builder_global_presets_ng', array() ),
+			'isLegacyDataImported' => 'yes' === get_option( 'builder_is_legacy_presets_imported_to_d5', '' ),
+		);
+	}
+
+	// Debug: Log what we found
+	error_log( 'DEBUG: Preset data: ' . print_r( $preset_data, true ) );
+
+	// Convert serialized strings to arrays for better handling in JavaScript.
+	$processed_presets = divi_5_dev_tool_process_serialized_data( $preset_data );
+
+	wp_send_json_success( $processed_presets );
+}
+
+/**
+ * AJAX handler for updating presets.
+ */
+function divi_5_dev_tool_update_preset() {
+	// Check nonce for security.
+	if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'divi_5_dev_tool_nonce' ) ) {
+		wp_send_json_error( array( 'message' => 'Security check failed' ) );
+		return;
+	}
+
+	// Check user capabilities.
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_send_json_error( array( 'message' => 'Insufficient permissions' ) );
+		return;
+	}
+
+	$key         = isset( $_POST['key'] ) ? sanitize_text_field( wp_unslash( $_POST['key'] ) ) : '';
+	$value       = isset( $_POST['value'] ) ? wp_unslash( $_POST['value'] ) : '';
+	$nested_keys = isset( $_POST['nested_keys'] ) ? json_decode( sanitize_text_field( wp_unslash( $_POST['nested_keys'] ) ), true ) : array();
+
+	if ( empty( $key ) ) {
+		wp_send_json_error( array( 'message' => 'Key is required' ) );
+		return;
+	}
+
+	// Process the value - try to detect the intended type.
+	$processed_value = divi_5_dev_tool_process_update_value( $value );
+
+	try {
+		// Handle nested key updates vs direct updates.
+		if ( ! empty( $nested_keys ) ) {
+			// For nested updates, we need to update the parent option.
+			divi_5_dev_tool_update_nested_option( array_merge( array( 'builder_global_presets_d5' ), $nested_keys ), $key, $processed_value );
+		} else {
+			// For direct updates, use the GlobalPreset save method if available
+			if ( class_exists( 'ET\Builder\Packages\GlobalData\GlobalPreset' ) ) {
+				$all_presets = \ET\Builder\Packages\GlobalData\GlobalPreset::get_data();
+				$all_presets[ $key ] = $processed_value;
+				\ET\Builder\Packages\GlobalData\GlobalPreset::save_data( $all_presets );
+			} else {
+				// Fallback to direct option update
+				$all_presets = get_option( 'builder_global_presets_d5', array() );
+				$all_presets[ $key ] = $processed_value;
+				divi_5_dev_tool_update_single_option( 'builder_global_presets_d5', $all_presets );
+			}
+		}
+
+		wp_send_json_success( array(
+			'message' => 'Preset updated successfully',
+		) );
+
+	} catch ( Exception $e ) {
+		wp_send_json_error( array(
+			'message' => 'Failed to update preset: ' . $e->getMessage(),
+		) );
+	}
+}
+
+/**
+ * AJAX handler for deleting presets.
+ */
+function divi_5_dev_tool_delete_preset() {
+	// Check nonce for security.
+	if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'divi_5_dev_tool_nonce' ) ) {
+		wp_send_json_error( array( 'message' => 'Security check failed' ) );
+		return;
+	}
+
+	// Check user capabilities.
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_send_json_error( array( 'message' => 'Insufficient permissions' ) );
+		return;
+	}
+
+	$key         = isset( $_POST['key'] ) ? sanitize_text_field( wp_unslash( $_POST['key'] ) ) : '';
+	$nested_keys = isset( $_POST['nested_keys'] ) ? json_decode( sanitize_text_field( wp_unslash( $_POST['nested_keys'] ) ), true ) : array();
+
+	if ( empty( $key ) ) {
+		wp_send_json_error( array( 'message' => 'Key is required' ) );
+		return;
+	}
+
+	try {
+		// Handle nested key deletion vs direct deletion.
+		if ( ! empty( $nested_keys ) ) {
+			// For nested deletions, we need to update the parent option.
+			divi_5_dev_tool_delete_nested_option( array_merge( array( 'builder_global_presets_d5' ), $nested_keys ), $key );
+		} else {
+			// For direct deletions, use the GlobalPreset save method if available
+			if ( class_exists( 'ET\Builder\Packages\GlobalData\GlobalPreset' ) ) {
+				$all_presets = \ET\Builder\Packages\GlobalData\GlobalPreset::get_data();
+				if ( isset( $all_presets[ $key ] ) ) {
+					unset( $all_presets[ $key ] );
+					\ET\Builder\Packages\GlobalData\GlobalPreset::save_data( $all_presets );
+				}
+			} else {
+				// Fallback to direct option update
+				$all_presets = get_option( 'builder_global_presets_d5', array() );
+				if ( isset( $all_presets[ $key ] ) ) {
+					unset( $all_presets[ $key ] );
+					divi_5_dev_tool_update_single_option( 'builder_global_presets_d5', $all_presets );
+				}
+			}
+		}
+
+		wp_send_json_success( array(
+			'message' => 'Preset deleted successfully',
+		) );
+
+	} catch ( Exception $e ) {
+		wp_send_json_error( array(
+			'message' => 'Failed to delete preset: ' . $e->getMessage(),
+		) );
+	}
+}
+
+
+
+
+
 // Register AJAX handlers.
 add_action( 'wp_ajax_divi_5_dev_tool_get_divi_options', 'divi_5_dev_tool_get_divi_options' );
 add_action( 'wp_ajax_divi_5_dev_tool_update_divi_option', 'divi_5_dev_tool_update_divi_option' );
 add_action( 'wp_ajax_divi_5_dev_tool_delete_divi_option', 'divi_5_dev_tool_delete_divi_option' );
+add_action( 'wp_ajax_divi_5_dev_tool_get_presets', 'divi_5_dev_tool_get_presets' );
+add_action( 'wp_ajax_divi_5_dev_tool_update_preset', 'divi_5_dev_tool_update_preset' );
+add_action( 'wp_ajax_divi_5_dev_tool_delete_preset', 'divi_5_dev_tool_delete_preset' );
+
+
