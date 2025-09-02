@@ -1,14 +1,26 @@
 import jQuery from 'jquery';
+import { forEach } from 'lodash';
 
 // Divi dependencies
 import { dispatch } from '@divi/data';
+
+// WordPress dependencies.
+import {
+  __,
+  sprintf,
+} from '@wordpress/i18n';
 
 // Local dependencies
 import {
   Divi5DevTool,
   name,
 } from './components/modal';
-import { ReactNode } from 'react';
+import { contentPanelMap } from './components/content-panel-map';
+import {
+  createElement,
+  ReactNode,
+} from 'react';
+import { PanelBasedModal } from './components/panel-based-modal';
 
 declare global {
   interface Window {
@@ -63,7 +75,25 @@ if (window.top !== window) {
     type:            'multiInstanceModal',
     component:       Divi5DevTool as unknown as ReactNode,
     sidebarPosition: 'left',
+  });
 
+  // Register every panel as modal. This way every panel can be opened as its own modal so if the need
+  // to look into multiple panel at the same time arise, it can be done.
+  forEach(contentPanelMap, ({ label, id, component }) => {
+    const modalName             = `${name}--${id}`;
+    const panelAsModalComponent = (() => createElement(PanelBasedModal, {
+      children: createElement(component),
+      modalName,
+      label,
+    })) as unknown as ReactNode;
+
+    // Register the panel as modal.
+    dispatch('divi/modal-library').addModal({
+      name: modalName,
+      label: sprintf(__('D5 Dev Tool: %s', 'et_builder'), label),
+      type: 'multiInstanceModal',
+      component: panelAsModalComponent,
+    });
   });
 
 }

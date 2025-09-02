@@ -1,5 +1,5 @@
 // External dependencies.
-import React, { ReactElement } from 'react';
+import React from 'react';
 import {
   isEmpty,
   keys,
@@ -22,22 +22,12 @@ import { ErrorBoundary } from '@divi/error-boundary';
 // Local dependencies.
 import { ContentPanel } from '../content-panel';
 import { ContentPanelWrapper } from '../content-panel-wrapper';
-import { ContentLayoutContainer } from '../content-layout';
-import { ContentSavedContainer } from '../content-saved'
-import { ContentScriptsContainer } from '../content-scripts';
-import { ContentAppStatesContainer } from '../content-app-states';
-import { ContentKeyboardContainer } from '../content-keyboard';
-import { ContentGlobalContainer } from '../content-global';
-import { ContentClipboardContainer } from '../content-clipboard';
-import { ContentEventsContainer } from '../content-events'
-import { ContentDiviOptionsContainer } from '../content-divi-options';
-import { ContentPresetsContainer } from '../content-presets';
 import { ContentAddNewContainer } from '../content-add-new';
 import { ReferencesTreeView } from '../references-tree-view';
+import { contentPanelMap } from '../content-panel-map';
 import { ToolGenerateModuleSettingsConfigurationContainer } from '../tool-generate-module-settings-configuration';
 import { Divi5DevToolProps } from './types';
 import './styles.scss';
-
 
 /**
  * Divi 5 Dev Tool modal component.
@@ -77,36 +67,11 @@ const Divi5DevTool = ({
             }}
             >
               <ContentPanelWrapper>
-                <ContentPanel id="layout" label={__('Layout', 'et_builder')}>
-                  <ContentLayoutContainer />
-                </ContentPanel>
-                <ContentPanel id="saved" label={__('Saved Content', 'et_builder')}>
-                  <ContentSavedContainer />
-                </ContentPanel>
-                <ContentPanel id="scripts" label={__('Scripts', 'et_builder')}>
-                  <ContentScriptsContainer />
-                </ContentPanel>
-                <ContentPanel id="global" label={__('Global', 'et_builder')}>
-                  <ContentGlobalContainer />
-                </ContentPanel>
-                <ContentPanel id="app-state" label={__('App State', 'et_builder')}>
-                  <ContentAppStatesContainer />
-                </ContentPanel>
-                <ContentPanel id="events" label={__('Events', 'et_builder')}>
-                  <ContentEventsContainer />
-                </ContentPanel>
-                <ContentPanel id="keyboard" label={__('Keyboard', 'et_builder')}>
-                  <ContentKeyboardContainer />
-                </ContentPanel>
-                <ContentPanel id="clipboard" label={__('Clipboard', 'et_builder')}>
-                  <ContentClipboardContainer />
-                </ContentPanel>
-                <ContentPanel id="divi-options" label={__('Divi Options', 'et_builder')}>
-                  <ContentDiviOptionsContainer />
-                </ContentPanel>
-                <ContentPanel id="presets" label={__('Presets', 'et_builder')}>
-                  <ContentPresetsContainer />
-                </ContentPanel>
+                {contentPanelMap.map(({ id, label, component: Component }) => (
+                  <ContentPanel key={id} id={id} label={label}>
+                    <Component />
+                  </ContentPanel>
+                ))}
               </ContentPanelWrapper>
             </div>
           </PanelContainer>
