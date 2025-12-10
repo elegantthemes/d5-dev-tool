@@ -57,3 +57,26 @@
     }
   }
 }
+
+.d5-dev-tool-global-modules-templates {
+  .et-vb-object-renderer-value-item-name {
+    background: #efefef;
+    padding: 3px 10px;
+    border-radius: 4px;
+    margin-bottom: 3px;
+  }
+
+  .et-vb-object-renderer-value-toggle {
+    top: -21px;
+    right: 10px;
+  }
+
+  .et-vb-object-renderer-value-item-value {
+    padding-left: 10px;
+    font-family: monospace;
+  }
+}
+
+:root {
+  --d5-dev-tool-global-module: #97d000;
+}

@@ -7,11 +7,12 @@ import { ContentSavedContainer } from '../content-saved'
 import { ContentScriptsContainer } from '../content-scripts';
 import { ContentAppStatesContainer } from '../content-app-states';
 import { ContentKeyboardContainer } from '../content-keyboard';
-import { ContentGlobalContainer } from '../content-global';
 import { ContentClipboardContainer } from '../content-clipboard';
 import { ContentEventsContainer } from '../content-events'
 import { ContentDiviOptionsContainer } from '../content-divi-options';
 import { ContentPresetsContainer } from '../content-presets';
+import { ContentGlobalModulesSyncWorthy } from '../content-global-modules-sync-worthy';
+import { ContentGlobalModulesTemplates } from '../content-global-modules-templates';
 
 /**
  * Map of content panels component.
@@ -33,9 +34,14 @@ export const contentPanelMap = [
     component: ContentScriptsContainer,
   },
   {
-    id: 'global',
-    label: __('Global', 'et_builder'),
-    component: ContentGlobalContainer,
+    id: 'global-modules-templates',
+    label: __('Global Modules Templates', 'et_builder'),
+    component: ContentGlobalModulesTemplates,
+  },
+  {
+    id: 'global-modules-sync-worthy',
+    label: __('Global Modules Sync Worthy Changes', 'et_builder'),
+    component: ContentGlobalModulesSyncWorthy,
   },
   {
     id: 'app-state',

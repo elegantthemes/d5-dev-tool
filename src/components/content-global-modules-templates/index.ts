@@ -1,0 +1,1 @@
+export { ContentGlobalModulesTemplates } from './component';

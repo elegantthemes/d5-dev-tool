@@ -1,0 +1,1 @@
+export { ContentGlobalModulesSyncWorthy } from './component';

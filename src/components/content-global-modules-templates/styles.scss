@@ -1,0 +1,21 @@
+.d5-dev-tool-global-modules-template {
+  border: 3px solid var(--d5-dev-tool-global-module);
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+
+  &-object {
+    border: 1px solid var(--d5-dev-tool-global-module);
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+  }
+}
+
+.d5-dev-tool-panel-title {
+
+  // No need to display title when panel is being opened as modal.
+  .et-vb-modal--divi-5-dev-tool--global-modules-templates & {
+    display: none;
+  }
+}

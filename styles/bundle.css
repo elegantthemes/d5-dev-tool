@@ -287,18 +287,6 @@
 .d5-dev-tool-script:first-child {
   margin-top: 0;
 }
-/*!********************************************************************************************************************************************************************************************!*\
-  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[2].use[1]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[2].use[2]!./src/components/content-global/styles.scss ***!
-  \********************************************************************************************************************************************************************************************/
-.d5-dev-tool-global-module-item {
-  margin-bottom: 40px;
-  border: 3px solid #97d000;
-  padding: 15px;
-  border-radius: 10px;
-}
-.d5-dev-tool-global-module-item .d5-dev-tool-module-state {
-  display: none;
-}
 /*!***********************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[2].use[1]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[2].use[2]!./src/components/content-clipboard/styles.scss ***!
   \***********************************************************************************************************************************************************************************************/
@@ -695,6 +683,25 @@
   outline: 2px solid #0073aa;
   outline-offset: 2px;
 }
+/*!**************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[2].use[1]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[2].use[2]!./src/components/content-global-modules-templates/styles.scss ***!
+  \**************************************************************************************************************************************************************************************************************/
+.d5-dev-tool-global-modules-template {
+  border: 3px solid var(--d5-dev-tool-global-module);
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+.d5-dev-tool-global-modules-template-object {
+  border: 1px solid var(--d5-dev-tool-global-module);
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+.et-vb-modal--divi-5-dev-tool--global-modules-templates .d5-dev-tool-panel-title {
+  display: none;
+}
 /*!*************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[2].use[1]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[2].use[2]!./src/components/tool-generate-module-settings-configuration/styles.scss ***!
   \*************************************************************************************************************************************************************************************************************************/
@@ -792,4 +799,23 @@
 }
 .d5-dev-tool-overview-view .d5-dev-tool-overview-value, .d5-dev-tool-overview-breakpoint .d5-dev-tool-overview-value, .d5-dev-tool-overview-attribute-state .d5-dev-tool-overview-value, .d5-dev-tool-overview-selected .d5-dev-tool-overview-value, .d5-dev-tool-overview-keypress .d5-dev-tool-overview-value, .d5-dev-tool-overview-shortcut .d5-dev-tool-overview-value {
   height: 25px;
+}
+
+.d5-dev-tool-global-modules-templates .et-vb-object-renderer-value-item-name {
+  background: #efefef;
+  padding: 3px 10px;
+  border-radius: 4px;
+  margin-bottom: 3px;
+}
+.d5-dev-tool-global-modules-templates .et-vb-object-renderer-value-toggle {
+  top: -21px;
+  right: 10px;
+}
+.d5-dev-tool-global-modules-templates .et-vb-object-renderer-value-item-value {
+  padding-left: 10px;
+  font-family: monospace;
+}
+
+:root {
+  --d5-dev-tool-global-module: #97d000;
 }
