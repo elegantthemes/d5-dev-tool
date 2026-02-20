@@ -53,6 +53,15 @@ export const ContentGlobalModulesTemplates = (): ReactElement => {
                   {instanceIds.map(instanceId => (
                     <dd key={`global-module-template-instance-id-${instanceId}`}>{instanceId}</dd>
                   ))}
+
+                  <dt>{__('Has Synced To Server', 'divi-5-dev-tool')}</dt>
+                  <dd>{template?.hasSavedSincePreEditCapture ? __('Yes', 'divi-5-dev-tool') : __('No', 'divi-5-dev-tool')}</dd>
+
+                  <dt>{__('Confirmation Popup', 'divi-5-dev-tool')}</dt>
+                  <dd>{template?.isConfirmationPopupOpen ? __('Opened', 'divi-5-dev-tool') : __('Closed', 'divi-5-dev-tool')}</dd>
+
+                  <dt>{__('Confirmation Popup Type', 'divi-5-dev-tool')}</dt>
+                  <dd>{template?.confirmationType}</dd>
                 </dl>
               </div>
 
@@ -76,7 +85,7 @@ export const ContentGlobalModulesTemplates = (): ReactElement => {
                 <h5>{__('Pre Edit Content', 'divi-5-dev-tool')}</h5>
                 <ObjectRenderer
                   values={template?.preEditContent}
-                  initialExpand={false}
+                  initialExpand={true}
                 />
               </div>
             </div>
