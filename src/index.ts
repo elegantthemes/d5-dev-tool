@@ -66,12 +66,12 @@ if (window.top !== window) {
     iconSvg: { name: 'divi/setting' },
     order: 50, // Place it after other built-in buttons
     onClick: toggleDevTool,
-    hasSeparator: true,
   });
 
   // On script load, register `divi/divi-5-dev-tool` modal to modals registry.
   dispatch('divi/modal-library').addModal({
     name,
+    label: __('D5 Dev Tool', 'et_builder'),
     type:            'multiInstanceModal',
     component:       Divi5DevTool as unknown as ReactNode,
     sidebarPosition: 'left',
