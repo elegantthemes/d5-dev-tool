@@ -82,7 +82,9 @@ if (window.top !== window) {
   forEach(contentPanelMap, ({ label, id, component }) => {
     const modalName             = `${name}--${id}`;
     const panelAsModalComponent = (() => createElement(PanelBasedModal, {
-      children: createElement(component),
+      children: createElement(component as any, {
+        ...(id === 'layout' ? { modalName } : {}),
+      }),
       modalName,
       label,
     })) as unknown as ReactNode;

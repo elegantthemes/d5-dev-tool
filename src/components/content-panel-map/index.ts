@@ -2,7 +2,7 @@
 import { __ } from '@wordpress/i18n';
 
 // Local dependencies.
-import { ContentLayoutContainer } from '../content-layout';
+import { ContentPostContent } from '../content-post-content';
 import { ContentModuleCount } from '../content-module-count';
 import { ContentSavedContainer } from '../content-saved'
 import { ContentScriptsContainer } from '../content-scripts';
@@ -20,9 +20,9 @@ import { ContentGlobalModulesTemplates } from '../content-global-modules-templat
  */
 export const contentPanelMap = [
   {
-    id: 'layout',
-    label: __('Layout', 'et_builder'),
-    component: ContentLayoutContainer,
+    id: 'layout-post-content',
+    label: __('Post Content', 'et_builder'),
+    component: ContentPostContent,
   },
   {
     id: 'module-count',

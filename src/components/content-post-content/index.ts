@@ -1,0 +1,1 @@
+export { ContentPostContent } from './component';
