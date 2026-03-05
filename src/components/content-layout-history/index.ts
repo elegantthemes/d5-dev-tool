@@ -1,0 +1,1 @@
+export { ContentLayoutHistory } from './component';

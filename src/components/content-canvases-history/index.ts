@@ -1,0 +1,1 @@
+export { ContentCanvasesHistory } from './component';

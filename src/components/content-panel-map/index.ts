@@ -17,6 +17,8 @@ import { ContentPresetsContainer } from '../content-presets';
 import { ContentGlobalModulesSyncWorthy } from '../content-global-modules-sync-worthy';
 import { ContentGlobalModulesTemplates } from '../content-global-modules-templates';
 import { ContentCanvasStates } from '../content-canvas-states';
+import { ContentLayoutHistory } from '../content-layout-history';
+import { ContentCanvasesHistory } from '../content-canvases-history';
 
 const TBHeaderPanel = () => createElement(ContentPostContent, { layout: 'header' });
 const TBBodyPanel = () => createElement(ContentPostContent, { layout: 'body' });
@@ -80,6 +82,16 @@ export const contentPanelMap = [
     id: 'canvases',
     label: __('Canvases', 'et_builder'),
     component: ContentCanvasStates,
+  },
+  {
+    id: 'layout-history',
+    label: __('Layout History', 'et_builder'),
+    component: ContentLayoutHistory,
+  },
+  {
+    id: 'canvases-history',
+    label: __('Canvases History', 'et_builder'),
+    component: ContentCanvasesHistory,
   },
   {
     id: 'events',
