@@ -1,3 +1,5 @@
+import { createElement } from 'react';
+
 // WordPress dependencies.
 import { __ } from '@wordpress/i18n';
 
@@ -16,6 +18,10 @@ import { ContentGlobalModulesSyncWorthy } from '../content-global-modules-sync-w
 import { ContentGlobalModulesTemplates } from '../content-global-modules-templates';
 import { ContentCanvasStates } from '../content-canvas-states';
 
+const TBHeaderPanel = () => createElement(ContentPostContent, { layout: 'header' });
+const TBBodyPanel = () => createElement(ContentPostContent, { layout: 'body' });
+const TBFooterPanel = () => createElement(ContentPostContent, { layout: 'footer' });
+
 /**
  * Map of content panels component.
  */
@@ -24,6 +30,21 @@ export const contentPanelMap = [
     id: 'layout-post-content',
     label: __('Post Content', 'et_builder'),
     component: ContentPostContent,
+  },
+  {
+    id: 'layout-tb-header',
+    label: __('TB Header', 'et_builder'),
+    component: TBHeaderPanel,
+  },
+  {
+    id: 'layout-tb-body',
+    label: __('TB Body', 'et_builder'),
+    component: TBBodyPanel,
+  },
+  {
+    id: 'layout-tb-footer',
+    label: __('TB Footer', 'et_builder'),
+    component: TBFooterPanel,
   },
   {
     id: 'module-count',

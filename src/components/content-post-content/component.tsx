@@ -7,6 +7,7 @@ import React, {
 import {
   get,
   map,
+  isEmpty,
 } from 'lodash';
 
 // Divi dependencies.
@@ -21,6 +22,7 @@ const defaultModalName = 'divi/divi-5-dev-tool';
 
 interface ContentPostContentProps {
   modalName?: string;
+  layout: 'postContent' | 'header' | 'body' | 'footer';
 }
 
 /**
@@ -28,6 +30,7 @@ interface ContentPostContentProps {
  */
 export const ContentPostContent = ({
   modalName = defaultModalName,
+  layout = 'postContent',
 }: ContentPostContentProps): ReactElement => {
   const {
     activeModalSetting,
@@ -54,7 +57,8 @@ export const ContentPostContent = ({
 
       // @todo (D5) to be updated once new selector has been made.
       lastModuleClipboard: {},
-      modules: editPostStoreSelectors.getContent(),
+      modules: layout === 'postContent'
+        ? editPostStoreSelectors.getContent() : editPostStoreSelectors.getLayoutContent(layout),
       rightClickedModuleId: rightClick.active ? get(rightClick, ['owner', 'id']) : '',
       selectedModules: getModuleIds(eventsStoreSelectors.getSelectedModules(false)),
     };
@@ -65,6 +69,15 @@ export const ContentPostContent = ({
   useEffect(() => {
     setLocalExpandedModuleIds([]);
   }, [modalName]);
+
+  if ('postContent' !== layout && isEmpty(modules.root.children)) {
+    return (
+      <div className="d5-dev-tool-panel-item-wrapper">
+        <h3>TB: {layout}</h3>
+        <p>No Theme Builder template is not assigned for this</p>
+      </div>
+    );
+  }
 
   return (
     <ModuleTreeView
