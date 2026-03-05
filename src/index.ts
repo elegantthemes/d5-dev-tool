@@ -52,12 +52,6 @@ if (window.top !== window) {
     }
   };
 
-  // Listen to click event on top window's admin bar item (keep existing functionality).
-  window.top.jQuery('#wp-admin-bar-divi-5-dev-tool > a').on('click', (event: JQuery.Event) => {
-    event.preventDefault();
-    toggleDevTool();
-  });
-
   // Add custom button to BuilderBar
   // Note: Using the same name as the modal so the button automatically becomes active when modal is open
   (dispatch('divi/app-ui') as any).addBuilderBarButton({
@@ -82,9 +76,7 @@ if (window.top !== window) {
   forEach(contentPanelMap, ({ label, id, component }) => {
     const modalName             = `${name}--${id}`;
     const panelAsModalComponent = (() => createElement(PanelBasedModal, {
-      children: createElement(component as any, {
-        ...(id === 'layout' ? { modalName } : {}),
-      }),
+      children: createElement(component as any, {}),
       modalName,
       label,
     })) as unknown as ReactNode;

@@ -11,7 +11,6 @@ import {
 
 // Divi dependencies.
 import {
-  dispatch,
   useSelect,
 } from '@divi/data';
 
@@ -33,7 +32,6 @@ export const ContentPostContent = ({
   const {
     activeModalSetting,
     draggedModules,
-    expandedModuleIds,
     hoveredModule,
     lastModuleClipboard,
     modules,
@@ -45,7 +43,6 @@ export const ContentPostContent = ({
     const rightClickOptionsSelectors = selectStore('divi/right-click-options');
     const modalSelectors = selectStore('divi/modal-library');
 
-    const modalState = modalSelectors.getActiveModal('multi');
     const singleModalState = modalSelectors.getActiveModal('single');
     const rightClick = rightClickOptionsSelectors.getState();
     const getModuleIds = (moduleItems: any[] = []) => map(moduleItems, module => module?.id);
@@ -53,7 +50,6 @@ export const ContentPostContent = ({
     return {
       activeModalSetting: 'divi/module' === singleModalState?.name && singleModalState?.owner,
       draggedModules: getModuleIds(eventsStoreSelectors.getDraggedModules().asMutable()),
-      expandedModuleIds: get(modalState, [modalName, 'attributes', 'expandedModuleIds']) || [],
       hoveredModule: eventsStoreSelectors.getHoveredModule(),
 
       // @todo (D5) to be updated once new selector has been made.
@@ -64,11 +60,11 @@ export const ContentPostContent = ({
     };
   }, [modalName]);
 
-  const [localExpandedModuleIds, setLocalExpandedModuleIds] = useState<string[]>(expandedModuleIds || []);
+  const [localExpandedModuleIds, setLocalExpandedModuleIds] = useState<string[]>([]);
 
   useEffect(() => {
-    setLocalExpandedModuleIds(expandedModuleIds || []);
-  }, [expandedModuleIds, modalName]);
+    setLocalExpandedModuleIds([]);
+  }, [modalName]);
 
   return (
     <ModuleTreeView
@@ -83,12 +79,6 @@ export const ContentPostContent = ({
       selectedModules={selectedModules}
       setExpandedModuleIds={(moduleIds: string[]) => {
         setLocalExpandedModuleIds(moduleIds);
-        dispatch('divi/modal-library').setAttributes({
-          name: modalName,
-          attributes: {
-            expandedModuleIds: moduleIds,
-          },
-        });
       }}
     />
   );
