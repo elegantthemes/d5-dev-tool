@@ -94,6 +94,15 @@
     padding-left: 10px;
     font-family: monospace;
   }
+
+  .et-vb-object-renderer-value-item--number {
+    display: flex;
+
+    .et-vb-object-renderer-value-item-name,
+    .et-vb-object-renderer-value-item-value {
+      flex-grow: 1;
+    }
+  }
 }
 
 :root {

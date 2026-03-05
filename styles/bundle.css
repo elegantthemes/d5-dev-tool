@@ -829,6 +829,13 @@
   padding-left: 10px;
   font-family: monospace;
 }
+.d5-dev-tool-content-panel-wrapper .et-vb-object-renderer-value-item--number {
+  display: flex;
+}
+.d5-dev-tool-content-panel-wrapper .et-vb-object-renderer-value-item--number .et-vb-object-renderer-value-item-name,
+.d5-dev-tool-content-panel-wrapper .et-vb-object-renderer-value-item--number .et-vb-object-renderer-value-item-value {
+  flex-grow: 1;
+}
 
 :root {
   --d5-dev-tool-global-module: #97d000;
