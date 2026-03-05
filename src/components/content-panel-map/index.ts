@@ -3,6 +3,7 @@ import { __ } from '@wordpress/i18n';
 
 // Local dependencies.
 import { ContentLayoutContainer } from '../content-layout';
+import { ContentModuleCount } from '../content-module-count';
 import { ContentSavedContainer } from '../content-saved'
 import { ContentScriptsContainer } from '../content-scripts';
 import { ContentAppStatesContainer } from '../content-app-states';
@@ -22,6 +23,11 @@ export const contentPanelMap = [
     id: 'layout',
     label: __('Layout', 'et_builder'),
     component: ContentLayoutContainer,
+  },
+  {
+    id: 'module-count',
+    label: __('Module Count', 'et_builder'),
+    component: ContentModuleCount,
   },
   {
     id: 'saved',

@@ -1,0 +1,1 @@
+export { ContentModuleCount } from './component';
