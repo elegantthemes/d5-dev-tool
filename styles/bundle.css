@@ -766,11 +766,6 @@
   color: #AFAFAF;
 }
 
-.d5-dev-tool-overview h3 {
-  font-size: 14px;
-  font-weight: bold;
-  color: #6C2EB9;
-}
 .d5-dev-tool-overview-selected .d5-dev-tool-overview-value {
   font-weight: bold;
 }
@@ -801,17 +796,36 @@
   height: 25px;
 }
 
-.d5-dev-tool-global-modules-templates .et-vb-object-renderer-value-item-name {
+.d5-dev-tool-content-panel-wrapper h3 {
+  font-size: 16px;
+  font-weight: bold;
+  color: #6C2EB9;
+}
+.d5-dev-tool-content-panel-wrapper h4 {
+  font-size: 14px;
+  font-weight: bold;
+  color: #7a6595;
+}
+.d5-dev-tool-content-panel-wrapper code {
+  font-size: 12px;
+}
+.d5-dev-tool-content-panel-wrapper .d5-dev-tool-panel-item-wrapper {
+  margin-bottom: 35px;
+}
+.d5-dev-tool-content-panel-wrapper .et-vb-object-renderer-value {
+  background: #fafafa;
+}
+.d5-dev-tool-content-panel-wrapper .et-vb-object-renderer-value-item-name {
   background: #efefef;
   padding: 3px 10px;
   border-radius: 4px;
   margin-bottom: 3px;
 }
-.d5-dev-tool-global-modules-templates .et-vb-object-renderer-value-toggle {
+.d5-dev-tool-content-panel-wrapper .et-vb-object-renderer-value-toggle {
   top: -21px;
   right: 10px;
 }
-.d5-dev-tool-global-modules-templates .et-vb-object-renderer-value-item-value {
+.d5-dev-tool-content-panel-wrapper .et-vb-object-renderer-value-item-value {
   padding-left: 10px;
   font-family: monospace;
 }

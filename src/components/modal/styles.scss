@@ -5,12 +5,6 @@
 }
 
 .d5-dev-tool-overview {
-  h3 {
-    font-size: 14px;
-    font-weight: bold;
-    color: #6C2EB9;
-  }
-
   &-selected {
     .d5-dev-tool-overview-value {
       font-weight: bold;
@@ -58,7 +52,32 @@
   }
 }
 
-.d5-dev-tool-global-modules-templates {
+.d5-dev-tool-content-panel-wrapper {
+  h3 {
+    font-size: 16px;
+    font-weight: bold;
+    color: #6C2EB9;
+  }
+
+  h4 {
+    font-size: 14px;
+    font-weight: bold;
+    color: #7a6595;
+
+  }
+
+  code {
+    font-size: 12px;
+  }
+
+  .d5-dev-tool-panel-item-wrapper {
+    margin-bottom: 35px;
+  }
+
+  .et-vb-object-renderer-value {
+    background: #fafafa;
+  }
+
   .et-vb-object-renderer-value-item-name {
     background: #efefef;
     padding: 3px 10px;

@@ -16,10 +16,6 @@ export const ContentModuleCount = (): ReactElement => {
     return selectStore('divi/module').getModuleCount();
   }, []);
 
-  console.log({
-    moduleCount,
-  });
-
   return (
     <div>
       <h3>Module Count</h3>

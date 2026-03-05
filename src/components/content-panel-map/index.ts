@@ -14,6 +14,7 @@ import { ContentDiviOptionsContainer } from '../content-divi-options';
 import { ContentPresetsContainer } from '../content-presets';
 import { ContentGlobalModulesSyncWorthy } from '../content-global-modules-sync-worthy';
 import { ContentGlobalModulesTemplates } from '../content-global-modules-templates';
+import { ContentCanvasStates } from '../content-canvas-states';
 
 /**
  * Map of content panels component.
@@ -53,6 +54,11 @@ export const contentPanelMap = [
     id: 'app-state',
     label: __('App State', 'et_builder'),
     component: ContentAppStatesContainer,
+  },
+  {
+    id: 'canvases',
+    label: __('Canvases', 'et_builder'),
+    component: ContentCanvasStates,
   },
   {
     id: 'events',
