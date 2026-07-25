@@ -702,6 +702,320 @@
 .et-vb-modal--divi-5-dev-tool--global-modules-templates .d5-dev-tool-panel-title {
   display: none;
 }
+/*!***********************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[2].use[1]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[2].use[2]!./src/components/content-ai-agents/styles.scss ***!
+  \***********************************************************************************************************************************************************************************************/
+.d5-dev-tool-ai-agent {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.d5-dev-tool-ai-agent__section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin: 0;
+  padding-top: 4px;
+}
+.d5-dev-tool-ai-agent__section-title {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 700;
+  color: #6c2eb9;
+}
+.d5-dev-tool-ai-agent__collapse-controls {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+.d5-dev-tool-ai-agent__collapse-button {
+  padding: 3px 8px;
+  border: 1px solid #d0d0d0;
+  border-radius: 4px;
+  background: #fff;
+  color: #444;
+  font-size: 11px;
+  cursor: pointer;
+}
+.d5-dev-tool-ai-agent__collapse-button:hover {
+  background: #f7f7f7;
+}
+.d5-dev-tool-ai-agent__card-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.d5-dev-tool-ai-agent__card {
+  border: 1px solid #d4d4d4;
+  border-radius: 6px;
+  background: #f5f5f5;
+  overflow: hidden;
+}
+.d5-dev-tool-ai-agent__card--current {
+  border-color: #6c2eb9;
+  box-shadow: 0 0 0 1px rgba(108, 46, 185, 0.12);
+}
+.d5-dev-tool-ai-agent__card-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  width: 100%;
+  padding: 10px 12px;
+  border: 0;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+}
+.d5-dev-tool-ai-agent__card-header:hover {
+  background: #ececec;
+}
+.d5-dev-tool-ai-agent__card-header--static {
+  cursor: default;
+}
+.d5-dev-tool-ai-agent__card-header--static:hover {
+  background: transparent;
+}
+.d5-dev-tool-ai-agent__card-header-main {
+  flex: 1;
+  min-width: 0;
+}
+.d5-dev-tool-ai-agent__card-title {
+  margin: 0 0 4px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #333;
+  line-height: 1.3;
+}
+.d5-dev-tool-ai-agent__card-subtitle {
+  margin: 0;
+  font-size: 11px;
+  color: #666;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+.d5-dev-tool-ai-agent__card-chevron {
+  flex-shrink: 0;
+  margin-top: 1px;
+  font-size: 11px;
+  color: #666;
+}
+.d5-dev-tool-ai-agent__card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px 12px 12px;
+  border-top: 1px solid #e0e0e0;
+  background: #fafafa;
+}
+.d5-dev-tool-ai-agent__meta-grid {
+  display: grid;
+  gap: 4px;
+  font-size: 11px;
+  line-height: 1.4;
+}
+.d5-dev-tool-ai-agent__meta-row {
+  margin: 0;
+}
+.d5-dev-tool-ai-agent__badge {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: #6c2eb9;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 600;
+  vertical-align: middle;
+}
+.d5-dev-tool-ai-agent__badge--streaming {
+  background: #2563eb;
+}
+.d5-dev-tool-ai-agent__badge--idle {
+  background: #6b7280;
+}
+.d5-dev-tool-ai-agent__block {
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  overflow: hidden;
+}
+.d5-dev-tool-ai-agent__block-content {
+  padding: 8px 10px;
+}
+.d5-dev-tool-ai-agent__block--user-prompt {
+  border-left: 3px solid #2563eb;
+  background: #eff6ff;
+}
+.d5-dev-tool-ai-agent__block--system-prompt {
+  border-left: 3px solid #7c3aed;
+  background: #f5f3ff;
+}
+.d5-dev-tool-ai-agent__block--response {
+  border-left: 3px solid #059669;
+  background: #ecfdf5;
+}
+.d5-dev-tool-ai-agent__block--tool-request {
+  border-left: 3px solid #d97706;
+  background: #fffbeb;
+}
+.d5-dev-tool-ai-agent__block--tool-response {
+  border-left: 3px solid #4f46e5;
+  background: #eef2ff;
+}
+.d5-dev-tool-ai-agent__block-label {
+  display: block;
+  padding: 6px 10px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #444;
+}
+.d5-dev-tool-ai-agent__block-label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 6px 10px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+.d5-dev-tool-ai-agent__block-label-row .d5-dev-tool-ai-agent__block-label {
+  padding: 0;
+  border-bottom: 0;
+}
+.d5-dev-tool-ai-agent__copy-button {
+  flex-shrink: 0;
+  padding: 2px 8px;
+  border: 1px solid #c9c9c9;
+  border-radius: 4px;
+  background: #fff;
+  color: #444;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: none;
+  letter-spacing: normal;
+  cursor: pointer;
+}
+.d5-dev-tool-ai-agent__copy-button:hover {
+  background: #f7f7f7;
+}
+.d5-dev-tool-ai-agent__prompt {
+  margin: 0;
+  padding: 8px 10px;
+  border: 0;
+  width: 100%;
+  background: transparent;
+  color: #222;
+  font-family: monospace;
+  font-size: 11px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-break: break-word;
+  text-align: left;
+  cursor: pointer;
+}
+.d5-dev-tool-ai-agent__prompt--collapsed {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+}
+.d5-dev-tool-ai-agent__prompt--json {
+  white-space: pre;
+}
+.d5-dev-tool-ai-agent__prompt-hint {
+  display: block;
+  padding: 0 10px 8px;
+  font-size: 10px;
+  color: #666;
+}
+.d5-dev-tool-ai-agent__step-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.d5-dev-tool-ai-agent__step-card {
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  background: #fff;
+  overflow: hidden;
+}
+.d5-dev-tool-ai-agent__step-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+  padding: 8px 10px;
+  border: 0;
+  background: #f0f0f0;
+  text-align: left;
+  cursor: pointer;
+}
+.d5-dev-tool-ai-agent__step-header:hover {
+  background: #e8e8e8;
+}
+.d5-dev-tool-ai-agent__step-title {
+  margin: 0;
+  font-size: 11px;
+  font-weight: 700;
+  color: #333;
+  line-height: 1.4;
+}
+.d5-dev-tool-ai-agent__step-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 8px 10px 10px;
+}
+.d5-dev-tool-ai-agent__empty {
+  margin: 0;
+  padding: 10px 12px;
+  border: 1px dashed #d0d0d0;
+  border-radius: 4px;
+  background: #fff;
+  color: #666;
+  font-size: 11px;
+  text-align: center;
+}
+.d5-dev-tool-ai-agent__stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+.d5-dev-tool-ai-agent__stat {
+  padding: 8px 10px;
+  border: 1px solid #d4d4d4;
+  border-radius: 4px;
+  background: #fff;
+}
+.d5-dev-tool-ai-agent__stat-label {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #666;
+}
+.d5-dev-tool-ai-agent__stat-value {
+  display: block;
+  font-size: 18px;
+  line-height: 1.2;
+  color: #222;
+}
+.d5-dev-tool-ai-agent__messages {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 4px;
+  padding-top: 12px;
+  border-top: 1px solid #e5e5e5;
+}
 /*!*************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[2].use[1]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[2].use[2]!./src/components/tool-generate-module-settings-configuration/styles.scss ***!
   \*************************************************************************************************************************************************************************************************************************/
@@ -764,6 +1078,16 @@
   \***********************************************************************************************************************************************************************************/
 .d5-dev-tool-no-items {
   color: #AFAFAF;
+}
+
+.d5-dev-tool-ai-agents-panel {
+  padding: 12px 12px 16px;
+}
+.d5-dev-tool-ai-agents-panel .d5-dev-tool-content-panel {
+  padding: 8px;
+}
+.d5-dev-tool-ai-agents-panel .d5-dev-tool-open-in-new-modal-button {
+  margin-bottom: 10px;
 }
 
 .d5-dev-tool-overview-selected .d5-dev-tool-overview-value {
