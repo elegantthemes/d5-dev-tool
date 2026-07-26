@@ -13,6 +13,26 @@ type AiAgentStore = Record<string, (...args: unknown[]) => unknown> & {
   allState?: () => unknown;
 };
 
+export type ChatDebugTodoStatus = 'pending' | 'in_progress' | 'completed' | 'cancelled';
+
+export type ChatDebugTodo = {
+  id: string;
+  content: string;
+  status: ChatDebugTodoStatus;
+  createdAt: number;
+  updatedAt: number;
+};
+
+export type ChatDebugContext = {
+  schemaVersion: number;
+  objective: string;
+  notes: string[];
+  decisions: string[];
+  blockers: string[];
+  todos: ChatDebugTodo[];
+  updatedAt: number;
+};
+
 export type ChatDebugConversation = {
   id: string;
   title: string;
@@ -34,6 +54,7 @@ export type CurrentChatDebug = {
   interactionMode: string;
   pendingInput: unknown;
   contextUsage: unknown;
+  chatContext: ChatDebugContext | null;
   draftPrompt: string;
   pendingApprovals: Record<string, unknown>;
   chatMetrics: ChatMetrics;
@@ -92,6 +113,9 @@ export const useCurrentChatDebug = (): CurrentChatDebug | null => useSelect(sele
       : (store.getLastInteractionMode?.() as string ?? ''),
     pendingInput: currentChatId ? store.getPendingInput?.(currentChatId) ?? null : null,
     contextUsage: currentChatId ? store.getContextUsage?.(currentChatId) ?? null : null,
+    chatContext: currentChatId
+      ? toPlainObject<ChatDebugContext>(store.getChatContext?.(currentChatId) ?? null)
+      : null,
     draftPrompt: (store.getDraftPrompt?.(currentChatId) as string ?? ''),
     pendingApprovals: currentConversation?.pendingApprovals ?? {},
     chatMetrics: computeChatMetrics(

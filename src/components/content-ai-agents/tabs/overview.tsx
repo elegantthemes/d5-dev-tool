@@ -9,6 +9,7 @@ import { ObjectRenderer } from '@divi/object-renderer';
 
 // Local dependencies.
 import { CollapseControls } from '../components/collapse-controls';
+import { ChatPlanDebug } from '../components/chat-plan-debug';
 import { CollapsibleCard } from '../components/collapsible-card';
 import { CollapsiblePrompt } from '../components/collapsible-prompt';
 import { useExpandedItems } from '../components/use-expanded-items';
@@ -51,6 +52,7 @@ export const ContentAIAgentsOverview = (): ReactElement => {
     interactionMode,
     pendingInput,
     contextUsage,
+    chatContext,
     draftPrompt,
     pendingApprovals,
     messages,
@@ -128,6 +130,11 @@ export const ContentAIAgentsOverview = (): ReactElement => {
           <p className="d5-dev-tool-ai-agent__empty">No active chat selected.</p>
         )}
       </CollapsibleCard>
+
+      <ChatPlanDebug
+        chatContext={chatContext}
+        hasActiveChat={Boolean(currentChatId)}
+      />
 
       <div className="d5-dev-tool-ai-agent__section-header">
         <h3 className="d5-dev-tool-ai-agent__section-title">All Chats</h3>

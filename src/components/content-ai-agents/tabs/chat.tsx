@@ -3,6 +3,7 @@ import React, { ReactElement } from 'react';
 
 // Local dependencies.
 import { ChatMessagesDebug } from '../components/chat-messages-debug';
+import { ChatPlanDebug } from '../components/chat-plan-debug';
 import { CollapsibleCard } from '../components/collapsible-card';
 import { useExpandedItems } from '../components/use-expanded-items';
 import { ContentAIAgentsStoreUnavailable } from '../store-unavailable';
@@ -30,6 +31,7 @@ export const ContentAIAgentsChat = (): ReactElement => {
     threadId,
     isStreaming,
     messages,
+    chatContext,
     chatMetrics,
   } = chatDebug;
   const latestTurn = chatMetrics.turnDurations[chatMetrics.turnDurations.length - 1] ?? null;
@@ -87,6 +89,11 @@ export const ContentAIAgentsChat = (): ReactElement => {
           <p className="d5-dev-tool-ai-agent__empty">No active chat selected.</p>
         )}
       </CollapsibleCard>
+
+      <ChatPlanDebug
+        chatContext={chatContext}
+        hasActiveChat={Boolean(currentChatId)}
+      />
 
       <ChatMessagesDebug
         messages={messages}

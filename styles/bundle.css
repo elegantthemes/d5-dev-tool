@@ -1016,6 +1016,92 @@
   padding-top: 12px;
   border-top: 1px solid #e5e5e5;
 }
+.d5-dev-tool-ai-agent__todo-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.d5-dev-tool-ai-agent__todo-item {
+  padding: 8px 10px;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  background: #fff;
+}
+.d5-dev-tool-ai-agent__todo-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+.d5-dev-tool-ai-agent__todo-id {
+  font-size: 10px;
+  color: #666;
+}
+.d5-dev-tool-ai-agent__todo-content {
+  margin: 0 0 4px;
+  font-size: 11px;
+  line-height: 1.5;
+  color: #222;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.d5-dev-tool-ai-agent__todo-meta {
+  margin: 0;
+  font-size: 10px;
+  color: #666;
+}
+.d5-dev-tool-ai-agent__badge--todo-pending {
+  background: #6b7280;
+}
+.d5-dev-tool-ai-agent__badge--todo-in_progress {
+  background: #2563eb;
+}
+.d5-dev-tool-ai-agent__badge--todo-completed {
+  background: #059669;
+}
+.d5-dev-tool-ai-agent__badge--todo-cancelled {
+  background: #9ca3af;
+}
+.d5-dev-tool-ai-agent__context-body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.d5-dev-tool-ai-agent__context-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.d5-dev-tool-ai-agent__context-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #666;
+}
+.d5-dev-tool-ai-agent__context-objective {
+  margin: 0;
+  font-size: 11px;
+  line-height: 1.5;
+  color: #222;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.d5-dev-tool-ai-agent__context-list {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 11px;
+  line-height: 1.5;
+  color: #222;
+}
+.d5-dev-tool-ai-agent__context-item {
+  margin: 0 0 4px;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
 /*!*************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[2].use[1]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[2].use[2]!./src/components/tool-generate-module-settings-configuration/styles.scss ***!
   \*************************************************************************************************************************************************************************************************************************/
