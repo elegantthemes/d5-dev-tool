@@ -13,6 +13,43 @@ type AiAgentStore = Record<string, (...args: unknown[]) => unknown> & {
   allState?: () => unknown;
 };
 
+const DEBUG_SELECTOR_NAMES = [
+  'getPendingAttachments',
+  'getCommands',
+  'getCommandsLoaded',
+  'getSessionLedger',
+  'getChatTodos',
+  'getStreamingChatIds',
+  'getModelPreferences',
+  'getLatestCheckpoint',
+  'listCheckpoints',
+  'getChatRestorePoints',
+  'getRestorePointForMessage',
+  'getRules',
+  'hasCredentials',
+] as const;
+
+type DebugSelectorName = typeof DEBUG_SELECTOR_NAMES[number];
+
+const callSelector = <T>(
+  store: AiAgentStore,
+  selectorName: DebugSelectorName,
+  fallback: T,
+  ...args: unknown[]
+): T => {
+  const selector = store[selectorName];
+
+  if ('function' !== typeof selector) {
+    return fallback;
+  }
+
+  try {
+    return selector(...args) as T;
+  } catch {
+    return fallback;
+  }
+};
+
 export type ChatDebugTodoStatus = 'pending' | 'in_progress' | 'completed' | 'cancelled';
 
 export type ChatDebugTodo = {
@@ -57,6 +94,19 @@ export type CurrentChatDebug = {
   chatContext: ChatDebugContext | null;
   draftPrompt: string;
   pendingApprovals: Record<string, unknown>;
+  pendingAttachments: unknown[];
+  commands: unknown[];
+  commandsLoaded: boolean;
+  sessionLedger: unknown;
+  chatTodos: unknown[];
+  streamingChatIds: string[];
+  modelPreferences: unknown;
+  latestCheckpoint: unknown;
+  checkpoints: unknown[];
+  restorePoints: unknown[];
+  latestTurnRestorePoint: unknown;
+  rules: unknown[];
+  hasCredentials: boolean | null;
   chatMetrics: ChatMetrics;
 };
 
@@ -91,6 +141,10 @@ export const useCurrentChatDebug = (): CurrentChatDebug | null => useSelect(sele
     currentChatId ? store.getContextUsage?.(currentChatId) ?? null : null,
   );
   const chatUpdatedAt = currentConversation?.updatedAt ?? null;
+  const latestUserMessage = [...messages].reverse().find(message => (
+    'user' === (message as { role?: string }).role
+  )) as { id?: string } | undefined;
+  const threadId = currentChatId ? (store.getChatThreadId?.(currentChatId) as string ?? '') : '';
 
   return {
     currentChatId,
@@ -106,7 +160,7 @@ export const useCurrentChatDebug = (): CurrentChatDebug | null => useSelect(sele
     })),
     messages,
     title: currentConversation?.title ?? '',
-    threadId: currentChatId ? (store.getChatThreadId?.(currentChatId) as string ?? '') : '',
+    threadId,
     isStreaming,
     interactionMode: currentChatId
       ? (store.getChatInteractionMode?.(currentChatId) as string ?? '')
@@ -118,6 +172,41 @@ export const useCurrentChatDebug = (): CurrentChatDebug | null => useSelect(sele
       : null,
     draftPrompt: (store.getDraftPrompt?.(currentChatId) as string ?? ''),
     pendingApprovals: currentConversation?.pendingApprovals ?? {},
+    pendingAttachments: currentChatId
+      ? toPlainObject<unknown[]>(callSelector(store, 'getPendingAttachments', [], currentChatId)) ?? []
+      : [],
+    commands: toPlainObject<unknown[]>(callSelector(store, 'getCommands', [])) ?? [],
+    commandsLoaded: callSelector(store, 'getCommandsLoaded', false),
+    sessionLedger: currentChatId
+      ? toPlainObject(callSelector(store, 'getSessionLedger', null, currentChatId))
+      : null,
+    chatTodos: currentChatId
+      ? toPlainObject<unknown[]>(callSelector(store, 'getChatTodos', [], currentChatId)) ?? []
+      : [],
+    streamingChatIds: toPlainObject<string[]>(callSelector(store, 'getStreamingChatIds', [])) ?? [],
+    modelPreferences: toPlainObject(callSelector(store, 'getModelPreferences', null)),
+    latestCheckpoint: threadId
+      ? toPlainObject(callSelector(store, 'getLatestCheckpoint', null, threadId))
+      : null,
+    checkpoints: threadId
+      ? toPlainObject<unknown[]>(callSelector(store, 'listCheckpoints', [], threadId)) ?? []
+      : [],
+    restorePoints: currentChatId
+      ? toPlainObject<unknown[]>(callSelector(store, 'getChatRestorePoints', [], currentChatId)) ?? []
+      : [],
+    latestTurnRestorePoint: currentChatId && latestUserMessage?.id
+      ? toPlainObject(callSelector(
+        store,
+        'getRestorePointForMessage',
+        null,
+        currentChatId,
+        latestUserMessage.id,
+      ))
+      : null,
+    rules: toPlainObject<unknown[]>(callSelector(store, 'getRules', [])) ?? [],
+    hasCredentials: 'function' === typeof store.hasCredentials
+      ? callSelector(store, 'hasCredentials', false)
+      : null,
     chatMetrics: computeChatMetrics(
       messages as Array<{ id?: string; role?: string; timestamp?: number; isStreaming?: boolean }>,
       contextUsageByAgent,

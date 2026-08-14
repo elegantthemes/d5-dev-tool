@@ -6,9 +6,10 @@ import React, {
 } from 'react';
 import classnames from 'classnames';
 
+import { copyTextToClipboard } from '../utils/copy-to-clipboard';
 import { formatJsonContent } from '../utils/format-json-content';
 
-type PromptVariant = 'user-prompt' | 'system-prompt' | 'response' | 'tool-request' | 'tool-response';
+export type PromptVariant = 'user-prompt' | 'system-prompt' | 'response' | 'tool-request' | 'tool-response';
 
 type CollapsiblePromptProps = {
   label: string;
@@ -41,7 +42,10 @@ export const CollapsiblePrompt = ({
     event.stopPropagation();
 
     try {
-      await navigator.clipboard.writeText(formattedContent.copyValue);
+      await copyTextToClipboard(
+        formattedContent.copyValue,
+        event.currentTarget.ownerDocument ?? document,
+      );
       setCopyState('copied');
       window.setTimeout(() => setCopyState('idle'), 1500);
     } catch {
@@ -63,21 +67,19 @@ export const CollapsiblePrompt = ({
     ? 'Copied'
     : 'error' === copyState
       ? 'Copy failed'
-      : 'Copy JSON';
+      : (formattedContent.isJson ? 'Copy JSON' : 'Copy');
 
   return (
     <div className={classnames('d5-dev-tool-ai-agent__block', variantClassMap[variant])}>
       <div className="d5-dev-tool-ai-agent__block-label-row">
         <span className="d5-dev-tool-ai-agent__block-label">{label}</span>
-        {formattedContent.isJson && (
-          <button
-            type="button"
-            className="d5-dev-tool-ai-agent__copy-button"
-            onClick={handleCopy}
-          >
-            {copyLabel}
-          </button>
-        )}
+        <button
+          type="button"
+          className="d5-dev-tool-ai-agent__copy-button"
+          onClick={handleCopy}
+        >
+          {copyLabel}
+        </button>
       </div>
       <button
         type="button"

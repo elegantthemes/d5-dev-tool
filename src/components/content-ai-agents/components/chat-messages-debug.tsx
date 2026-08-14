@@ -8,6 +8,7 @@ import { map } from 'lodash';
 // Divi dependencies.
 import { ObjectRenderer } from '@divi/object-renderer';
 
+import { getStepKindLabel } from '../utils/debug-step';
 import { isToolDebugStep, parseToolCallStep } from '../utils/parse-tool-call';
 import { formatDuration, getAssistantTurnDuration, type ChatTurnDuration } from '../utils/chat-metrics';
 import '../styles.scss';
@@ -49,33 +50,6 @@ const formatTimestamp = (timestamp?: number): string => {
   }
 
   return new Date(timestamp).toLocaleString();
-};
-
-const getStepKindLabel = (type?: string): string => {
-  switch (type) {
-    case 'thinking':
-      return 'System / Thinking';
-    case 'tool_call':
-      return 'Tool Call';
-    case 'sub_agent':
-      return 'Sub Agent';
-    case 'approval':
-      return 'Approval Request';
-    case 'clarification':
-      return 'Clarification';
-    case 'text':
-      return 'Assistant Response';
-    case 'notes':
-      return 'Notes';
-    case 'status':
-      return 'Status';
-    case 'routing':
-      return 'Routing';
-    case 'summarizing':
-      return 'Summarizing';
-    default:
-      return type || 'Step';
-  }
 };
 
 const getMessageSubtitle = (message: ChatMessage): string => {

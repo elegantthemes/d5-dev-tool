@@ -1,4 +1,4 @@
-type AssistantStep = {
+export type AssistantStep = {
   type?: string;
   label?: string;
   content?: string;
