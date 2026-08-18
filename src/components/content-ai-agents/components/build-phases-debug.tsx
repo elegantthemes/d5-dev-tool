@@ -24,6 +24,10 @@ import { CollapseControls } from './collapse-controls';
 import { CollapsibleCard } from './collapsible-card';
 import { CollapsiblePrompt } from './collapsible-prompt';
 import { CopyDataButton } from './copy-data-button';
+import {
+  filterNetworkRecordsByView,
+  type ExecutionViewFilters,
+} from './execution-filters';
 import { NetworkRequestsDebug } from './network-requests-debug';
 import { StepListDebug } from './step-list-debug';
 import { useExpandedItems } from './use-expanded-items';
@@ -286,8 +290,10 @@ const getPhaseStatus = ({
  */
 export const BuildPhasesDebug = ({
   chatDebug,
+  viewFilters,
 }: {
   chatDebug: CurrentChatDebug;
+  viewFilters: ExecutionViewFilters;
 }): ReactElement | null => {
   const {
     currentChatId,
@@ -823,7 +829,11 @@ export const BuildPhasesDebug = ({
       </p>
       {phases.map(phase => {
         const timing = phaseTimings[phase.id] ?? EMPTY_TIMING;
-        const phaseRecords = phaseNetwork[phase.id] ?? [];
+        const phaseRecords = filterNetworkRecordsByView(
+          phaseNetwork[phase.id] ?? [],
+          viewFilters,
+        );
+        const showNetworkRequests = viewFilters.wpRestEndpoint || viewFilters.aiEndpoint;
 
         return (
           <CollapsibleCard
@@ -870,30 +880,44 @@ export const BuildPhasesDebug = ({
                 <strong>Duration:</strong> <code>{formatPhaseDuration(timing, timingNow)}</code>
               </p>
             </div>
-            {phase.content}
-            <NetworkRequestsDebug
-              label="HTTP Requests In This Phase"
-              records={phaseRecords}
-              emptyMessage="No HTTP request is attributed to this phase. Phases that only read Redux or mutate the canvas make no network calls."
-            />
+            {viewFilters.phaseEvents && phase.content}
+            {showNetworkRequests && (
+              <NetworkRequestsDebug
+                label="HTTP Requests In This Phase"
+                records={phaseRecords}
+                emptyMessage="No HTTP request is attributed to this phase. Phases that only read Redux or mutate the canvas make no network calls."
+              />
+            )}
           </CollapsibleCard>
         );
       })}
-      {0 < unattributedNetwork.length && (
-        <CollapsibleCard
-          id={UNATTRIBUTED_ID}
-          title="Unattributed Requests"
-          subtitle={`${unattributedNetwork.length} request(s) from before this turn or from an unrecognized endpoint`}
-          isExpanded={isExpanded(UNATTRIBUTED_ID)}
-          onToggle={() => toggle(UNATTRIBUTED_ID)}
-        >
-          <NetworkRequestsDebug
-            label="Requests Outside The Current Turn"
-            records={unattributedNetwork}
-            emptyMessage="No unattributed requests."
-          />
-        </CollapsibleCard>
-      )}
+      {(() => {
+        const filteredUnattributed = filterNetworkRecordsByView(
+          unattributedNetwork,
+          viewFilters,
+        );
+        const showNetworkRequests = viewFilters.wpRestEndpoint || viewFilters.aiEndpoint;
+
+        if (!showNetworkRequests || 0 === filteredUnattributed.length) {
+          return null;
+        }
+
+        return (
+          <CollapsibleCard
+            id={UNATTRIBUTED_ID}
+            title="Unattributed Requests"
+            subtitle={`${filteredUnattributed.length} request(s) from before this turn or from an unrecognized endpoint`}
+            isExpanded={isExpanded(UNATTRIBUTED_ID)}
+            onToggle={() => toggle(UNATTRIBUTED_ID)}
+          >
+            <NetworkRequestsDebug
+              label="Requests Outside The Current Turn"
+              records={filteredUnattributed}
+              emptyMessage="No unattributed requests."
+            />
+          </CollapsibleCard>
+        );
+      })()}
     </div>
   );
 };

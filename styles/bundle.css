@@ -1060,6 +1060,35 @@
   padding-top: 12px;
   border-top: 1px solid #e5e5e5;
 }
+.d5-dev-tool-ai-agent__execution-filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 14px;
+  padding: 8px 10px;
+  border: 1px solid #d4d4d4;
+  border-radius: 6px;
+  background: #fafafa;
+}
+.d5-dev-tool-ai-agent__execution-filters-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: #555;
+}
+.d5-dev-tool-ai-agent__execution-filter {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin: 0;
+  font-size: 11px;
+  color: #333;
+  cursor: pointer;
+  user-select: none;
+}
+.d5-dev-tool-ai-agent__execution-filter input {
+  margin: 0;
+  cursor: pointer;
+}
 .d5-dev-tool-ai-agent__phases {
   display: flex;
   flex-direction: column;

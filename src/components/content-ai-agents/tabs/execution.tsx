@@ -1,8 +1,15 @@
 // External dependencies.
-import React, { ReactElement } from 'react';
+import React, {
+  ReactElement,
+  useState,
+} from 'react';
 
 // Local dependencies.
 import { BuildPhasesDebug } from '../components/build-phases-debug';
+import {
+  DEFAULT_EXECUTION_VIEW_FILTERS,
+  ExecutionFilters,
+} from '../components/execution-filters';
 import { ContentAIAgentsStoreUnavailable } from '../store-unavailable';
 import { useCurrentChatDebug } from '../use-current-chat-debug';
 import '../styles.scss';
@@ -12,6 +19,7 @@ import '../styles.scss';
  */
 export const ContentAIAgentsExecution = (): ReactElement => {
   const chatDebug = useCurrentChatDebug();
+  const [viewFilters, setViewFilters] = useState(DEFAULT_EXECUTION_VIEW_FILTERS);
 
   if (!chatDebug) {
     return <ContentAIAgentsStoreUnavailable />;
@@ -19,7 +27,8 @@ export const ContentAIAgentsExecution = (): ReactElement => {
 
   return (
     <div className="d5-dev-tool-ai-agent">
-      <BuildPhasesDebug chatDebug={chatDebug} />
+      <ExecutionFilters filters={viewFilters} onChange={setViewFilters} />
+      <BuildPhasesDebug chatDebug={chatDebug} viewFilters={viewFilters} />
     </div>
   );
 };
