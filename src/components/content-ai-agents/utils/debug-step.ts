@@ -44,6 +44,7 @@ const STEP_KIND_LABELS: Record<string, string> = {
   text: 'Assistant Response',
   thinking: 'System / Thinking',
   tool_call: 'Tool Call',
+  'tool-selection': 'Tool Selection',
 };
 
 // Values longer than this get their own collapsed block instead of an inline row.
@@ -118,6 +119,17 @@ export const formatCompactStepValue = (value: unknown): string => {
  * Single-line excerpt used as a step's collapsed subtitle.
  */
 export const getStepPreview = (step: DebugStep): string => {
+  if ('tool-selection' === step.type) {
+    const agent = 'string' === typeof step.agentType ? step.agentType : '';
+    const mode = 'string' === typeof step.toolSelectionMode ? step.toolSelectionMode : '';
+    const catalogSize = 'number' === typeof step.catalogSize ? step.catalogSize : null;
+    const boundCount = Array.isArray(step.toolNames) ? step.toolNames.length : null;
+
+    if (agent && mode && null !== catalogSize && null !== boundCount) {
+      return `${agent} · ${mode} ${boundCount}/${catalogSize}`;
+    }
+  }
+
   const candidates = [step.content, step.goal, step.argsPreview, step.status];
   const source = candidates.find(
     candidate => 'string' === typeof candidate && Boolean(candidate.trim()),
