@@ -2,7 +2,6 @@
 import React, { ReactElement } from 'react';
 
 // Local dependencies.
-import { ChatMessagesDebug } from '../components/chat-messages-debug';
 import { ChatPlanDebug } from '../components/chat-plan-debug';
 import { CollapsibleCard } from '../components/collapsible-card';
 import { useExpandedItems } from '../components/use-expanded-items';
@@ -92,12 +91,6 @@ export const ContentAIAgentsChat = (): ReactElement => {
 
       <ChatPlanDebug
         chatContext={chatContext}
-        hasActiveChat={Boolean(currentChatId)}
-      />
-
-      <ChatMessagesDebug
-        messages={messages}
-        turnDurations={chatMetrics.turnDurations}
         hasActiveChat={Boolean(currentChatId)}
       />
     </div>

@@ -2,7 +2,6 @@
 import { __ } from '@wordpress/i18n';
 
 // Local dependencies.
-import { ContentAIAgentsOverview } from '../content-ai-agents/tabs/overview';
 import { ContentAIAgentsChat } from '../content-ai-agents/tabs/chat';
 import { ContentAIAgentsExecution } from '../content-ai-agents/tabs/execution';
 import { ContentAIAgentsLlmInference } from '../content-ai-agents/tabs/llm-inference';
@@ -11,11 +10,6 @@ import { ContentAIAgentsLlmInference } from '../content-ai-agents/tabs/llm-infer
  * Map of AI Agents panel tabs.
  */
 export const aiAgentsPanelMap = [
-  {
-    id: 'ai-agents-overview',
-    label: __('Overview', 'et_builder'),
-    component: ContentAIAgentsOverview,
-  },
   {
     id: 'ai-agents-chat',
     label: __('Chat', 'et_builder'),
