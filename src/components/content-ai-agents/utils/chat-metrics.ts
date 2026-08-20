@@ -1,3 +1,6 @@
+import { sumInferenceUsage } from './extract-inference-usage';
+import { type NetworkRecord } from './network-recorder';
+
 type ContextUsageEntry = {
   inputTokens: number;
   modelName: string;
@@ -19,8 +22,14 @@ export type ChatTurnDuration = {
   isInProgress: boolean;
 };
 
+export type TurnWindow = {
+  startedAt: number | null;
+  endedAt: number | null;
+};
+
 export type ChatMetrics = {
   totalTokens: number;
+  inferenceRequestCount: number;
   latestTurnDurationMs: number | null;
   totalTurnDurationMs: number;
   turnDurations: ChatTurnDuration[];
@@ -77,9 +86,17 @@ export const extractContextUsageByAgent = (
 };
 
 /**
- * Sums the latest reported input-token counts across all agents in a chat.
+ * Sums token usage reported by captured LLM inference responses for a turn.
  */
-export const computeTotalTokens = (
+export const computeInferenceTotalTokens = (records: NetworkRecord[]): number => (
+  sumInferenceUsage(records).totalTokens
+);
+
+/**
+ * Falls back to the latest per-agent context snapshot when inference traffic
+ * was not captured (for example, if the recorder was installed after send).
+ */
+export const computeContextSnapshotTokens = (
   contextUsageByAgent: ContextUsageByAgent,
   peakContextUsage: ContextUsageEntry | null = null,
 ): number => {
@@ -93,6 +110,60 @@ export const computeTotalTokens = (
   }
 
   return peakContextUsage?.inputTokens ?? 0;
+};
+
+/**
+ * Prefers cumulative inference usage for the active turn, with a store snapshot
+ * fallback only when no inference requests were captured for that turn.
+ */
+export const computeTotalTokens = (
+  contextUsageByAgent: ContextUsageByAgent,
+  peakContextUsage: ContextUsageEntry | null = null,
+  inferenceRecords: NetworkRecord[] = [],
+): number => {
+  if (0 < inferenceRecords.length) {
+    return computeInferenceTotalTokens(inferenceRecords);
+  }
+
+  return computeContextSnapshotTokens(contextUsageByAgent, peakContextUsage);
+};
+
+/**
+ * Bounds the latest chat turn for duration and inference attribution.
+ *
+ * Assistant placeholders are stamped when the user sends, so the turn must not
+ * end at the assistant message timestamp — that would exclude every inference
+ * request fired afterward.
+ *
+ * For the latest turn, leave the upper bound open (`endedAt: null`). The next
+ * user message becomes the lower bound for the following turn, which naturally
+ * excludes earlier inference without relying on `chat.updatedAt` (that value can
+ * lag behind the final inference response when streaming settles).
+ */
+export const getLatestTurnWindow = (
+  messages: ChatMessageMetrics[],
+): TurnWindow => {
+  const latestUserMessageIndex = messages.reduce(
+    (latestIndex, message, index) => ('user' === message.role ? index : latestIndex),
+    -1,
+  );
+
+  if (-1 === latestUserMessageIndex) {
+    return {
+      startedAt: null,
+      endedAt: null,
+    };
+  }
+
+  const latestUserMessage = messages[latestUserMessageIndex];
+  const nextUserMessage = messages
+    .slice(latestUserMessageIndex + 1)
+    .find(message => 'user' === message.role);
+
+  return {
+    startedAt: latestUserMessage.timestamp ?? null,
+    endedAt: nextUserMessage?.timestamp ?? null,
+  };
 };
 
 /**
@@ -169,6 +240,7 @@ export const computeChatMetrics = (
   isStreaming: boolean,
   chatUpdatedAt: number | null,
   peakContextUsage: ContextUsageEntry | null = null,
+  inferenceRecords: NetworkRecord[] = [],
   now = Date.now(),
 ): ChatMetrics => {
   const turnDurations: ChatTurnDuration[] = [];
@@ -205,7 +277,8 @@ export const computeChatMetrics = (
   const latestTurn = turnDurations[turnDurations.length - 1] ?? null;
 
   return {
-    totalTokens: computeTotalTokens(contextUsageByAgent, peakContextUsage),
+    totalTokens: computeTotalTokens(contextUsageByAgent, peakContextUsage, inferenceRecords),
+    inferenceRequestCount: inferenceRecords.length,
     latestTurnDurationMs: latestTurn?.durationMs ?? null,
     totalTurnDurationMs: completedTurnDurations.reduce(
       (total, turn) => total + turn.durationMs,

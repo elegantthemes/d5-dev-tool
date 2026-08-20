@@ -10,3 +10,33 @@ export const filterInferenceRecords = (records: NetworkRecord[]): NetworkRecord[
     .filter(record => 'agent-inference' === getNetworkRole(record.url))
     .sort((left, right) => left.startedAt - right.startedAt)
 );
+
+/**
+ * Limits inference records to a single chat turn window.
+ *
+ * Requests are matched on `startedAt`. When the turn is still in progress the
+ * upper bound is left open so tokens accumulate until settlement.
+ */
+export const filterInferenceRecordsForTurn = (
+  records: NetworkRecord[],
+  turnStartedAt: number | null,
+  turnEndedAt: number | null,
+): NetworkRecord[] => {
+  if (null === turnStartedAt && null === turnEndedAt) {
+    return records;
+  }
+
+  return records.filter(record => {
+    if (null !== turnStartedAt && record.startedAt < turnStartedAt) {
+      return false;
+    }
+
+    if (null !== turnEndedAt) {
+      const requestTimestamp = record.endedAt ?? record.startedAt;
+
+      return requestTimestamp <= turnEndedAt;
+    }
+
+    return true;
+  });
+};
