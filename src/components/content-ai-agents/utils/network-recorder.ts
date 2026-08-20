@@ -26,7 +26,6 @@ type RecorderState = {
 };
 
 const MAX_RECORDS = 300;
-const MAX_BODY_LENGTH = 20000;
 const ASSET_PATTERN = /\.(?:js|css|png|jpe?g|gif|svg|webp|woff2?|ttf|eot|ico|map)(?:\?|$)/i;
 const API_PATTERN = /(?:\/wp-json\/|\/divi\/v1\/|\/wp\/v2\/|admin-ajax\.php)/i;
 const ET_AI_PATTERN = /(?:ai_server|\/agent(?:\/|\?|$)|generate-layout)/i;
@@ -48,12 +47,6 @@ const notifyListeners = (): void => {
     }
   });
 };
-
-const truncateBody = (value: string): string => (
-  MAX_BODY_LENGTH < value.length
-    ? `${value.slice(0, MAX_BODY_LENGTH)}\n…[truncated ${value.length - MAX_BODY_LENGTH} chars]`
-    : value
-);
 
 const isCrossOrigin = (url: string): boolean => {
   if (/^https?:\/\//i.test(url)) {
@@ -117,11 +110,11 @@ const describeRequestBody = (body: unknown): string | null => {
   }
 
   if ('string' === typeof body) {
-    return truncateBody(body);
+    return body;
   }
 
   if (body instanceof URLSearchParams) {
-    return truncateBody(body.toString());
+    return body.toString();
   }
 
   if (body instanceof FormData) {
@@ -149,6 +142,75 @@ const updateRecord = (id: string, changes: Partial<NetworkRecord>): void => {
     record.id === id ? { ...record, ...changes } : record
   ));
   notifyListeners();
+};
+
+/**
+ * Reads a cloned SSE response body without touching the original stream the
+ * agent consumes. Updates the record when the stream finishes.
+ */
+const bufferStreamResponse = (
+  recordId: string,
+  response: Response,
+  startedAt: number,
+): void => {
+  const finish = (responseBody: string): void => {
+    const endedAt = Date.now();
+
+    updateRecord(recordId, {
+      endedAt,
+      durationMs: endedAt - startedAt,
+      responseBody,
+    });
+  };
+
+  if (!response.body) {
+    finish('[Empty stream body]');
+
+    return;
+  }
+
+  let clone: Response;
+
+  try {
+    clone = response.clone();
+  } catch {
+    finish('[Response body could not be cloned]');
+
+    return;
+  }
+
+  const reader = clone.body?.getReader();
+
+  if (!reader) {
+    finish('[Stream reader unavailable]');
+
+    return;
+  }
+
+  const decoder = new TextDecoder();
+  let buffer = '';
+
+  const pump = (): Promise<void> => reader.read().then(({ done, value }) => {
+    if (done) {
+      buffer += decoder.decode();
+      finish(buffer);
+
+      return;
+    }
+
+    buffer += decoder.decode(value, { stream: true });
+
+    // Progressive updates keep in-flight SSE requests visible while streaming.
+    if (buffer.trim()) {
+      updateRecord(recordId, { responseBody: buffer });
+    }
+
+    return pump();
+  });
+
+  pump().catch(() => {
+    finish(buffer.trim() ? buffer : '[Stream read failed]');
+  });
 };
 
 /**
@@ -193,26 +255,33 @@ export const installNetworkRecorder = (): void => {
     });
 
     return originalFetch(input as RequestInfo, init).then((response: Response) => {
-      const endedAt = Date.now();
       const contentType = response.headers?.get?.('content-type') ?? '';
       const isStream = /text\/event-stream/i.test(contentType);
 
-      updateRecord(id, {
-        endedAt,
-        durationMs: endedAt - startedAt,
-        status: response.status,
-        statusText: response.statusText,
-        ok: response.ok,
-        isStream,
-        responseBody: isStream ? '[Server-sent event stream — body not buffered]' : null,
-      });
+      if (isStream) {
+        updateRecord(id, {
+          status: response.status,
+          statusText: response.statusText,
+          ok: response.ok,
+          isStream: true,
+        });
 
-      // Streaming bodies are left untouched so cloning cannot interfere with
-      // the agent's own consumption of the stream.
-      if (!isStream) {
+        bufferStreamResponse(id, response, startedAt);
+      } else {
+        const endedAt = Date.now();
+
+        updateRecord(id, {
+          endedAt,
+          durationMs: endedAt - startedAt,
+          status: response.status,
+          statusText: response.statusText,
+          ok: response.ok,
+          isStream: false,
+        });
+
         try {
           response.clone().text().then((text: string) => {
-            updateRecord(id, { responseBody: truncateBody(text) });
+            updateRecord(id, { responseBody: text });
           }).catch(() => {
             updateRecord(id, { responseBody: '[Response body unavailable]' });
           });

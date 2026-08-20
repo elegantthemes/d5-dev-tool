@@ -615,4 +615,41 @@
     white-space: pre-wrap;
     word-break: break-word;
   }
+
+  &__llm-inference {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  &__llm-inference-meta {
+    margin: 4px 0 0;
+    font-size: 11px;
+    color: #666;
+    line-height: 1.4;
+  }
+
+  &__llm-inference-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  &__llm-inference-request {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 12px;
+    border: 1px solid #d4d4d4;
+    border-radius: 6px;
+    background: #f5f5f5;
+  }
+
+  &__llm-inference-request-title {
+    margin: 0;
+    font-size: 13px;
+    font-weight: 700;
+    color: #333;
+    line-height: 1.3;
+  }
 }
