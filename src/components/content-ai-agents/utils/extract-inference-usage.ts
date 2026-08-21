@@ -5,12 +5,14 @@ export type InferenceUsage = {
   inputTokens: number;
   outputTokens: number;
   totalTokens: number;
+  cost: number | null;
 };
 
 type RawUsage = {
   input_tokens?: number;
   output_tokens?: number;
   total_tokens?: number;
+  cost?: number;
 };
 
 const normalizeUsage = (usage: RawUsage): InferenceUsage | null => {
@@ -29,10 +31,13 @@ const normalizeUsage = (usage: RawUsage): InferenceUsage | null => {
   const resolvedInput = inputTokens ?? 0;
   const resolvedOutput = outputTokens ?? 0;
 
+  const resolvedCost = 'number' === typeof usage.cost ? usage.cost : null;
+
   return {
     inputTokens: resolvedInput,
     outputTokens: resolvedOutput,
     totalTokens: totalTokens ?? (resolvedInput + resolvedOutput),
+    cost: resolvedCost,
   };
 };
 
@@ -113,14 +118,20 @@ export const sumInferenceUsage = (records: NetworkRecord[]): InferenceUsage => (
       return totals;
     }
 
+    const nextCost = null === totals.cost && null === usage.cost
+      ? null
+      : (totals.cost ?? 0) + (usage.cost ?? 0);
+
     return {
       inputTokens: totals.inputTokens + usage.inputTokens,
       outputTokens: totals.outputTokens + usage.outputTokens,
       totalTokens: totals.totalTokens + usage.totalTokens,
+      cost: nextCost,
     };
   }, {
     inputTokens: 0,
     outputTokens: 0,
     totalTokens: 0,
+    cost: null,
   })
 );
