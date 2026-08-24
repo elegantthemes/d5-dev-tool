@@ -695,6 +695,20 @@
     gap: 8px;
   }
 
+  &__llm-inference-summary-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  &__llm-inference-summary-title {
+    margin: 0;
+    font-size: 12px;
+    font-weight: 700;
+    color: #4a2875;
+  }
+
   &__llm-inference-summary-table {
     width: 100%;
     border-collapse: collapse;

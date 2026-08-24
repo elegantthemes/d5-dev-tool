@@ -6,6 +6,7 @@ import React, {
 
 // Local dependencies.
 import { OPEN_ROUTER_PRICING_LAST_UPDATED } from '../constants/open-router-model-pricing';
+import { formatLlmInferenceSummaryForCopy } from '../utils/format-llm-inference-summary';
 import { formatUsdCost } from '../utils/open-router-pricing';
 import {
   scrollToLlmInferenceRequest,
@@ -13,6 +14,7 @@ import {
   type InferenceSummaryRow,
 } from '../utils/summarize-inference-records';
 import { type NetworkRecord } from '../utils/network-recorder';
+import { CopyDataButton } from './copy-data-button';
 
 type LlmInferenceSummaryProps = {
   records: NetworkRecord[];
@@ -65,6 +67,15 @@ export const LlmInferenceSummary = ({
 
   return (
     <div className="d5-dev-tool-ai-agent__llm-inference-summary">
+      <div className="d5-dev-tool-ai-agent__llm-inference-summary-header">
+        <h4 className="d5-dev-tool-ai-agent__llm-inference-summary-title">
+          Summary
+        </h4>
+        <CopyDataButton
+          label="Copy Table"
+          getValue={() => formatLlmInferenceSummaryForCopy(records)}
+        />
+      </div>
       <table className="d5-dev-tool-ai-agent__llm-inference-summary-table">
         <thead>
           <tr>

@@ -1181,6 +1181,18 @@
   flex-direction: column;
   gap: 8px;
 }
+.d5-dev-tool-ai-agent__llm-inference-summary-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.d5-dev-tool-ai-agent__llm-inference-summary-title {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 700;
+  color: #4a2875;
+}
 .d5-dev-tool-ai-agent__llm-inference-summary-table {
   width: 100%;
   border-collapse: collapse;
