@@ -49,7 +49,7 @@ const ROLE_CANDIDATE_PHASES: Record<NetworkRole, string[]> = {
 };
 
 export const getNetworkRole = (url: string): NetworkRole => {
-  if (/\/api\/v\d+\/agent\//i.test(url)) {
+  if (/\/api\/v\d+\/agent\//i.test(url) || /\/agent\/generate-layout/i.test(url)) {
     return 'agent-inference';
   }
 

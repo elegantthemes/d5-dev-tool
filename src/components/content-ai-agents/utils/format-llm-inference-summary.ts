@@ -19,7 +19,9 @@ const SUMMARY_TABLE_HEADERS = [
   'Total Cost',
 ] as const;
 
-const formatTokenCount = (count: number): string => count.toLocaleString();
+const formatTokenCount = (count: number, isEstimated = false): string => (
+  `${isEstimated ? '~' : ''}${count.toLocaleString()}`
+);
 
 const escapeMarkdownTableCell = (value: string): string => value.replace(/\|/g, '\\|');
 
@@ -31,11 +33,11 @@ const formatSummaryDataRow = (row: InferenceSummaryRow): string => formatMarkdow
   `Request ${row.requestNumber}`,
   row.agent,
   `\`${row.model}\``,
-  formatTokenCount(row.payloadTokens),
+  formatTokenCount(row.payloadTokens, row.isEstimated),
   formatUsdCost(row.payloadCost),
-  formatTokenCount(row.responseTokens),
+  formatTokenCount(row.responseTokens, row.isEstimated),
   formatUsdCost(row.responseCost),
-  formatTokenCount(row.totalTokens),
+  formatTokenCount(row.totalTokens, row.isEstimated),
   formatUsdCost(row.totalCost),
 ]);
 

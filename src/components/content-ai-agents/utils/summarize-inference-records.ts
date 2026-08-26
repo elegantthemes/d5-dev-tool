@@ -3,7 +3,7 @@ import {
   extractInferenceMetadata,
   isInferenceRecordComplete,
 } from './extract-inference-metadata';
-import { extractInferenceUsage } from './extract-inference-usage';
+import { resolveInferenceUsage } from './extract-inference-usage';
 import { calculateInferenceCosts } from './open-router-pricing';
 import { type NetworkRecord } from './network-recorder';
 
@@ -19,6 +19,7 @@ export type InferenceSummaryRow = {
   totalTokens: number;
   totalCost: number | null;
   isComplete: boolean;
+  isEstimated: boolean;
 };
 
 export type InferenceSummaryTotals = {
@@ -29,6 +30,7 @@ export type InferenceSummaryTotals = {
   totalTokens: number;
   totalCost: number;
   hasUnknownPricing: boolean;
+  hasEstimatedUsage: boolean;
 };
 
 export type InferenceSummary = {
@@ -59,7 +61,7 @@ export const buildInferenceRecordSummary = (
 ): InferenceSummaryRow => {
   const isComplete = isInferenceRecordComplete(record);
   const { agent, model } = extractInferenceMetadata(record);
-  const usage = extractInferenceUsage(record.responseBody);
+  const usage = resolveInferenceUsage(record.requestBody, record.responseBody);
   const inputTokens = usage?.inputTokens ?? 0;
   const outputTokens = usage?.outputTokens ?? 0;
   const totalTokens = usage?.totalTokens ?? (inputTokens + outputTokens);
@@ -68,7 +70,7 @@ export const buildInferenceRecordSummary = (
     outputTokens,
     requestBody: record.requestBody,
     responseBody: record.responseBody,
-    reportedTotalCost: isComplete ? (usage?.cost ?? null) : null,
+    reportedTotalCost: isComplete && !usage?.isEstimated ? (usage?.cost ?? null) : null,
   });
 
   return {
@@ -83,6 +85,7 @@ export const buildInferenceRecordSummary = (
     totalTokens,
     totalCost: costs.totalCost,
     isComplete,
+    isEstimated: Boolean(usage?.isEstimated),
   };
 };
 
@@ -92,6 +95,7 @@ export const buildInferenceRecordSummary = (
 export const summarizeInferenceRecords = (records: NetworkRecord[]): InferenceSummary => {
   const rows = records.map((record, index) => buildInferenceRecordSummary(record, index + 1));
   let hasUnknownPricing = false;
+  let hasEstimatedUsage = false;
 
   const totals = rows.reduce<InferenceSummaryTotals>((accumulator, row) => {
     if (
@@ -105,6 +109,10 @@ export const summarizeInferenceRecords = (records: NetworkRecord[]): InferenceSu
       hasUnknownPricing = true;
     }
 
+    if (row.isEstimated) {
+      hasEstimatedUsage = true;
+    }
+
     return {
       payloadTokens: accumulator.payloadTokens + row.payloadTokens,
       payloadCost: accumulator.payloadCost + (row.payloadCost ?? 0),
@@ -113,6 +121,7 @@ export const summarizeInferenceRecords = (records: NetworkRecord[]): InferenceSu
       totalTokens: accumulator.totalTokens + row.totalTokens,
       totalCost: accumulator.totalCost + (row.totalCost ?? 0),
       hasUnknownPricing,
+      hasEstimatedUsage,
     };
   }, {
     payloadTokens: 0,
@@ -122,6 +131,7 @@ export const summarizeInferenceRecords = (records: NetworkRecord[]): InferenceSu
     totalTokens: 0,
     totalCost: 0,
     hasUnknownPricing: false,
+    hasEstimatedUsage: false,
   });
 
   return {

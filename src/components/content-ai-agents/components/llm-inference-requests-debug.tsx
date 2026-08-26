@@ -25,7 +25,9 @@ const formatRecorderInstalledAt = (installedAt: number | null): string => (
   null === installedAt ? 'not installed' : new Date(installedAt).toLocaleString()
 );
 
-const formatTokenCount = (count: number): string => count.toLocaleString();
+const formatTokenCount = (count: number, isEstimated = false): string => (
+  `${isEstimated ? '~' : ''}${count.toLocaleString()}`
+);
 
 /**
  * Lists captured LLM inference payloads and responses, grouped by request.
@@ -80,9 +82,9 @@ export const LlmInferenceRequestsDebug = ({
                     Request {index + 1}
                   </h4>
                   <p className="d5-dev-tool-ai-agent__llm-inference-request-usage">
-                    <span>Input: {formatTokenCount(summary.payloadTokens)}</span>
-                    <span>Output: {formatTokenCount(summary.responseTokens)}</span>
-                    <span>Total: {formatTokenCount(summary.totalTokens)}</span>
+                    <span>Input: {formatTokenCount(summary.payloadTokens, summary.isEstimated)}</span>
+                    <span>Output: {formatTokenCount(summary.responseTokens, summary.isEstimated)}</span>
+                    <span>Total: {formatTokenCount(summary.totalTokens, summary.isEstimated)}</span>
                     <span>Est. cost: {formatUsdCost(summary.totalCost)}</span>
                   </p>
                   <p className="d5-dev-tool-ai-agent__llm-inference-request-meta">

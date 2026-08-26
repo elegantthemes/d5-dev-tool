@@ -1,4 +1,5 @@
 // Local dependencies.
+import { estimateInferenceUsage } from './estimate-inference-usage';
 import { type NetworkRecord } from './network-recorder';
 
 export type InferenceUsage = {
@@ -6,6 +7,7 @@ export type InferenceUsage = {
   outputTokens: number;
   totalTokens: number;
   cost: number | null;
+  isEstimated: boolean;
 };
 
 type RawUsage = {
@@ -38,8 +40,13 @@ const normalizeUsage = (usage: RawUsage): InferenceUsage | null => {
     outputTokens: resolvedOutput,
     totalTokens: totalTokens ?? (resolvedInput + resolvedOutput),
     cost: resolvedCost,
+    isEstimated: false,
   };
 };
+
+const hasReportedTokens = (usage: InferenceUsage): boolean => (
+  0 < usage.inputTokens || 0 < usage.outputTokens || 0 < usage.totalTokens
+);
 
 const collectUsagesFromText = (text: string): InferenceUsage[] => {
   const usages: InferenceUsage[] = [];
@@ -108,11 +115,28 @@ export const extractInferenceUsage = (
 };
 
 /**
+ * Prefers provider-reported usage, then estimates tokens from the captured
+ * request and response bodies when the API omits a `usage` block.
+ */
+export const resolveInferenceUsage = (
+  requestBody: string | null | undefined,
+  responseBody: string | null | undefined,
+): InferenceUsage | null => {
+  const reported = extractInferenceUsage(responseBody);
+
+  if (reported && hasReportedTokens(reported)) {
+    return reported;
+  }
+
+  return estimateInferenceUsage(requestBody, responseBody);
+};
+
+/**
  * Sums token usage across every captured LLM inference request.
  */
 export const sumInferenceUsage = (records: NetworkRecord[]): InferenceUsage => (
   records.reduce<InferenceUsage>((totals, record) => {
-    const usage = extractInferenceUsage(record.responseBody);
+    const usage = resolveInferenceUsage(record.requestBody, record.responseBody);
 
     if (!usage) {
       return totals;
@@ -127,11 +151,13 @@ export const sumInferenceUsage = (records: NetworkRecord[]): InferenceUsage => (
       outputTokens: totals.outputTokens + usage.outputTokens,
       totalTokens: totals.totalTokens + usage.totalTokens,
       cost: nextCost,
+      isEstimated: totals.isEstimated || usage.isEstimated,
     };
   }, {
     inputTokens: 0,
     outputTokens: 0,
     totalTokens: 0,
     cost: null,
+    isEstimated: false,
   })
 );

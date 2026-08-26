@@ -20,7 +20,9 @@ type LlmInferenceSummaryProps = {
   records: NetworkRecord[];
 };
 
-const formatTokenCount = (count: number): string => count.toLocaleString();
+const formatTokenCount = (count: number, isEstimated = false): string => (
+  `${isEstimated ? '~' : ''}${count.toLocaleString()}`
+);
 
 const SummaryTableRow = ({
   row,
@@ -39,11 +41,11 @@ const SummaryTableRow = ({
     </td>
     <td>{row.agent}</td>
     <td><code>{row.model}</code></td>
-    <td>{formatTokenCount(row.payloadTokens)}</td>
+    <td>{formatTokenCount(row.payloadTokens, row.isEstimated)}</td>
     <td>{formatUsdCost(row.payloadCost)}</td>
-    <td>{formatTokenCount(row.responseTokens)}</td>
+    <td>{formatTokenCount(row.responseTokens, row.isEstimated)}</td>
     <td>{formatUsdCost(row.responseCost)}</td>
-    <td>{formatTokenCount(row.totalTokens)}</td>
+    <td>{formatTokenCount(row.totalTokens, row.isEstimated)}</td>
     <td>{formatUsdCost(row.totalCost)}</td>
   </tr>
 );
@@ -112,6 +114,12 @@ export const LlmInferenceSummary = ({
       </table>
       <p className="d5-dev-tool-ai-agent__llm-inference-summary-notice">
         {pricingNotice}
+        {summary.totals.hasEstimatedUsage && (
+          <>
+            {' '}
+            Rows marked with ~ estimate tokens from the captured payload and response because the API did not include usage.
+          </>
+        )}
         {summary.totals.hasUnknownPricing && (
           <>
             {' '}

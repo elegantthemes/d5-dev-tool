@@ -9,6 +9,10 @@ type PayloadMessage = {
 type ParsedPayload = {
   model?: string;
   input?: PayloadMessage[];
+  prompt?: string;
+  placement?: string;
+  scope?: string;
+  streamProgress?: boolean;
 };
 
 const AGENT_PATTERNS: Array<{ id: string; pattern: RegExp }> = [
@@ -51,11 +55,34 @@ const collectMessageText = (message: PayloadMessage): string => {
     .join('\n');
 };
 
+const isGenerateLayoutPayload = (payload: ParsedPayload | null): boolean => {
+  if (!payload || payload.input) {
+    return false;
+  }
+
+  return 'string' === typeof payload.prompt && (
+    'string' === typeof payload.placement
+    || 'string' === typeof payload.scope
+    || 'boolean' === typeof payload.streamProgress
+  );
+};
+
 /**
  * Infers the Divi agent from the captured request payload system/developer text.
  */
-export const extractInferenceAgent = (requestBody: string | null): string => {
+export const extractInferenceAgent = (
+  requestBody: string | null,
+  url?: string | null,
+): string => {
+  if (url && /generate-layout/i.test(url)) {
+    return 'module';
+  }
+
   const payload = parsePayload(requestBody);
+
+  if (isGenerateLayoutPayload(payload)) {
+    return 'module';
+  }
 
   if (!payload?.input) {
     return 'unknown';
@@ -180,6 +207,6 @@ export type InferenceRecordMetadata = {
 export const extractInferenceMetadata = (
   record: NetworkRecord,
 ): InferenceRecordMetadata => ({
-  agent: extractInferenceAgent(record.requestBody),
+  agent: extractInferenceAgent(record.requestBody, record.url),
   model: extractInferenceModel(record.requestBody, record.responseBody),
 });
