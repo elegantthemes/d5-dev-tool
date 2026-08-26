@@ -1,4 +1,5 @@
 // Local dependencies.
+import { formatInferenceResponseToolCalls } from './extract-inference-tool-calls';
 import { formatUsdCost } from './open-router-pricing';
 import {
   summarizeInferenceRecords,
@@ -11,6 +12,7 @@ const SUMMARY_TABLE_HEADERS = [
   'Request',
   'Agent',
   'Model',
+  'Response Tool Call',
   'Payload Token',
   'Payload Cost',
   'Response Token',
@@ -29,10 +31,19 @@ const formatMarkdownTableRow = (cells: string[]): string => (
   `| ${cells.map(escapeMarkdownTableCell).join(' | ')} |`
 );
 
+const formatToolCallsForCopy = (toolCalls: string[]): string => {
+  if (0 === toolCalls.length) {
+    return formatInferenceResponseToolCalls(toolCalls);
+  }
+
+  return toolCalls.map(name => `\`${name}\``).join(', ');
+};
+
 const formatSummaryDataRow = (row: InferenceSummaryRow): string => formatMarkdownTableRow([
   `Request ${row.requestNumber}`,
   row.agent,
   `\`${row.model}\``,
+  formatToolCallsForCopy(row.responseToolCalls),
   formatTokenCount(row.payloadTokens, row.isEstimated),
   formatUsdCost(row.payloadCost),
   formatTokenCount(row.responseTokens, row.isEstimated),
@@ -43,6 +54,7 @@ const formatSummaryDataRow = (row: InferenceSummaryRow): string => formatMarkdow
 
 const formatSummaryTotalsRow = (summary: InferenceSummary): string => formatMarkdownTableRow([
   '**Totals**',
+  '',
   '',
   '',
   formatTokenCount(summary.totals.payloadTokens),

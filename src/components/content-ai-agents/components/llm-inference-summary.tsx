@@ -6,6 +6,7 @@ import React, {
 
 // Local dependencies.
 import { OPEN_ROUTER_PRICING_LAST_UPDATED } from '../constants/open-router-model-pricing';
+import { formatInferenceResponseToolCalls } from '../utils/extract-inference-tool-calls';
 import { formatLlmInferenceSummaryForCopy } from '../utils/format-llm-inference-summary';
 import { formatUsdCost } from '../utils/open-router-pricing';
 import {
@@ -41,6 +42,18 @@ const SummaryTableRow = ({
     </td>
     <td>{row.agent}</td>
     <td><code>{row.model}</code></td>
+    <td>
+      {0 === row.responseToolCalls.length ? (
+        formatInferenceResponseToolCalls(row.responseToolCalls)
+      ) : (
+        row.responseToolCalls.map((name, index) => (
+          <React.Fragment key={name}>
+            {0 < index && ', '}
+            <code>{name}</code>
+          </React.Fragment>
+        ))
+      )}
+    </td>
     <td>{formatTokenCount(row.payloadTokens, row.isEstimated)}</td>
     <td>{formatUsdCost(row.payloadCost)}</td>
     <td>{formatTokenCount(row.responseTokens, row.isEstimated)}</td>
@@ -84,6 +97,7 @@ export const LlmInferenceSummary = ({
             <th>Request</th>
             <th>Agent</th>
             <th>Model</th>
+            <th>Response Tool Call</th>
             <th>Payload Token</th>
             <th>Payload Cost</th>
             <th>Response Token</th>
@@ -102,7 +116,7 @@ export const LlmInferenceSummary = ({
         </tbody>
         <tfoot>
           <tr>
-            <th colSpan={3}>Totals</th>
+            <th colSpan={4}>Totals</th>
             <th>{formatTokenCount(summary.totals.payloadTokens)}</th>
             <th>{formatUsdCost(summary.totals.payloadCost)}</th>
             <th>{formatTokenCount(summary.totals.responseTokens)}</th>
