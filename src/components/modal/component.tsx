@@ -18,6 +18,7 @@ import { ContentPanel } from '../content-panel';
 import { ContentPanelWrapper } from '../content-panel-wrapper';
 import { contentPanelMap } from '../content-panel-map';
 import { aiAgentsPanelMap } from '../content-ai-agents-panel-map';
+import { toolsPanelMap } from '../content-tools-panel-map';
 import { Divi5DevToolProps } from './types';
 import './styles.scss';
 
@@ -64,6 +65,20 @@ const Divi5DevTool = ({
             <div className="d5-dev-tool-ai-agents-panel">
               <ContentPanelWrapper>
                 {aiAgentsPanelMap.map(({ id, label, component: Component }) => (
+                  <ContentPanel key={id} id={id} label={label}>
+                    <Component />
+                  </ContentPanel>
+                ))}
+              </ContentPanelWrapper>
+            </div>
+          </PanelContainer>
+          <PanelContainer id="tools" label={__('Tools', 'et_builder')}>
+            <div style={{
+              padding: '20px 20px 40px 20px',
+            }}
+            >
+              <ContentPanelWrapper>
+                {toolsPanelMap.map(({ id, label, component: Component }) => (
                   <ContentPanel key={id} id={id} label={label}>
                     <Component />
                   </ContentPanel>

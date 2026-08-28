@@ -17,6 +17,7 @@ import {
 } from './components/modal';
 import { contentPanelMap } from './components/content-panel-map';
 import { aiAgentsPanelMap } from './components/content-ai-agents-panel-map';
+import { toolsPanelMap } from './components/content-tools-panel-map';
 import {
   createElement,
   ReactNode,
@@ -92,6 +93,22 @@ if (window.top !== window) {
   });
 
   forEach(aiAgentsPanelMap, ({ label, id, component }) => {
+    const modalName             = `${name}--${id}`;
+    const panelAsModalComponent = (() => createElement(PanelBasedModal, {
+      children: createElement(component as any, {}),
+      modalName,
+      label,
+    })) as unknown as ReactNode;
+
+    dispatch('divi/modal-library').addModal({
+      name: modalName,
+      label: sprintf(__('D5 Dev Tool: %s', 'et_builder'), label),
+      type: 'multiInstanceModal',
+      component: panelAsModalComponent,
+    });
+  });
+
+  forEach(toolsPanelMap, ({ label, id, component }) => {
     const modalName             = `${name}--${id}`;
     const panelAsModalComponent = (() => createElement(PanelBasedModal, {
       children: createElement(component as any, {}),
