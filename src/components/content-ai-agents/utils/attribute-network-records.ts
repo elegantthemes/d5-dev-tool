@@ -1,4 +1,5 @@
 // Local dependencies.
+import { extractInferenceCaller } from './extract-inference-metadata';
 import { type NetworkRecord } from './network-recorder';
 
 export type NetworkRole =
@@ -37,15 +38,25 @@ export const NETWORK_ROLE_LABELS: Record<NetworkRole, string> = {
  * issued it; timing then picks between them.
  */
 const ROLE_CANDIDATE_PHASES: Record<NetworkRole, string[]> = {
-  // Planner inference, then the specialist's runAgent stream.
-  'agent-inference': ['phase-4', 'phase-6'],
-  // LangGraph checkpointer writes during the run, and the final flush.
-  'graph-persistence': ['phase-6', 'phase-8'],
+  // Planner/classifier inference, then the parent agent, then nested sub-agents.
+  'agent-inference': ['phase-4', 'phase-5', 'phase-6'],
+  // LangGraph checkpointer writes during parent/sub-agent runs, and the final flush.
+  'graph-persistence': ['phase-5', 'phase-6', 'phase-8'],
   // Thread/message rows written pre-turn, and again once the turn settles.
   'chat-persistence': ['phase-2', 'phase-8'],
   'agent-config': ['phase-1'],
   'agent-rules': ['phase-3'],
   unclassified: [],
+};
+
+const INFERENCE_CALLER_PHASE: Record<string, string> = {
+  planner: 'phase-4',
+  'planner-scope': 'phase-4',
+  'tool-router': 'phase-4',
+  agent: 'phase-5',
+  ask: 'phase-5',
+  layout: 'phase-5',
+  'sub-agent': 'phase-6',
 };
 
 export const getNetworkRole = (url: string): NetworkRole => {
@@ -98,6 +109,16 @@ const findOwningPhase = (
 
   if (0 === candidates.length) {
     return '';
+  }
+
+  if ('agent-inference' === getNetworkRole(record.url)) {
+    const callerPhase = INFERENCE_CALLER_PHASE[
+      extractInferenceCaller(record.requestBody, record.url)
+    ];
+
+    if (callerPhase && -1 !== candidates.indexOf(callerPhase)) {
+      return callerPhase;
+    }
   }
 
   const containing = candidates.filter(

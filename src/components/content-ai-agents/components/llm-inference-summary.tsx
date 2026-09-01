@@ -40,7 +40,8 @@ const SummaryTableRow = ({
         Request {row.requestNumber}
       </button>
     </td>
-    <td>{row.agent}</td>
+    <td><code>{row.caller}</code></td>
+    <td>{row.subAgent || '—'}</td>
     <td><code>{row.model}</code></td>
     <td>
       {0 === row.responseToolCalls.length ? (
@@ -95,7 +96,8 @@ export const LlmInferenceSummary = ({
         <thead>
           <tr>
             <th>Request</th>
-            <th>Agent</th>
+            <th>Caller</th>
+            <th>Subagent</th>
             <th>Model</th>
             <th>Response Tool Call</th>
             <th>Payload Token</th>
@@ -116,7 +118,7 @@ export const LlmInferenceSummary = ({
         </tbody>
         <tfoot>
           <tr>
-            <th colSpan={4}>Totals</th>
+            <th colSpan={5}>Totals</th>
             <th>{formatTokenCount(summary.totals.payloadTokens)}</th>
             <th>{formatUsdCost(summary.totals.payloadCost)}</th>
             <th>{formatTokenCount(summary.totals.responseTokens)}</th>

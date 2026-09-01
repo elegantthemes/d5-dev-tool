@@ -3,6 +3,7 @@ import { type NetworkRecord } from './network-recorder';
 
 type PayloadMessage = {
   role?: string;
+  type?: string;
   content?: string | Array<{ type?: string; text?: string }>;
 };
 
@@ -15,16 +16,23 @@ type ParsedPayload = {
   streamProgress?: boolean;
 };
 
-const AGENT_PATTERNS: Array<{ id: string; pattern: RegExp }> = [
-  { id: 'planner', pattern: /website planner/i },
-  { id: 'module', pattern: /module agent|module specialist/i },
-  { id: 'context', pattern: /Context Agent/i },
-  { id: 'settings', pattern: /Settings Agent|settings specialist/i },
-  { id: 'ui', pattern: /UI Agent|interface specialist/i },
-  { id: 'outside_vb', pattern: /Outside-VB Agent|outside-VB specialist/i },
-  { id: 'preset', pattern: /Preset Agent|preset specialist/i },
-  { id: 'ask', pattern: /Ask mode/i },
+export type InferenceCaller =
+  | 'planner'
+  | 'planner-scope'
+  | 'agent'
+  | 'sub-agent'
+  | 'ask'
+  | 'tool-router'
+  | 'layout'
+  | 'unknown';
+
+const CALLER_PATTERNS: Array<{ id: InferenceCaller; pattern: RegExp }> = [
+  { id: 'sub-agent', pattern: /You are a focused Divi 5 sub agent/i },
+  { id: 'planner', pattern: /You are a Divi 5 website planner/i },
+  { id: 'planner-scope', pattern: /planner-scope (?:classifier|filter)/i },
+  { id: 'ask', pattern: /You are the Divi AI Agent in Ask mode/i },
   { id: 'tool-router', pattern: /tool-routing classifier/i },
+  { id: 'agent', pattern: /You are the Divi 5 expert/i },
 ];
 
 const parsePayload = (requestBody: string | null): ParsedPayload | null => {
@@ -67,21 +75,58 @@ const isGenerateLayoutPayload = (payload: ParsedPayload | null): boolean => {
   );
 };
 
+const isInstructionRole = (role?: string): boolean => (
+  'system' === role || 'developer' === role
+);
+
+const isUserRole = (role?: string): boolean => 'user' === role;
+
 /**
- * Infers the Divi agent from the captured request payload system/developer text.
+ * Reads the first user-turn text from a captured inference payload.
+ *
+ * Sub-agent invokes put the self-contained task goal in that user message.
  */
-export const extractInferenceAgent = (
+export const extractInferenceUserText = (requestBody: string | null): string => {
+  const payload = parsePayload(requestBody);
+
+  if (!payload?.input) {
+    return '';
+  }
+
+  for (const message of payload.input) {
+    if (!isUserRole(message.role)) {
+      continue;
+    }
+
+    const text = collectMessageText(message).trim();
+
+    if (text) {
+      return text;
+    }
+  }
+
+  return '';
+};
+
+/**
+ * Classifies which runtime invoked the captured inference request.
+ *
+ * Build-mode no longer routes to predefined specialists. Requests come from the
+ * planner, the parent execution agent, a focused sub-agent, Ask mode, or a
+ * classifier/layout helper.
+ */
+export const extractInferenceCaller = (
   requestBody: string | null,
   url?: string | null,
-): string => {
+): InferenceCaller => {
   if (url && /generate-layout/i.test(url)) {
-    return 'module';
+    return 'layout';
   }
 
   const payload = parsePayload(requestBody);
 
   if (isGenerateLayoutPayload(payload)) {
-    return 'module';
+    return 'layout';
   }
 
   if (!payload?.input) {
@@ -89,7 +134,7 @@ export const extractInferenceAgent = (
   }
 
   for (const message of payload.input) {
-    if ('system' !== message.role && 'developer' !== message.role) {
+    if (!isInstructionRole(message.role)) {
       continue;
     }
 
@@ -99,7 +144,7 @@ export const extractInferenceAgent = (
       continue;
     }
 
-    const match = AGENT_PATTERNS.find(({ pattern }) => pattern.test(text));
+    const match = CALLER_PATTERNS.find(({ pattern }) => pattern.test(text));
 
     if (match) {
       return match.id;
@@ -107,6 +152,29 @@ export const extractInferenceAgent = (
   }
 
   return 'unknown';
+};
+
+/**
+ * @deprecated Use `extractInferenceCaller`. Kept for callers that still expect
+ * a string agent id; now returns the runtime caller, not a specialist name.
+ */
+export const extractInferenceAgent = (
+  requestBody: string | null,
+  url?: string | null,
+): string => extractInferenceCaller(requestBody, url);
+
+/**
+ * Returns the sub-agent task goal when this request was made by a sub-agent.
+ */
+export const extractInferenceSubAgentGoal = (
+  requestBody: string | null,
+  url?: string | null,
+): string => {
+  if ('sub-agent' !== extractInferenceCaller(requestBody, url)) {
+    return '';
+  }
+
+  return extractInferenceUserText(requestBody);
 };
 
 const extractResolvedModelFromText = (text: string): string | null => {
@@ -197,16 +265,18 @@ export const extractInferenceModel = (
 };
 
 export type InferenceRecordMetadata = {
-  agent: string;
+  caller: InferenceCaller;
+  subAgent: string;
   model: string;
 };
 
 /**
- * Extracts agent and model metadata from a captured inference request.
+ * Extracts caller, sub-agent goal, and model metadata from a captured request.
  */
 export const extractInferenceMetadata = (
   record: NetworkRecord,
 ): InferenceRecordMetadata => ({
-  agent: extractInferenceAgent(record.requestBody, record.url),
+  caller: extractInferenceCaller(record.requestBody, record.url),
+  subAgent: extractInferenceSubAgentGoal(record.requestBody, record.url),
   model: extractInferenceModel(record.requestBody, record.responseBody),
 });

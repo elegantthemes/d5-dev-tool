@@ -18,6 +18,10 @@ import {
   toolStepHasError,
   type DebugStep,
 } from '../utils/debug-step';
+import {
+  extractSubAgentBatch,
+  isSubAgentOwnedStep,
+} from '../utils/extract-sub-agent-batch';
 import { type NetworkRecord } from '../utils/network-recorder';
 import { stringifyExecutionData } from '../utils/stringify-execution-data';
 import { CollapseControls } from './collapse-controls';
@@ -30,6 +34,7 @@ import {
 } from './execution-filters';
 import { NetworkRequestsDebug } from './network-requests-debug';
 import { StepListDebug } from './step-list-debug';
+import { SubAgentBatchDebugView } from './sub-agent-batch-debug';
 import { useExpandedItems } from './use-expanded-items';
 
 type DebugMessage = {
@@ -336,11 +341,19 @@ export const BuildPhasesDebug = ({
     'status' === step.type
     && /plan|prepar/i.test(`${step.label ?? ''} ${step.content ?? ''}`)
   ));
-  const routingSteps = assistantSteps.filter(step => (
-    'routing' === step.type || 'sub_agent' === step.type
+  const routingSteps = assistantSteps.filter(step => 'routing' === step.type);
+  const subAgentBatch = extractSubAgentBatch(assistantSteps);
+  const parentAgentSteps = assistantSteps.filter(step => (
+    -1 !== ['thinking', 'text', 'status', 'routing', 'summarizing', 'approval', 'clarification', 'media-pick', 'tool-selection']
+      .indexOf(step.type ?? '')
+    && !plannerSteps.includes(step)
+    && !isSubAgentOwnedStep(step, subAgentBatch)
+  ));
+  const parentToolSteps = assistantSteps.filter(step => (
+    'tool_call' === step.type && !isSubAgentOwnedStep(step, subAgentBatch)
   ));
   const agentSteps = assistantSteps.filter(step => (
-    -1 !== ['thinking', 'text', 'status', 'routing', 'sub_agent', 'summarizing', 'approval', 'clarification', 'media-pick']
+    -1 !== ['thinking', 'text', 'status', 'routing', 'sub_agent', 'summarizing', 'approval', 'clarification', 'media-pick', 'tool-selection']
       .indexOf(step.type ?? '')
   ));
   const toolSteps = assistantSteps.filter(step => 'tool_call' === step.type);
@@ -348,9 +361,12 @@ export const BuildPhasesDebug = ({
   const hasAssistantMessage = Boolean(latestAssistantMessage);
   const turnHasSettled = hasAssistantMessage && !isStreaming && !latestAssistantMessage?.isStreaming;
   const runAgentHasStarted = 0 < routingSteps.length
-    || 0 < toolSteps.length
-    || agentSteps.some(step => -1 !== ['thinking', 'text', 'summarizing', 'approval', 'clarification', 'media-pick']
+    || 0 < parentToolSteps.length
+    || parentAgentSteps.some(step => -1 !== ['thinking', 'text', 'summarizing', 'approval', 'clarification', 'media-pick', 'tool-selection']
       .indexOf(step.type ?? ''));
+  const subAgentsStillRunning = subAgentBatch.tasks.some(task => (
+    'running' === task.status || 'waiting' === task.status
+  ));
   const phase1Started = Boolean(draftPrompt) || hasUserMessage;
   const phase1Complete = hasUserMessage;
   const phase2Started = hasUserMessage;
@@ -359,11 +375,11 @@ export const BuildPhasesDebug = ({
   const phase3Complete = 0 < plannerSteps.length || 0 < routingSteps.length || turnHasSettled;
   const phase4Started = 0 < plannerSteps.length;
   const phase4Complete = 0 < routingSteps.length || (phase4Started && turnHasSettled);
-  const phase5Started = 0 < routingSteps.length;
+  const phase5Started = runAgentHasStarted;
   const phase5Complete = phase5Started && turnHasSettled;
-  const phase6Started = runAgentHasStarted;
-  const phase6Complete = phase6Started && turnHasSettled;
-  const phase7Started = 0 < toolSteps.length;
+  const phase6Started = 0 < subAgentBatch.tasks.length;
+  const phase6Complete = phase6Started && (!subAgentsStillRunning || turnHasSettled);
+  const phase7Started = 0 < parentToolSteps.length;
   const phase7Complete = phase7Started && turnHasSettled;
   const phase8Started = turnHasSettled;
   const phase8Complete = turnHasSettled;
@@ -377,7 +393,7 @@ export const BuildPhasesDebug = ({
   // An aborted turn is attributed to the furthest phase that actually started.
   const abortedAtExecuteCommand = turnAborted && !phase4Started && !phase5Started && !phase7Started;
   const abortedAtPlanner = turnAborted && phase4Started && !phase5Started && !phase7Started;
-  const abortedAtSpecialistSteps = turnAborted && phase5Started;
+  const abortedAtParentAgent = turnAborted && phase5Started;
   const abortedAtSettlement = turnAborted && turnHasSettled;
   if (currentChatId && draftPrompt && !composerStartedAtCache.has(currentChatId)) {
     composerStartedAtCache.set(currentChatId, {
@@ -431,16 +447,16 @@ export const BuildPhasesDebug = ({
       ended: 0 < routingSteps.length || (0 < plannerSteps.length && turnHasSettled),
     },
     'phase-5': {
-      started: 0 < routingSteps.length,
-      ended: 0 < routingSteps.length && turnHasSettled,
-    },
-    'phase-6': {
       started: runAgentHasStarted,
       ended: runAgentHasStarted && turnHasSettled,
     },
+    'phase-6': {
+      started: 0 < subAgentBatch.tasks.length,
+      ended: 0 < subAgentBatch.tasks.length && (!subAgentsStillRunning || turnHasSettled),
+    },
     'phase-7': {
-      started: 0 < toolSteps.length,
-      ended: 0 < toolSteps.length && turnHasSettled,
+      started: 0 < parentToolSteps.length,
+      ended: 0 < parentToolSteps.length && turnHasSettled,
     },
     'phase-8': {
       started: turnHasSettled,
@@ -600,6 +616,12 @@ export const BuildPhasesDebug = ({
         <>
           {Boolean(modelPreferences) && <RawDebugBlock label="Model Preferences" values={modelPreferences} />}
           <StepCollection label="Planner Events" steps={plannerSteps} idPrefix="phase-4-planner" />
+          <p className="d5-dev-tool-ai-agent__observability-note">
+            The planner prefers one comprehensive step and tells the parent agent to batch independent work through
+            {' '}
+            <code>run_subagents</code>
+            . Multi-step plans appear only when a later milestone needs user input, approval, or external state.
+          </p>
           <SelectorGap>
             A successful fresh PlannedStep[] is ephemeral. Redux only retains a plan when a turn pauses or aborts; routing events below are the durable approximation.
           </SelectorGap>
@@ -609,26 +631,32 @@ export const BuildPhasesDebug = ({
     {
       id: 'phase-5',
       number: 5,
-      title: 'Sequential Specialist Steps',
-      summary: `${routingSteps.length} routing/sub-agent event(s) · base thread ${threadId || '—'}`,
+      title: 'Parent Agent',
+      summary: `${subAgentBatch.summons.length} run_subagents call(s) · ${parentAgentSteps.length} parent event(s) · base thread ${threadId || '—'}`,
       status: getPhaseStatus({
         hasStarted: phase5Started,
         isActive: isStreaming && phase5Started && !phase5Complete,
         isComplete: phase5Complete,
         canSkip: turnHasSettled || phase6Started || phase7Started,
-        isAborted: abortedAtSpecialistSteps,
+        isAborted: abortedAtParentAgent,
       }),
       data: {
         routingSteps,
+        parentAgentSteps,
+        summons: subAgentBatch.summons,
         pendingInput,
         baseThreadId: threadId,
       },
       content: (
         <>
-          <StepCollection label="Routing and Specialist Events" steps={routingSteps} idPrefix="phase-5-routing" />
+          <SubAgentBatchDebugView
+            batch={subAgentBatch}
+            parentSteps={parentAgentSteps}
+            showTasks={false}
+          />
           {Boolean(pendingInput) && <RawDebugBlock label="Paused Plan / Step State" values={pendingInput} />}
           <SelectorGap>
-            Accumulated handoff, facts, ExecuteStepsResult, and successful step-thread IDs are orchestrator locals.
+            The planner step goal, authorized tool subset, and ExecuteStepsResult live in orchestrator locals. This view shows the parent routing, tool selection, and the run_subagents summon.
           </SelectorGap>
         </>
       ),
@@ -636,19 +664,22 @@ export const BuildPhasesDebug = ({
     {
       id: 'phase-6',
       number: 6,
-      title: 'LangGraph runAgent Stream',
-      summary: `${agentSteps.length} stream event(s) · ${checkpoints.length} base-thread checkpoint(s)`,
+      title: 'Concurrent Sub-agents',
+      summary: 0 === subAgentBatch.tasks.length
+        ? 'no sub-agent summoned'
+        : `${subAgentBatch.tasks.length} sub-agent(s) · ${subAgentBatch.tasks.filter(task => 'completed' === task.status).length} completed`,
       status: getPhaseStatus({
         hasStarted: phase6Started,
         isActive: isStreaming && phase6Started && !phase6Complete,
         isComplete: phase6Complete,
         canSkip: turnHasSettled || phase7Started,
-        hasError: 0 < streamErrorSteps.length,
+        hasError: subAgentBatch.tasks.some(task => 'failed' === task.status),
+        isAborted: turnAborted && phase6Started,
       }),
       data: {
         streamingChatIds,
         baseThreadId: threadId,
-        agentSteps,
+        subAgentBatch,
         contextUsage,
         latestCheckpoint,
         checkpoints,
@@ -664,12 +695,15 @@ export const BuildPhasesDebug = ({
               <strong>Base Thread:</strong> <code>{threadId || '—'}</code>
             </p>
           </div>
-          <StepCollection label="Agent Stream Events" steps={agentSteps} idPrefix="phase-6-stream" />
+          <SubAgentBatchDebugView
+            batch={subAgentBatch}
+            showSummon={false}
+          />
           {Boolean(contextUsage) && <RawDebugBlock label="Context Usage" values={contextUsage} />}
           {Boolean(latestCheckpoint) && <RawDebugBlock label="Latest Base-thread Checkpoint" values={latestCheckpoint} />}
           {0 < checkpoints.length && <RawDebugBlock label="Base-thread Checkpoints" values={checkpoints} />}
           <SelectorGap>
-            Build specialists use derived step threads. The store exposes checkpoint lookup, but not a list of those derived thread IDs or the final RunAgentResult object.
+            Sub-agent graphs run on `-turn-N-step-M-sub-P` threads. The store exposes parent checkpoint lookup, but not a live list of those derived thread IDs.
           </SelectorGap>
         </>
       ),
@@ -677,22 +711,25 @@ export const BuildPhasesDebug = ({
     {
       id: 'phase-7',
       number: 7,
-      title: 'Tool Execution',
-      summary: `${toolSteps.length} tool call(s) observed`,
+      title: 'Parent Tool Execution',
+      summary: `${parentToolSteps.length} parent tool call(s)${0 < toolSteps.length - parentToolSteps.length ? ` · ${toolSteps.length - parentToolSteps.length} nested in sub-agents` : ''}`,
       status: getPhaseStatus({
         hasStarted: phase7Started,
         isActive: isStreaming && phase7Started && !phase7Complete,
         isComplete: phase7Complete,
         canSkip: turnHasSettled,
-        hasError: hasToolError,
+        hasError: parentToolSteps.some(toolStepHasError),
       }),
       data: {
-        toolSteps,
+        parentToolSteps,
         hasToolError,
       },
       content: (
         <>
-          <StepCollection label="Tool Calls and Results" steps={toolSteps} idPrefix="phase-7-tools" />
+          <StepCollection label="Parent Tool Calls and Results" steps={parentToolSteps} idPrefix="phase-7-tools" />
+          <p className="d5-dev-tool-ai-agent__todo-meta">
+            Nested sub-agent tool calls are listed under each sub-agent in Phase 6.
+          </p>
           <SelectorGap>
             Raw ToolMessages only live inside LangGraph; this view shows the request/result mirror written to assistant steps.
           </SelectorGap>
@@ -756,7 +793,7 @@ export const BuildPhasesDebug = ({
     abortedAtExecuteCommand,
     abortedAtPlanner,
     abortedAtSettlement,
-    abortedAtSpecialistSteps,
+    abortedAtParentAgent,
     assistantSteps.length,
     chatContext,
     chatTodos,
@@ -777,6 +814,8 @@ export const BuildPhasesDebug = ({
     latestTurnRestorePoint,
     latestUserMessage,
     modelPreferences,
+    parentAgentSteps,
+    parentToolSteps,
     pendingApprovals,
     pendingAttachments,
     pendingInput,
@@ -803,6 +842,7 @@ export const BuildPhasesDebug = ({
     sessionLedger,
     streamErrorSteps.length,
     streamingChatIds,
+    subAgentBatch,
     threadId,
     toolSteps,
     turnAborted,
@@ -821,7 +861,9 @@ export const BuildPhasesDebug = ({
         <CollapseControls onExpandAll={expandAll} onCollapseAll={collapseAll} />
       </div>
       <p className="d5-dev-tool-ai-agent__phase-intro">
-        Live Redux-observable state is grouped by the eight Build-mode phases. Timing uses message timestamps where available
+        Live Redux-observable state is grouped by the eight Build-mode phases. After planning, the parent
+        execution agent may summon concurrent sub-agents with <code>run_subagents</code> instead of routing
+        to predefined specialists. Timing uses message timestamps where available
         and records phase transitions as this debugger observes them; historical assistant steps do not contain timestamps.
         HTTP capture patches <code>fetch</code> and started {formatPhaseTimestamp(networkInstalledAt)} —
         requests made before that, and any made via XHR, are not recorded. Each request is attributed to exactly one phase,

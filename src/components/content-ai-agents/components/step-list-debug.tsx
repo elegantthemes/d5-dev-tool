@@ -130,10 +130,14 @@ const StepCard = ({
 }): ReactElement => {
   const preview = getStepPreview(step);
   const isToolCall = 'tool_call' === step.type;
+  const isSubAgent = 'sub_agent' === step.type;
   const toolName = isToolCall
     ? parseToolCallStep(step as AssistantStep).toolName
     : '';
-  const headline = toolName || step.label || '';
+  const headline = toolName
+    || (isSubAgent && 'string' === typeof step.goal ? step.goal : '')
+    || step.label
+    || '';
   const hasFailed = isToolCall ? toolStepHasError(step) : stepActivityFailed(step);
 
   return (
@@ -153,9 +157,9 @@ const StepCard = ({
                 error
               </span>
             )}
-            {!hasFailed && step.status && (
+            {!hasFailed && (step.subAgentStatus || step.status) && (
               <span className={`d5-dev-tool-ai-agent__badge d5-dev-tool-ai-agent__badge--phase-${getStepStatusVariant(step)}`}>
-                {step.status}
+                {('string' === typeof step.subAgentStatus ? step.subAgentStatus : step.status) as string}
               </span>
             )}
           </span>

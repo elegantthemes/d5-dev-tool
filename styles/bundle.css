@@ -1229,6 +1229,50 @@
   color: #666;
   line-height: 1.4;
 }
+.d5-dev-tool-ai-agent__subagent-batch {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.d5-dev-tool-ai-agent__summon-list, .d5-dev-tool-ai-agent__summon-tasks {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.d5-dev-tool-ai-agent__summon-item {
+  padding: 8px 10px;
+  border: 1px solid #ddd6fe;
+  border-radius: 4px;
+  background: #faf8ff;
+}
+.d5-dev-tool-ai-agent__summon-parent {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+.d5-dev-tool-ai-agent__summon-goal, .d5-dev-tool-ai-agent__summon-task-goal {
+  margin: 0;
+  font-size: 11px;
+  line-height: 1.5;
+  color: #222;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.d5-dev-tool-ai-agent__summon-tasks {
+  margin-left: 12px;
+  padding-left: 10px;
+  border-left: 2px solid #c4b5fd;
+}
+.d5-dev-tool-ai-agent__summon-task {
+  padding: 6px 8px;
+  border: 1px solid #e9d5ff;
+  border-radius: 4px;
+  background: #fff;
+}
 /*!*******************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[2].use[1]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[2].use[2]!./src/components/content-reset/styles.scss ***!
   \*******************************************************************************************************************************************************************************************/

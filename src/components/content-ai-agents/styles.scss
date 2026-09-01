@@ -751,4 +751,57 @@
     color: #666;
     line-height: 1.4;
   }
+
+  &__subagent-batch {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  &__summon-list,
+  &__summon-tasks {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  &__summon-item {
+    padding: 8px 10px;
+    border: 1px solid #ddd6fe;
+    border-radius: 4px;
+    background: #faf8ff;
+  }
+
+  &__summon-parent {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: 8px;
+  }
+
+  &__summon-goal,
+  &__summon-task-goal {
+    margin: 0;
+    font-size: 11px;
+    line-height: 1.5;
+    color: #222;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  &__summon-tasks {
+    margin-left: 12px;
+    padding-left: 10px;
+    border-left: 2px solid #c4b5fd;
+  }
+
+  &__summon-task {
+    padding: 6px 8px;
+    border: 1px solid #e9d5ff;
+    border-radius: 4px;
+    background: #fff;
+  }
 }

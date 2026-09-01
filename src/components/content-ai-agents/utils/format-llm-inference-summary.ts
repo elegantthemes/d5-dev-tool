@@ -10,7 +10,8 @@ import { type NetworkRecord } from './network-recorder';
 
 const SUMMARY_TABLE_HEADERS = [
   'Request',
-  'Agent',
+  'Caller',
+  'Subagent',
   'Model',
   'Response Tool Call',
   'Payload Token',
@@ -41,7 +42,8 @@ const formatToolCallsForCopy = (toolCalls: string[]): string => {
 
 const formatSummaryDataRow = (row: InferenceSummaryRow): string => formatMarkdownTableRow([
   `Request ${row.requestNumber}`,
-  row.agent,
+  row.caller,
+  row.subAgent || '—',
   `\`${row.model}\``,
   formatToolCallsForCopy(row.responseToolCalls),
   formatTokenCount(row.payloadTokens, row.isEstimated),
@@ -54,6 +56,7 @@ const formatSummaryDataRow = (row: InferenceSummaryRow): string => formatMarkdow
 
 const formatSummaryTotalsRow = (summary: InferenceSummary): string => formatMarkdownTableRow([
   '**Totals**',
+  '',
   '',
   '',
   '',

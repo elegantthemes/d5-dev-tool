@@ -11,7 +11,8 @@ import { type NetworkRecord } from './network-recorder';
 export type InferenceSummaryRow = {
   requestNumber: number;
   recordId: string;
-  agent: string;
+  caller: string;
+  subAgent: string;
   model: string;
   responseToolCalls: string[];
   payloadTokens: number;
@@ -62,7 +63,7 @@ export const buildInferenceRecordSummary = (
   requestNumber: number,
 ): InferenceSummaryRow => {
   const isComplete = isInferenceRecordComplete(record);
-  const { agent, model } = extractInferenceMetadata(record);
+  const { caller, subAgent, model } = extractInferenceMetadata(record);
   const usage = resolveInferenceUsage(record.requestBody, record.responseBody);
   const inputTokens = usage?.inputTokens ?? 0;
   const outputTokens = usage?.outputTokens ?? 0;
@@ -78,7 +79,8 @@ export const buildInferenceRecordSummary = (
   return {
     requestNumber,
     recordId: record.id,
-    agent,
+    caller,
+    subAgent,
     model,
     responseToolCalls: extractInferenceResponseToolCalls(record.responseBody),
     payloadTokens: inputTokens,

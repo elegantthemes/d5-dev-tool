@@ -43,6 +43,8 @@ const STEP_KIND_LABELS: Record<string, string> = {
   summarizing: 'Summarizing',
   text: 'Assistant Response',
   thinking: 'System / Thinking',
+  todos: 'Todos',
+  'tool-selection': 'Tool Selection',
   tool_call: 'Tool Call',
 };
 
@@ -118,7 +120,7 @@ export const formatCompactStepValue = (value: unknown): string => {
  * Single-line excerpt used as a step's collapsed subtitle.
  */
 export const getStepPreview = (step: DebugStep): string => {
-  const candidates = [step.content, step.goal, step.argsPreview, step.status];
+  const candidates = [step.content, step.goal, step.argsPreview, step.status, step.subAgentHandleId];
   const source = candidates.find(
     candidate => 'string' === typeof candidate && Boolean(candidate.trim()),
   ) as string | undefined;
@@ -190,11 +192,13 @@ export const toolStepHasError = (step: DebugStep): boolean => {
  * Maps a step status onto the shared phase badge colors.
  */
 export const getStepStatusVariant = (step: DebugStep): string => {
-  if (stepTextLooksLikeError(step.status) || stepTextLooksLikeError(step.label)) {
+  if (stepTextLooksLikeError(step.status) || stepTextLooksLikeError(step.label) || stepTextLooksLikeError(step.subAgentStatus)) {
     return 'error';
   }
 
-  const status = ('string' === typeof step.status ? step.status : '').toLowerCase();
+  const status = (
+    'string' === typeof step.subAgentStatus ? step.subAgentStatus : ('string' === typeof step.status ? step.status : '')
+  ).toLowerCase();
 
   if (-1 !== ['success', 'succeeded', 'complete', 'completed', 'done'].indexOf(status)) {
     return 'observed';
@@ -202,6 +206,14 @@ export const getStepStatusVariant = (step: DebugStep): string => {
 
   if (-1 !== ['pending', 'running', 'in_progress', 'streaming', 'active'].indexOf(status)) {
     return 'active';
+  }
+
+  if (-1 !== ['failed', 'error'].indexOf(status)) {
+    return 'error';
+  }
+
+  if (-1 !== ['aborted', 'cancelled'].indexOf(status)) {
+    return 'aborted';
   }
 
   return 'waiting';

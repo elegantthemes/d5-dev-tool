@@ -88,7 +88,10 @@ export const LlmInferenceRequestsDebug = ({
                     <span>Est. cost: {formatUsdCost(summary.totalCost)}</span>
                   </p>
                   <p className="d5-dev-tool-ai-agent__llm-inference-request-meta">
-                    <span>Agent: <code>{summary.agent}</code></span>
+                    <span>Caller: <code>{summary.caller}</code></span>
+                    {summary.subAgent && (
+                      <span>Subagent: {summary.subAgent}</span>
+                    )}
                     <span>Model: <code>{summary.model}</code></span>
                   </p>
                 </div>

@@ -66,5 +66,5 @@ export const parseToolCallStep = (step: AssistantStep): ParsedToolCall => {
  * Returns true when a step represents a tool invocation worth surfacing in debug UI.
  */
 export const isToolDebugStep = (step: AssistantStep): boolean => (
-  'tool_call' === step.type || 'sub_agent' === step.type || 'approval' === step.type
+  'tool_call' === step.type || 'sub_agent' === step.type || 'approval' === step.type || 'tool-selection' === step.type
 );
