@@ -13,6 +13,7 @@ import {
   getLlmInferenceRequestElementId,
 } from '../utils/summarize-inference-records';
 import { CollapsiblePrompt } from './collapsible-prompt';
+import { CollapsibleResponse } from './collapsible-response';
 import { CopyDataButton } from './copy-data-button';
 import { LlmInferenceSummary } from './llm-inference-summary';
 
@@ -100,7 +101,7 @@ export const LlmInferenceRequestsDebug = ({
                   content={record.requestBody ?? ''}
                   variant="tool-request"
                 />
-                <CollapsiblePrompt
+                <CollapsibleResponse
                   label="Response"
                   content={record.responseBody ?? ''}
                   variant="tool-response"

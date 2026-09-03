@@ -296,6 +296,125 @@
     color: #666;
   }
 
+  &__response-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
+  &__response-view-tabs {
+    display: inline-flex;
+    border: 1px solid #c9c9c9;
+    border-radius: 4px;
+    overflow: hidden;
+    background: #fff;
+  }
+
+  &__response-view-tab {
+    padding: 2px 8px;
+    border: 0;
+    background: transparent;
+    color: #666;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: none;
+    letter-spacing: normal;
+    cursor: pointer;
+
+    & + & {
+      border-left: 1px solid #c9c9c9;
+    }
+
+    &:hover {
+      background: #f7f7f7;
+    }
+
+    &--active {
+      background: #eef2ff;
+      color: #312e81;
+    }
+  }
+
+  &__sse-events {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 8px 10px 10px;
+  }
+
+  &__sse-events-toolbar {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  &__sse-event {
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.65);
+    overflow: hidden;
+  }
+
+  &__sse-event-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    padding: 6px 8px;
+    border: 0;
+    background: transparent;
+    text-align: left;
+    cursor: pointer;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.9);
+    }
+  }
+
+  &__sse-event-index {
+    flex-shrink: 0;
+    min-width: 18px;
+    padding: 1px 4px;
+    border-radius: 3px;
+    background: rgba(79, 70, 229, 0.12);
+    color: #4338ca;
+    font-size: 10px;
+    font-weight: 700;
+    text-align: center;
+  }
+
+  &__sse-event-summary {
+    flex: 1;
+    min-width: 0;
+    font-family: monospace;
+    font-size: 11px;
+    color: #333;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__sse-event-toggle {
+    flex-shrink: 0;
+    font-size: 10px;
+    font-weight: 600;
+    color: #666;
+  }
+
+  &__sse-event-body {
+    margin: 0;
+    padding: 8px 10px;
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
+    background: rgba(255, 255, 255, 0.95);
+    color: #222;
+    font-family: monospace;
+    font-size: 11px;
+    line-height: 1.5;
+    white-space: pre;
+    overflow-x: auto;
+    word-break: normal;
+  }
+
   &__step-list {
     display: flex;
     flex-direction: column;
