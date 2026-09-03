@@ -533,6 +533,191 @@ function divi_5_dev_tool_delete_preset() {
 
 
 
+/**
+ * Get the initial global variables state.
+ *
+ * @return array Initial global variables data.
+ */
+function divi_5_dev_tool_get_initial_global_variables() {
+	return array(
+		'numbers'   => array(),
+		'strings'   => array(),
+		'images'    => array(),
+		'links'     => array(),
+		'colors'    => array(),
+		'fonts'     => array(),
+		'gradients' => array(),
+	);
+}
+
+/**
+ * Remove user-created presets from preset data.
+ *
+ * @param array  $presets_data Preset data.
+ * @param string $preset_type  Preset type (`module` or `group`).
+ *
+ * @return array Updated preset data.
+ */
+function divi_5_dev_tool_remove_user_created_presets( array $presets_data, string $preset_type ) {
+	if ( ! isset( $presets_data[ $preset_type ] ) || ! is_array( $presets_data[ $preset_type ] ) ) {
+		return $presets_data;
+	}
+
+	foreach ( $presets_data[ $preset_type ] as $sub_type => $group_data ) {
+		if ( ! is_array( $group_data ) || ! isset( $group_data['items'] ) || ! is_array( $group_data['items'] ) ) {
+			unset( $presets_data[ $preset_type ][ $sub_type ] );
+			continue;
+		}
+
+		$default_preset_id = $group_data['default'] ?? '';
+		$filtered_items    = array();
+
+		foreach ( $group_data['items'] as $item_id => $item ) {
+			$is_default = class_exists( 'ET\Builder\Packages\GlobalData\GlobalPreset' )
+				? \ET\Builder\Packages\GlobalData\GlobalPreset::is_preset_id_as_default( (string) $item_id, (string) $default_preset_id )
+				: ( '' === $item_id || 'default' === $item_id || '_initial' === $item_id || $default_preset_id === $item_id );
+
+			if ( $is_default ) {
+				$filtered_items[ $item_id ] = $item;
+			}
+		}
+
+		if ( empty( $filtered_items ) ) {
+			unset( $presets_data[ $preset_type ][ $sub_type ] );
+		} else {
+			$presets_data[ $preset_type ][ $sub_type ]['items'] = $filtered_items;
+		}
+	}
+
+	return $presets_data;
+}
+
+/**
+ * Clear static resources after global data changes.
+ *
+ * @return void
+ */
+function divi_5_dev_tool_clear_static_resources() {
+	if ( class_exists( 'ET_Core_PageResource' ) ) {
+		ET_Core_PageResource::remove_static_resources( 'all', 'all', true );
+	}
+}
+
+/**
+ * AJAX handler for resetting global variables.
+ */
+function divi_5_dev_tool_reset_global_variables() {
+	if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'divi_5_dev_tool_nonce' ) ) {
+		wp_send_json_error( array( 'message' => 'Security check failed' ) );
+		return;
+	}
+
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_send_json_error( array( 'message' => 'Insufficient permissions' ) );
+		return;
+	}
+
+	try {
+		$initial_state = divi_5_dev_tool_get_initial_global_variables();
+		divi_5_dev_tool_update_single_option( 'global_variables', $initial_state );
+		divi_5_dev_tool_clear_static_resources();
+
+		wp_send_json_success(
+			array(
+				'message' => 'Global variables reset successfully',
+			)
+		);
+	} catch ( Exception $e ) {
+		wp_send_json_error(
+			array(
+				'message' => 'Failed to reset global variables: ' . $e->getMessage(),
+			)
+		);
+	}
+}
+
+/**
+ * AJAX handler for resetting module presets.
+ */
+function divi_5_dev_tool_reset_module_presets() {
+	if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'divi_5_dev_tool_nonce' ) ) {
+		wp_send_json_error( array( 'message' => 'Security check failed' ) );
+		return;
+	}
+
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_send_json_error( array( 'message' => 'Insufficient permissions' ) );
+		return;
+	}
+
+	try {
+		if ( class_exists( 'ET\Builder\Packages\GlobalData\GlobalPreset' ) ) {
+			$presets_data = \ET\Builder\Packages\GlobalData\GlobalPreset::get_data();
+			$presets_data = divi_5_dev_tool_remove_user_created_presets( $presets_data, 'module' );
+			\ET\Builder\Packages\GlobalData\GlobalPreset::save_data( $presets_data );
+		} else {
+			$presets_data = get_option( 'builder_global_presets_d5', array() );
+			$presets_data = is_array( $presets_data ) ? $presets_data : array();
+			$presets_data = divi_5_dev_tool_remove_user_created_presets( $presets_data, 'module' );
+			divi_5_dev_tool_update_single_option( 'builder_global_presets_d5', $presets_data );
+			divi_5_dev_tool_clear_static_resources();
+		}
+
+		wp_send_json_success(
+			array(
+				'message' => 'Module presets reset successfully',
+			)
+		);
+	} catch ( Exception $e ) {
+		wp_send_json_error(
+			array(
+				'message' => 'Failed to reset module presets: ' . $e->getMessage(),
+			)
+		);
+	}
+}
+
+/**
+ * AJAX handler for resetting group presets.
+ */
+function divi_5_dev_tool_reset_group_presets() {
+	if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'divi_5_dev_tool_nonce' ) ) {
+		wp_send_json_error( array( 'message' => 'Security check failed' ) );
+		return;
+	}
+
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_send_json_error( array( 'message' => 'Insufficient permissions' ) );
+		return;
+	}
+
+	try {
+		if ( class_exists( 'ET\Builder\Packages\GlobalData\GlobalPreset' ) ) {
+			$presets_data = \ET\Builder\Packages\GlobalData\GlobalPreset::get_data();
+			$presets_data = divi_5_dev_tool_remove_user_created_presets( $presets_data, 'group' );
+			\ET\Builder\Packages\GlobalData\GlobalPreset::save_data( $presets_data );
+		} else {
+			$presets_data = get_option( 'builder_global_presets_d5', array() );
+			$presets_data = is_array( $presets_data ) ? $presets_data : array();
+			$presets_data = divi_5_dev_tool_remove_user_created_presets( $presets_data, 'group' );
+			divi_5_dev_tool_update_single_option( 'builder_global_presets_d5', $presets_data );
+			divi_5_dev_tool_clear_static_resources();
+		}
+
+		wp_send_json_success(
+			array(
+				'message' => 'Group presets reset successfully',
+			)
+		);
+	} catch ( Exception $e ) {
+		wp_send_json_error(
+			array(
+				'message' => 'Failed to reset group presets: ' . $e->getMessage(),
+			)
+		);
+	}
+}
+
 // Register AJAX handlers.
 add_action( 'wp_ajax_divi_5_dev_tool_get_divi_options', 'divi_5_dev_tool_get_divi_options' );
 add_action( 'wp_ajax_divi_5_dev_tool_update_divi_option', 'divi_5_dev_tool_update_divi_option' );
@@ -540,5 +725,8 @@ add_action( 'wp_ajax_divi_5_dev_tool_delete_divi_option', 'divi_5_dev_tool_delet
 add_action( 'wp_ajax_divi_5_dev_tool_get_presets', 'divi_5_dev_tool_get_presets' );
 add_action( 'wp_ajax_divi_5_dev_tool_update_preset', 'divi_5_dev_tool_update_preset' );
 add_action( 'wp_ajax_divi_5_dev_tool_delete_preset', 'divi_5_dev_tool_delete_preset' );
+add_action( 'wp_ajax_divi_5_dev_tool_reset_global_variables', 'divi_5_dev_tool_reset_global_variables' );
+add_action( 'wp_ajax_divi_5_dev_tool_reset_module_presets', 'divi_5_dev_tool_reset_module_presets' );
+add_action( 'wp_ajax_divi_5_dev_tool_reset_group_presets', 'divi_5_dev_tool_reset_group_presets' );
 
 

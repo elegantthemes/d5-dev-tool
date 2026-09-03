@@ -1,1 +1,0 @@
-export { ToolGenerateModuleSettingsConfigurationContainer } from './container';
