@@ -1187,6 +1187,21 @@
   justify-content: space-between;
   gap: 8px;
 }
+.d5-dev-tool-ai-agent__llm-inference-summary-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.d5-dev-tool-ai-agent__llm-inference-summary-filter {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin: 0;
+  font-size: 11px;
+  color: #333;
+  cursor: pointer;
+  user-select: none;
+}
 .d5-dev-tool-ai-agent__llm-inference-summary-title {
   margin: 0;
   font-size: 12px;

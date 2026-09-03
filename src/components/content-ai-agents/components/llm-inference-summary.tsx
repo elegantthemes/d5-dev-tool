@@ -2,6 +2,7 @@
 import React, {
   ReactElement,
   useMemo,
+  useState,
 } from 'react';
 
 // Local dependencies.
@@ -27,8 +28,10 @@ const formatTokenCount = (count: number, isEstimated = false): string => (
 
 const SummaryTableRow = ({
   row,
+  showEstimatedCost,
 }: {
   row: InferenceSummaryRow;
+  showEstimatedCost: boolean;
 }): ReactElement => (
   <tr>
     <td>
@@ -56,11 +59,11 @@ const SummaryTableRow = ({
       )}
     </td>
     <td>{formatTokenCount(row.payloadTokens, row.isEstimated)}</td>
-    <td>{formatUsdCost(row.payloadCost)}</td>
+    {showEstimatedCost && <td>{formatUsdCost(row.payloadCost)}</td>}
     <td>{formatTokenCount(row.responseTokens, row.isEstimated)}</td>
-    <td>{formatUsdCost(row.responseCost)}</td>
+    {showEstimatedCost && <td>{formatUsdCost(row.responseCost)}</td>}
     <td>{formatTokenCount(row.totalTokens, row.isEstimated)}</td>
-    <td>{formatUsdCost(row.totalCost)}</td>
+    {showEstimatedCost && <td>{formatUsdCost(row.totalCost)}</td>}
   </tr>
 );
 
@@ -70,6 +73,7 @@ const SummaryTableRow = ({
 export const LlmInferenceSummary = ({
   records,
 }: LlmInferenceSummaryProps): ReactElement => {
+  const [showEstimatedCost, setShowEstimatedCost] = useState(false);
   const summary = useMemo(
     () => summarizeInferenceRecords(records),
     [records],
@@ -80,6 +84,9 @@ export const LlmInferenceSummary = ({
   }
 
   const pricingNotice = `Pricing source: Open Router model rates (last updated ${OPEN_ROUTER_PRICING_LAST_UPDATED}).`;
+  const hasNotice = summary.totals.hasEstimatedUsage
+    || (showEstimatedCost && summary.totals.hasUnknownPricing)
+    || showEstimatedCost;
 
   return (
     <div className="d5-dev-tool-ai-agent__llm-inference-summary">
@@ -87,10 +94,20 @@ export const LlmInferenceSummary = ({
         <h4 className="d5-dev-tool-ai-agent__llm-inference-summary-title">
           Summary
         </h4>
-        <CopyDataButton
-          label="Copy Table"
-          getValue={() => formatLlmInferenceSummaryForCopy(records)}
-        />
+        <div className="d5-dev-tool-ai-agent__llm-inference-summary-actions">
+          <label className="d5-dev-tool-ai-agent__llm-inference-summary-filter">
+            <input
+              type="checkbox"
+              checked={showEstimatedCost}
+              onChange={() => setShowEstimatedCost(current => !current)}
+            />
+            <span>Show Estimated Cost</span>
+          </label>
+          <CopyDataButton
+            label="Copy Table"
+            getValue={() => formatLlmInferenceSummaryForCopy(records)}
+          />
+        </div>
       </div>
       <table className="d5-dev-tool-ai-agent__llm-inference-summary-table">
         <thead>
@@ -101,11 +118,11 @@ export const LlmInferenceSummary = ({
             <th>Model</th>
             <th>Response Tool Call</th>
             <th>Payload Token</th>
-            <th>Payload Cost</th>
+            {showEstimatedCost && <th>Payload Cost</th>}
             <th>Response Token</th>
-            <th>Response Cost</th>
+            {showEstimatedCost && <th>Response Cost</th>}
             <th>Total Token</th>
-            <th>Total Cost</th>
+            {showEstimatedCost && <th>Total Cost</th>}
           </tr>
         </thead>
         <tbody>
@@ -113,6 +130,7 @@ export const LlmInferenceSummary = ({
             <SummaryTableRow
               key={row.recordId}
               row={row}
+              showEstimatedCost={showEstimatedCost}
             />
           ))}
         </tbody>
@@ -120,29 +138,31 @@ export const LlmInferenceSummary = ({
           <tr>
             <th colSpan={5}>Totals</th>
             <th>{formatTokenCount(summary.totals.payloadTokens)}</th>
-            <th>{formatUsdCost(summary.totals.payloadCost)}</th>
+            {showEstimatedCost && <th>{formatUsdCost(summary.totals.payloadCost)}</th>}
             <th>{formatTokenCount(summary.totals.responseTokens)}</th>
-            <th>{formatUsdCost(summary.totals.responseCost)}</th>
+            {showEstimatedCost && <th>{formatUsdCost(summary.totals.responseCost)}</th>}
             <th>{formatTokenCount(summary.totals.totalTokens)}</th>
-            <th>{formatUsdCost(summary.totals.totalCost)}</th>
+            {showEstimatedCost && <th>{formatUsdCost(summary.totals.totalCost)}</th>}
           </tr>
         </tfoot>
       </table>
-      <p className="d5-dev-tool-ai-agent__llm-inference-summary-notice">
-        {pricingNotice}
-        {summary.totals.hasEstimatedUsage && (
-          <>
-            {' '}
-            Rows marked with ~ estimate tokens from the captured payload and response because the API did not include usage.
-          </>
-        )}
-        {summary.totals.hasUnknownPricing && (
-          <>
-            {' '}
-            Some completed rows use models without a known Open Router price and show — for cost.
-          </>
-        )}
-      </p>
+      {hasNotice && (
+        <p className="d5-dev-tool-ai-agent__llm-inference-summary-notice">
+          {showEstimatedCost && pricingNotice}
+          {summary.totals.hasEstimatedUsage && (
+            <>
+              {showEstimatedCost && ' '}
+              Rows marked with ~ estimate tokens from the captured payload and response because the API did not include usage.
+            </>
+          )}
+          {showEstimatedCost && summary.totals.hasUnknownPricing && (
+            <>
+              {' '}
+              Some completed rows use models without a known Open Router price and show — for cost.
+            </>
+          )}
+        </p>
+      )}
     </div>
   );
 };

@@ -702,6 +702,23 @@
     gap: 8px;
   }
 
+  &__llm-inference-summary-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  &__llm-inference-summary-filter {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    margin: 0;
+    font-size: 11px;
+    color: #333;
+    cursor: pointer;
+    user-select: none;
+  }
+
   &__llm-inference-summary-title {
     margin: 0;
     font-size: 12px;
