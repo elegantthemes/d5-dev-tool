@@ -5,7 +5,10 @@ import React, {
 } from 'react';
 
 // Local dependencies.
-import { formatLlmInferenceRequestsForCopy } from '../utils/format-llm-inference-requests';
+import {
+  formatLlmInferenceRequestForCopy,
+  formatLlmInferenceRequestsForCopy,
+} from '../utils/format-llm-inference-requests';
 import { formatUsdCost } from '../utils/open-router-pricing';
 import { type NetworkRecord } from '../utils/network-recorder';
 import {
@@ -91,34 +94,48 @@ export const LlmInferenceRequestsDebug = ({
                 id={getLlmInferenceRequestElementId(index + 1)}
                 className="d5-dev-tool-ai-agent__llm-inference-request"
               >
-                <button
-                  type="button"
-                  className="d5-dev-tool-ai-agent__step-header d5-dev-tool-ai-agent__step-header--stacked d5-dev-tool-ai-agent__llm-inference-request-header"
-                  onClick={() => toggle(record.id)}
-                  aria-expanded={requestExpanded}
-                >
-                  <span className="d5-dev-tool-ai-agent__step-header-main">
-                    <span className="d5-dev-tool-ai-agent__llm-inference-request-title">
-                      Request {index + 1}
+                <div className="d5-dev-tool-ai-agent__llm-inference-request-header">
+                  <button
+                    type="button"
+                    className="d5-dev-tool-ai-agent__step-header d5-dev-tool-ai-agent__step-header--stacked d5-dev-tool-ai-agent__llm-inference-request-toggle"
+                    onClick={() => toggle(record.id)}
+                    aria-expanded={requestExpanded}
+                  >
+                    <span className="d5-dev-tool-ai-agent__step-header-main">
+                      <span className="d5-dev-tool-ai-agent__llm-inference-request-title">
+                        Request {index + 1}
+                      </span>
+                      <span className="d5-dev-tool-ai-agent__llm-inference-request-usage">
+                        <span>Input: {formatTokenCount(summary.payloadTokens, summary.isEstimated)}</span>
+                        <span>Output: {formatTokenCount(summary.responseTokens, summary.isEstimated)}</span>
+                        <span>Total: {formatTokenCount(summary.totalTokens, summary.isEstimated)}</span>
+                        <span>Est. cost: {formatUsdCost(summary.totalCost)}</span>
+                      </span>
+                      <span className="d5-dev-tool-ai-agent__llm-inference-request-meta">
+                        <span>Caller: <code>{summary.caller}</code></span>
+                        {summary.subAgent && (
+                          <span>Subagent: {summary.subAgent}</span>
+                        )}
+                        <span>Model: <code>{summary.model}</code></span>
+                      </span>
                     </span>
-                    <span className="d5-dev-tool-ai-agent__llm-inference-request-usage">
-                      <span>Input: {formatTokenCount(summary.payloadTokens, summary.isEstimated)}</span>
-                      <span>Output: {formatTokenCount(summary.responseTokens, summary.isEstimated)}</span>
-                      <span>Total: {formatTokenCount(summary.totalTokens, summary.isEstimated)}</span>
-                      <span>Est. cost: {formatUsdCost(summary.totalCost)}</span>
-                    </span>
-                    <span className="d5-dev-tool-ai-agent__llm-inference-request-meta">
-                      <span>Caller: <code>{summary.caller}</code></span>
-                      {summary.subAgent && (
-                        <span>Subagent: {summary.subAgent}</span>
-                      )}
-                      <span>Model: <code>{summary.model}</code></span>
-                    </span>
-                  </span>
-                  <span className="d5-dev-tool-ai-agent__card-chevron">
-                    {requestExpanded ? '▼' : '▶'}
-                  </span>
-                </button>
+                  </button>
+                  <div className="d5-dev-tool-ai-agent__llm-inference-request-actions">
+                    <CopyDataButton
+                      label="Copy"
+                      getValue={() => formatLlmInferenceRequestForCopy(record, index + 1)}
+                    />
+                    <button
+                      type="button"
+                      className="d5-dev-tool-ai-agent__llm-inference-request-chevron"
+                      onClick={() => toggle(record.id)}
+                      aria-expanded={requestExpanded}
+                      aria-label={requestExpanded ? 'Collapse request' : 'Expand request'}
+                    >
+                      {requestExpanded ? '▼' : '▶'}
+                    </button>
+                  </div>
+                </div>
                 {requestExpanded && (
                   <div className="d5-dev-tool-ai-agent__llm-inference-request-body">
                     <CollapsiblePrompt

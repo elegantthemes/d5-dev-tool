@@ -1247,7 +1247,42 @@
   overflow: hidden;
 }
 .d5-dev-tool-ai-agent__llm-inference-request-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  width: 100%;
+  padding: 8px 10px;
+  background: #f0f0f0;
+}
+.d5-dev-tool-ai-agent__llm-inference-request-header:hover {
+  background: #e8e8e8;
+}
+.d5-dev-tool-ai-agent__llm-inference-request-toggle {
+  flex: 1;
+  min-width: 0;
+  width: auto;
+  padding: 0;
   background: transparent;
+}
+.d5-dev-tool-ai-agent__llm-inference-request-toggle:hover {
+  background: transparent;
+}
+.d5-dev-tool-ai-agent__llm-inference-request-actions {
+  display: flex;
+  align-items: flex-start;
+  flex-shrink: 0;
+  gap: 8px;
+}
+.d5-dev-tool-ai-agent__llm-inference-request-chevron {
+  flex-shrink: 0;
+  margin-top: 1px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  font-size: 11px;
+  color: #666;
+  line-height: 1.4;
+  cursor: pointer;
 }
 .d5-dev-tool-ai-agent__llm-inference-request-body {
   display: flex;
