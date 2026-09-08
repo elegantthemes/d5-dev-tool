@@ -98,12 +98,21 @@ function divi_5_dev_tool_process_update_value( $value ) {
  * @throws Exception If the update fails.
  */
 function divi_5_dev_tool_update_single_option( $key, $value ) {
+	// Divi 5 product settings are stored in dedicated options (e.g. et_divi_global_variables).
+	$product_settings = array(
+		'global_variables',
+		'builder_global_presets_d5',
+	);
+
+	if ( in_array( $key, $product_settings, true ) ) {
+		et_update_option( $key, $value, false, '', '', true );
+		return;
+	}
+
 	// Handle options that need serialization.
 	$serialized_options = array(
 		'et_global_data',
-		'global_variables',
 		'et_global_colors',
-		'builder_global_presets_d5',
 	);
 
 	if ( in_array( $key, $serialized_options, true ) ) {
@@ -580,6 +589,61 @@ function divi_5_dev_tool_get_initial_global_variables() {
 }
 
 /**
+ * Save global variables using Divi's product-setting storage.
+ *
+ * @param array $data Global variables data.
+ *
+ * @return void
+ */
+function divi_5_dev_tool_save_global_variables_option( array $data ) {
+	if ( class_exists( 'ET\Builder\Packages\GlobalData\GlobalData' ) ) {
+		$data = \ET\Builder\Packages\GlobalData\GlobalData::sanitize_global_variables_data( $data );
+	}
+
+	et_update_option( 'global_variables', $data, false, '', '', true );
+}
+
+/**
+ * Reset customizer-linked global color and font defaults.
+ *
+ * @return void
+ */
+function divi_5_dev_tool_reset_customizer_global_defaults() {
+	if ( ! class_exists( 'ET\Builder\Packages\GlobalData\GlobalData' ) ) {
+		return;
+	}
+
+	foreach ( \ET\Builder\Packages\GlobalData\GlobalData::$customizer_colors as $color_data ) {
+		et_update_option( $color_data['option_name'], $color_data['default'] );
+	}
+
+	foreach ( \ET\Builder\Packages\GlobalData\GlobalData::$customizer_fonts as $font_data ) {
+		et_update_option( $font_data['option_name'], $font_data['default'] );
+	}
+}
+
+/**
+ * Remove all user-created global colors.
+ *
+ * @return void
+ */
+function divi_5_dev_tool_reset_global_colors_data() {
+	if ( class_exists( 'ET\Builder\Packages\GlobalData\GlobalData' ) ) {
+		\ET\Builder\Packages\GlobalData\GlobalData::set_global_colors( array() );
+		return;
+	}
+
+	$global_data = maybe_unserialize( et_get_option( 'et_global_data' ) );
+
+	if ( ! is_array( $global_data ) ) {
+		$global_data = array();
+	}
+
+	$global_data['global_colors'] = array();
+	et_update_option( 'et_global_data', $global_data );
+}
+
+/**
  * Remove user-created presets from preset data.
  *
  * @param array  $presets_data Preset data.
@@ -647,15 +711,26 @@ function divi_5_dev_tool_reset_global_variables() {
 	}
 
 	try {
-		$initial_state = divi_5_dev_tool_get_initial_global_variables();
-		divi_5_dev_tool_update_single_option( 'global_variables', $initial_state );
+		// Reset customizer defaults, remove user-created global colors, and wipe all
+		// stored global variables (including archived ones — not just marking them archived).
+		divi_5_dev_tool_reset_customizer_global_defaults();
+		divi_5_dev_tool_reset_global_colors_data();
+		divi_5_dev_tool_save_global_variables_option( divi_5_dev_tool_get_initial_global_variables() );
 		divi_5_dev_tool_clear_static_resources();
 
-		wp_send_json_success(
-			array(
-				'message' => 'Global variables reset successfully',
-			)
+		$response_data = array(
+			'message' => 'Global variables reset successfully',
 		);
+
+		if ( class_exists( 'ET\Builder\Packages\GlobalData\GlobalData' ) ) {
+			$response_data['globalVariables'] = json_decode(
+				wp_json_encode( \ET\Builder\Packages\GlobalData\GlobalData::get_global_variables() ),
+				true
+			);
+			$response_data['globalColors'] = \ET\Builder\Packages\GlobalData\GlobalData::get_global_colors();
+		}
+
+		wp_send_json_success( $response_data );
 	} catch ( Exception $e ) {
 		wp_send_json_error(
 			array(

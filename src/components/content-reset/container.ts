@@ -23,6 +23,35 @@ const resetActionMap: Record<ResetAction, string> = {
   'group-presets': 'divi_5_dev_tool_reset_group_presets',
 };
 
+const syncGlobalDataAfterReset = (globalVariables: unknown, globalColors: unknown) => {
+  const diviData = (window as Window & {
+    divi?: {
+      data?: {
+        dispatch: (store: string) => {
+          addGlobalVariables?: (variables: unknown) => void;
+          updateGlobalVariablesBackup?: () => void;
+          updateGlobalColors?: (colors: unknown) => void;
+        };
+      };
+    };
+  }).divi?.data;
+
+  const dispatch = diviData?.dispatch?.('divi/global-data');
+
+  if (!dispatch) {
+    return;
+  }
+
+  if (globalVariables && 'function' === typeof dispatch.addGlobalVariables) {
+    dispatch.addGlobalVariables(globalVariables);
+    dispatch.updateGlobalVariablesBackup?.();
+  }
+
+  if (globalColors && 'function' === typeof dispatch.updateGlobalColors) {
+    dispatch.updateGlobalColors(globalColors);
+  }
+};
+
 /**
  * Container component for the ContentReset component.
  */
@@ -73,6 +102,10 @@ export const ContentResetContainer = () => {
 
       if (!result.success) {
         throw new Error(result.data?.message || 'Failed to reset data');
+      }
+
+      if ('global-variables' === action) {
+        syncGlobalDataAfterReset(result.data?.globalVariables, result.data?.globalColors);
       }
 
       setSuccessMessage(result.data?.message || 'Reset completed successfully');
