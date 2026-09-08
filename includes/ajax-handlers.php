@@ -534,6 +534,35 @@ function divi_5_dev_tool_delete_preset() {
 
 
 /**
+ * AJAX handler for getting all global variables data.
+ */
+function divi_5_dev_tool_get_global_variables() {
+	if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'divi_5_dev_tool_nonce' ) ) {
+		wp_die( 'Security check failed' );
+	}
+
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_die( 'Insufficient permissions' );
+	}
+
+	if ( class_exists( 'ET\Builder\Packages\GlobalData\GlobalData' ) ) {
+		$global_variables = \ET\Builder\Packages\GlobalData\GlobalData::get_global_variables();
+		$global_variables = json_decode( wp_json_encode( $global_variables ), true );
+	} else {
+		$global_variables = et_get_option( 'global_variables', array(), '', true, false, '', '', true );
+		$global_variables = maybe_unserialize( $global_variables );
+	}
+
+	if ( ! is_array( $global_variables ) ) {
+		$global_variables = divi_5_dev_tool_get_initial_global_variables();
+	}
+
+	$processed_global_variables = divi_5_dev_tool_process_serialized_data( $global_variables );
+
+	wp_send_json_success( $processed_global_variables );
+}
+
+/**
  * Get the initial global variables state.
  *
  * @return array Initial global variables data.
@@ -725,6 +754,7 @@ add_action( 'wp_ajax_divi_5_dev_tool_delete_divi_option', 'divi_5_dev_tool_delet
 add_action( 'wp_ajax_divi_5_dev_tool_get_presets', 'divi_5_dev_tool_get_presets' );
 add_action( 'wp_ajax_divi_5_dev_tool_update_preset', 'divi_5_dev_tool_update_preset' );
 add_action( 'wp_ajax_divi_5_dev_tool_delete_preset', 'divi_5_dev_tool_delete_preset' );
+add_action( 'wp_ajax_divi_5_dev_tool_get_global_variables', 'divi_5_dev_tool_get_global_variables' );
 add_action( 'wp_ajax_divi_5_dev_tool_reset_global_variables', 'divi_5_dev_tool_reset_global_variables' );
 add_action( 'wp_ajax_divi_5_dev_tool_reset_module_presets', 'divi_5_dev_tool_reset_module_presets' );
 add_action( 'wp_ajax_divi_5_dev_tool_reset_group_presets', 'divi_5_dev_tool_reset_group_presets' );

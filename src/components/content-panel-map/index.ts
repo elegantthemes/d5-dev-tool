@@ -14,6 +14,7 @@ import { ContentClipboardContainer } from '../content-clipboard';
 import { ContentEventsContainer } from '../content-events'
 import { ContentDiviOptionsContainer } from '../content-divi-options';
 import { ContentPresetsContainer } from '../content-presets';
+import { ContentGlobalVariablesContainer } from '../content-global-variables';
 import { ContentGlobalModulesSyncWorthy } from '../content-global-modules-sync-worthy';
 import { ContentGlobalModulesTemplates } from '../content-global-modules-templates';
 import { ContentCanvasStates } from '../content-canvas-states';
@@ -117,5 +118,10 @@ export const contentPanelMap = [
     id: 'presets',
     label: __('Presets', 'et_builder'),
     component: ContentPresetsContainer,
+  },
+  {
+    id: 'global-variables',
+    label: __('Global Variables', 'et_builder'),
+    component: ContentGlobalVariablesContainer,
   },
 ];
