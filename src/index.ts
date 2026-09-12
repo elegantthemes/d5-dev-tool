@@ -2,9 +2,14 @@ import jQuery from 'jquery';
 import { forEach } from 'lodash';
 
 // Divi dependencies
+import { registerBuilderBarButton } from '@divi/app-ui';
 import { dispatch } from '@divi/data';
 
 // WordPress dependencies.
+import {
+  addAction,
+  didAction,
+} from '@wordpress/hooks';
 import {
   __,
   sprintf,
@@ -30,64 +35,59 @@ declare global {
   }
 }
 
-// Ensure that the following function is registered on app window.
-// @todo this top / window detection should be abstracted into util function.
-if (window.top !== window) {
-
-  // Toggle function for the dev tool
+/**
+ * Register dev tool builder bar button and modals.
+ *
+ * @since ??
+ */
+const registerDevTool = () => {
+  // Toggle function for the dev tool.
   const toggleDevTool = () => {
-    // Check current modal state using the selector
     const isDevToolOpen = (window.divi as any).data.select('divi/modal-library').isModalActive(name);
 
     if (isDevToolOpen) {
-      // Close the modal
       dispatch('divi/modal-library').close({ name });
     } else {
-      // Open the modal
       dispatch('divi/modal-library').open({ name });
       dispatch('divi/app-ui').setElementProperty({
         elementName:   'sidebarLeft',
         propertyGroup: 'dimension',
         propertyName:  'width',
-        value: 500
+        value:         500,
       });
     }
   };
 
-  // Add custom button to BuilderBar
-  // Note: Using the same name as the modal so the button automatically becomes active when modal is open
-  (dispatch('divi/app-ui') as any).addBuilderBarButton({
-    name: name, // Use the same name as the modal for automatic active state
-    label: 'Dev Tool',
+  // Add custom button to BuilderBar.
+  // Note: Using the same name as the modal so the button automatically becomes active when modal is open.
+  registerBuilderBarButton({
+    name,
+    label:   'Dev Tool',
     iconSvg: { name: 'divi/setting' },
-    order: 50, // Place it after other built-in buttons
+    order:   50,
     onClick: toggleDevTool,
   });
 
-  // On script load, register `divi/divi-5-dev-tool` modal to modals registry.
   dispatch('divi/modal-library').addModal({
     name,
-    label: __('D5 Dev Tool', 'et_builder'),
+    label:           __('D5 Dev Tool', 'et_builder'),
     type:            'multiInstanceModal',
     component:       Divi5DevTool as unknown as ReactNode,
     sidebarPosition: 'left',
   });
 
-  // Register every panel as modal. This way every panel can be opened as its own modal so if the need
-  // to look into multiple panel at the same time arise, it can be done.
   forEach(contentPanelMap, ({ label, id, component }) => {
     const modalName             = `${name}--${id}`;
     const panelAsModalComponent = (() => createElement(PanelBasedModal, {
-      children: createElement(component as any, {}),
+      children:  createElement(component as any, {}),
       modalName,
       label,
     })) as unknown as ReactNode;
 
-    // Register the panel as modal.
     dispatch('divi/modal-library').addModal({
-      name: modalName,
-      label: sprintf(__('D5 Dev Tool: %s', 'et_builder'), label),
-      type: 'multiInstanceModal',
+      name:      modalName,
+      label:     sprintf(__('D5 Dev Tool: %s', 'et_builder'), label),
+      type:      'multiInstanceModal',
       component: panelAsModalComponent,
     });
   });
@@ -95,15 +95,15 @@ if (window.top !== window) {
   forEach(aiAgentsPanelMap, ({ label, id, component }) => {
     const modalName             = `${name}--${id}`;
     const panelAsModalComponent = (() => createElement(PanelBasedModal, {
-      children: createElement(component as any, {}),
+      children:  createElement(component as any, {}),
       modalName,
       label,
     })) as unknown as ReactNode;
 
     dispatch('divi/modal-library').addModal({
-      name: modalName,
-      label: sprintf(__('D5 Dev Tool: %s', 'et_builder'), label),
-      type: 'multiInstanceModal',
+      name:      modalName,
+      label:     sprintf(__('D5 Dev Tool: %s', 'et_builder'), label),
+      type:      'multiInstanceModal',
       component: panelAsModalComponent,
     });
   });
@@ -111,17 +111,23 @@ if (window.top !== window) {
   forEach(toolsPanelMap, ({ label, id, component }) => {
     const modalName             = `${name}--${id}`;
     const panelAsModalComponent = (() => createElement(PanelBasedModal, {
-      children: createElement(component as any, {}),
+      children:  createElement(component as any, {}),
       modalName,
       label,
     })) as unknown as ReactNode;
 
     dispatch('divi/modal-library').addModal({
-      name: modalName,
-      label: sprintf(__('D5 Dev Tool: %s', 'et_builder'), label),
-      type: 'multiInstanceModal',
+      name:      modalName,
+      label:     sprintf(__('D5 Dev Tool: %s', 'et_builder'), label),
+      type:      'multiInstanceModal',
       component: panelAsModalComponent,
     });
   });
+};
 
+// Third-party scripts load after visual-builder, so register immediately if stores are ready.
+if (didAction('divi.visualBuilder.registerStores.after')) {
+  registerDevTool();
+} else {
+  addAction('divi.visualBuilder.registerStores.after', 'divi5DevTool', registerDevTool);
 }

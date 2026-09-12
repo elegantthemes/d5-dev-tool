@@ -23,9 +23,11 @@ module.exports = {
     'react-dom': ['vendor', 'ReactDOM'],
 
     // WordPress dependencies.
+    '@wordpress/hooks': ['vendor', 'wp', 'hooks'],
     '@wordpress/i18n': ['vendor', 'wp', 'i18n'],
 
     // Divi dependencies.
+    '@divi/app-ui': ['divi', 'appUi'],
     '@divi/data': ['divi', 'data'],
     '@divi/error-boundary': ['divi', 'errorBoundary'],
     '@divi/field-library': ['divi', 'fieldLibrary'],
@@ -48,7 +50,12 @@ module.exports = {
       // Handle `.tsx` and `.ts` files.
       {
         test: /\.tsx?$/,
-        use: 'ts-loader',
+        use: {
+          loader: 'ts-loader',
+          options: {
+            transpileOnly: true,
+          },
+        },
         exclude: /node_modules/,
       },
 

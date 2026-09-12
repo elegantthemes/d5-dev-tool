@@ -62,38 +62,42 @@ function divi_5_dev_tool_enqueue_scripts() {
 	if ( ( function_exists( 'et_builder_d5_enabled' ) && et_builder_d5_enabled() && et_core_is_fb_enabled() ) || ( class_exists( 'ET\Builder\Framework\Utility\Conditions' ) && Conditions::is_tb_admin_screen() ) ) {
 		$plugin_dir_url = plugin_dir_url( __FILE__ );
 
-		PackageBuildManager::register_package_build( [
-			'name'    => 'divi-5-dev-tool-builder-bundle',
-			'version' => '0.1.2.' . rand(1, 10000000),
-			'script'  => [
-				'src'                => "{$plugin_dir_url}scripts/bundle.js",
+		PackageBuildManager::register_package_build(
+			[
+				'name'    => 'divi-5-dev-tool-builder-bundle',
+				'version' => '0.1.2.' . rand( 1, 10000000 ),
+				'script'  => [
+					'src'                => "{$plugin_dir_url}scripts/bundle.js",
 				'deps'               => [
-					// 'divi-visual-builder',
+					'visual-builder',
+					'divi-modal-library',
+					'divi-vendor-wp-hooks',
 					'divi-data',
 					'divi-error-boundary',
 					'divi-modal',
 					'divi-object-renderer',
 				],
-				'args'               => true,
-				'defer'              => false,
-				'async'              => false,
-				'data_app_window'    => [],
-				'data_top_window'    => [],
-				'enqueue_top_window' => false,
-				'enqueue_app_window' => true,
-			],
-			'style' => [
-				'src'                => "{$plugin_dir_url}styles/bundle.css",
-				'deps'               => [],
-				'args'               => [],
-				'enqueue_top_window' => true,
-				'enqueue_app_window' => false,
-				'media'              => 'all',
+					'args'               => true,
+					'defer'              => false,
+					'async'              => false,
+					'data_app_window'    => [],
+					'data_top_window'    => [],
+					'enqueue_top_window' => false,
+					'enqueue_app_window' => true,
+				],
+				'style' => [
+					'src'                => "{$plugin_dir_url}styles/bundle.css",
+					'deps'               => [],
+					'args'               => [],
+					'enqueue_top_window' => true,
+					'enqueue_app_window' => false,
+					'media'              => 'all',
+				],
 			]
-		] );
+		);
 	}
 }
-add_action( 'et_fb_framework_loaded', 'divi_5_dev_tool_enqueue_scripts', 20 );
+add_action( 'divi_visual_builder_assets_before_enqueue_scripts', 'divi_5_dev_tool_enqueue_scripts' );
 
 /**
  * Enqueue object renderer on top window.
@@ -129,4 +133,4 @@ function divi_5_dev_tool_localize_script() {
 		);
 	}
 }
-add_action( 'wp_enqueue_scripts', 'divi_5_dev_tool_localize_script', 21 );
+add_action( 'divi_visual_builder_assets_after_enqueue_app_window_scripts', 'divi_5_dev_tool_localize_script' );

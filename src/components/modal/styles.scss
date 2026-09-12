@@ -6,6 +6,9 @@
 
 .d5-dev-tool-ai-agents-panel {
   padding: 12px 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 
   .d5-dev-tool-content-panel {
     padding: 8px;

@@ -6,7 +6,8 @@
   "author": "Elegant Themes",
   "scripts": {
     "start": "NODE_ENV=development webpack -w --config webpack.config.js --progress",
-    "build": "NODE_ENV=production webpack --config webpack.config.js --progress"
+    "build": "NODE_ENV=production webpack --config webpack.config.js --progress",
+    "test": "node scripts/run-unit-tests.js"
   },
   "devDependencies": {
     "@babel/core": "^7.17.5",
@@ -47,6 +48,7 @@
     "webpack-cli": "^4.9.2"
   },
   "dependencies": {
+    "chart.js": "^4.4.9",
     "classnames": "^2.3.1",
     "lodash": "^4.17.21"
   }

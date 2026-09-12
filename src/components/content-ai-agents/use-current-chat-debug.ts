@@ -98,7 +98,7 @@ type ChatMessageMetrics = {
   isStreaming?: boolean;
 };
 
-type CurrentChatDebugState = Omit<CurrentChatDebug, 'chatMetrics'> & {
+type CurrentChatDebugState = Omit<CurrentChatDebug, 'chatMetrics' | 'turnKey' | 'promptText' | 'turnWindow'> & {
   chatMetricsInputs: {
     messages: ChatMessageMetrics[];
     contextUsageByAgent: ReturnType<typeof extractContextUsageByAgent>;
@@ -114,6 +114,9 @@ export type CurrentChatDebug = {
   messages: unknown[];
   title: string;
   threadId: string;
+  turnKey: string;
+  promptText: string;
+  turnWindow: ReturnType<typeof getLatestTurnWindow>;
   isStreaming: boolean;
   interactionMode: string;
   pendingInput: unknown;
@@ -135,6 +138,58 @@ export type CurrentChatDebug = {
   rules: unknown[];
   hasCredentials: boolean | null;
   chatMetrics: ChatMetrics;
+};
+
+type ChatMessageLike = ChatMessageMetrics & {
+  content?: unknown;
+};
+
+const flattenChatMessageContent = (content: unknown): string => {
+  if ('string' === typeof content) {
+    return content;
+  }
+
+  if (!Array.isArray(content)) {
+    return '';
+  }
+
+  return content
+    .map(item => {
+      if ('string' === typeof item) {
+        return item;
+      }
+
+      if (item && 'object' === typeof item && 'string' === typeof (item as { text?: string }).text) {
+        return (item as { text: string }).text;
+      }
+
+      return '';
+    })
+    .join('\n');
+};
+
+/**
+ * Reads the latest user-turn id and prompt text from chat messages.
+ */
+export const getLatestUserPrompt = (
+  messages: ChatMessageMetrics[] | unknown[],
+): { id: string; text: string } | null => {
+  const list = messages as ChatMessageLike[];
+
+  for (let index = list.length - 1; 0 <= index; index -= 1) {
+    const message = list[index];
+
+    if ('user' !== message?.role) {
+      continue;
+    }
+
+    return {
+      id: message.id ?? '',
+      text: flattenChatMessageContent(message.content).trim(),
+    };
+  }
+
+  return null;
 };
 
 /**
@@ -263,10 +318,8 @@ export const useCurrentChatDebug = (): CurrentChatDebug | null => {
       chatMetricsInputs.turnWindow.startedAt,
       chatMetricsInputs.turnWindow.endedAt,
     );
-    const latestUserMessage = [...chatMetricsInputs.messages].reverse().find(
-      message => 'user' === message.role,
-    );
-    const turnKey = `${rest.currentChatId}:${latestUserMessage?.id ?? 'no-turn'}`;
+    const latestUserPrompt = getLatestUserPrompt(chatMetricsInputs.messages);
+    const turnKey = `${rest.currentChatId}:${latestUserPrompt?.id || 'no-turn'}`;
     const inferenceTotal = computeInferenceTotalTokens(turnInferenceRecords);
 
     if (turnKey !== turnTokenPeakRef.current.key) {
@@ -292,6 +345,9 @@ export const useCurrentChatDebug = (): CurrentChatDebug | null => {
 
     return {
       ...rest,
+      turnKey,
+      promptText: latestUserPrompt?.text ?? '',
+      turnWindow: chatMetricsInputs.turnWindow,
       chatMetrics: {
         ...chatMetrics,
         totalTokens: Math.max(chatMetrics.totalTokens, turnTokenPeakRef.current.total),

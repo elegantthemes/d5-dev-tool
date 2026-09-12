@@ -18,9 +18,33 @@ import { ContentPanel } from '../content-panel';
 import { ContentPanelWrapper } from '../content-panel-wrapper';
 import { contentPanelMap } from '../content-panel-map';
 import { aiAgentsPanelMap } from '../content-ai-agents-panel-map';
+import { HistorySelector, HistorySelectorHost } from '../content-ai-agents/components/history-selector';
+import { usePersistHistory } from '../content-ai-agents/use-persist-history';
 import { toolsPanelMap } from '../content-tools-panel-map';
 import { Divi5DevToolProps } from './types';
 import './styles.scss';
+
+/**
+ * AI Agents panel with run-history capture mounted above the tab list.
+ */
+const AiAgentsPanel = () => {
+  usePersistHistory();
+
+  return (
+    <HistorySelectorHost>
+      <div className="d5-dev-tool-ai-agents-panel">
+        <HistorySelector />
+        <ContentPanelWrapper>
+          {aiAgentsPanelMap.map(({ id, label, component: Component }) => (
+            <ContentPanel key={id} id={id} label={label}>
+              <Component />
+            </ContentPanel>
+          ))}
+        </ContentPanelWrapper>
+      </div>
+    </HistorySelectorHost>
+  );
+};
 
 /**
  * Divi 5 Dev Tool modal component.
@@ -62,15 +86,7 @@ const Divi5DevTool = ({
             </div>
           </PanelContainer>
           <PanelContainer id="ai-agents" label={__('AI Agents', 'et_builder')}>
-            <div className="d5-dev-tool-ai-agents-panel">
-              <ContentPanelWrapper>
-                {aiAgentsPanelMap.map(({ id, label, component: Component }) => (
-                  <ContentPanel key={id} id={id} label={label}>
-                    <Component />
-                  </ContentPanel>
-                ))}
-              </ContentPanelWrapper>
-            </div>
+            <AiAgentsPanel />
           </PanelContainer>
           <PanelContainer id="tools" label={__('Tools', 'et_builder')}>
             <div style={{
