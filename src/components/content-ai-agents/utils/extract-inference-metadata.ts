@@ -1,13 +1,16 @@
 // Local dependencies.
 import { type NetworkRecord } from './network-recorder';
 
-type PayloadMessage = {
+export type PayloadMessage = {
   role?: string;
   type?: string;
+  name?: string;
   content?: string | Array<{ type?: string; text?: string }>;
+  arguments?: string;
+  output?: string;
 };
 
-type ParsedPayload = {
+export type ParsedPayload = {
   model?: string;
   input?: PayloadMessage[];
   prompt?: string;
@@ -35,7 +38,10 @@ const CALLER_PATTERNS: Array<{ id: InferenceCaller; pattern: RegExp }> = [
   { id: 'agent', pattern: /You are the Divi 5 expert/i },
 ];
 
-const parsePayload = (requestBody: string | null): ParsedPayload | null => {
+/**
+ * Parses a captured inference request body into the known payload shape.
+ */
+export const parsePayload = (requestBody: string | null): ParsedPayload | null => {
   if (!requestBody?.trim()) {
     return null;
   }
@@ -47,7 +53,10 @@ const parsePayload = (requestBody: string | null): ParsedPayload | null => {
   }
 };
 
-const collectMessageText = (message: PayloadMessage): string => {
+/**
+ * Flattens a payload message's `content` field into plain text.
+ */
+export const collectMessageText = (message: PayloadMessage): string => {
   const { content } = message;
 
   if ('string' === typeof content) {

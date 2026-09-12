@@ -3,6 +3,7 @@
 
 # misc
 .DS_Store
+.tmp-tests
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
