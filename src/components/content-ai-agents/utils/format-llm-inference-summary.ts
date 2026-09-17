@@ -8,19 +8,23 @@ import {
 } from './summarize-inference-records';
 import { type NetworkRecord } from './network-recorder';
 
-const SUMMARY_TABLE_HEADERS = [
-  'Request',
-  'Caller',
-  'Subagent',
-  'Model',
-  'Response Tool Call',
-  'Payload Token',
-  'Payload Cost',
-  'Response Token',
-  'Response Cost',
-  'Total Token',
-  'Total Cost',
+const SUMMARY_TABLE_COLUMNS = [
+  { header: 'Request', isCost: false },
+  { header: 'Caller', isCost: false },
+  { header: 'Subagent', isCost: false },
+  { header: 'Model', isCost: false },
+  { header: 'Response Tool Call', isCost: false },
+  { header: 'Payload Token', isCost: false },
+  { header: 'Payload Cost', isCost: true },
+  { header: 'Response Token', isCost: false },
+  { header: 'Response Cost', isCost: true },
+  { header: 'Total Token', isCost: false },
+  { header: 'Total Cost', isCost: true },
 ] as const;
+
+const pickVisibleCells = <T,>(cells: readonly T[], showEstimatedCost: boolean): T[] => (
+  cells.filter((_, index) => showEstimatedCost || !SUMMARY_TABLE_COLUMNS[index].isCost)
+);
 
 const formatTokenCount = (count: number, isEstimated = false): string => (
   `${isEstimated ? '~' : ''}${count.toLocaleString()}`
@@ -40,7 +44,10 @@ const formatToolCallsForCopy = (toolCalls: string[]): string => {
   return toolCalls.map(name => `\`${name}\``).join(', ');
 };
 
-const formatSummaryDataRow = (row: InferenceSummaryRow): string => formatMarkdownTableRow([
+const formatSummaryDataRow = (
+  row: InferenceSummaryRow,
+  showEstimatedCost: boolean,
+): string => formatMarkdownTableRow(pickVisibleCells([
   `Request ${row.requestNumber}`,
   row.caller,
   row.subAgent || '—',
@@ -52,9 +59,12 @@ const formatSummaryDataRow = (row: InferenceSummaryRow): string => formatMarkdow
   formatUsdCost(row.responseCost),
   formatTokenCount(row.totalTokens, row.isEstimated),
   formatUsdCost(row.totalCost),
-]);
+], showEstimatedCost));
 
-const formatSummaryTotalsRow = (summary: InferenceSummary): string => formatMarkdownTableRow([
+const formatSummaryTotalsRow = (
+  summary: InferenceSummary,
+  showEstimatedCost: boolean,
+): string => formatMarkdownTableRow(pickVisibleCells([
   '**Totals**',
   '',
   '',
@@ -66,24 +76,30 @@ const formatSummaryTotalsRow = (summary: InferenceSummary): string => formatMark
   formatUsdCost(summary.totals.responseCost),
   formatTokenCount(summary.totals.totalTokens),
   formatUsdCost(summary.totals.totalCost),
-]);
+], showEstimatedCost));
 
 /**
  * Serializes the LLM inference summary table as a markdown table for clipboard export.
+ * Cost columns are included only when they are visible in the UI.
  */
-export const formatLlmInferenceSummaryForCopy = (records: NetworkRecord[]): string => {
+export const formatLlmInferenceSummaryForCopy = (
+  records: NetworkRecord[],
+  showEstimatedCost = false,
+): string => {
   const summary = summarizeInferenceRecords(records);
 
   if (0 === summary.rows.length) {
     return '';
   }
 
-  const headerRow = formatMarkdownTableRow([...SUMMARY_TABLE_HEADERS]);
-  const separatorRow = formatMarkdownTableRow(
-    SUMMARY_TABLE_HEADERS.map(() => '---'),
+  const headers = pickVisibleCells(
+    SUMMARY_TABLE_COLUMNS.map(column => column.header),
+    showEstimatedCost,
   );
-  const dataRows = summary.rows.map(formatSummaryDataRow);
-  const totalsRow = formatSummaryTotalsRow(summary);
+  const headerRow = formatMarkdownTableRow(headers);
+  const separatorRow = formatMarkdownTableRow(headers.map(() => '---'));
+  const dataRows = summary.rows.map(row => formatSummaryDataRow(row, showEstimatedCost));
+  const totalsRow = formatSummaryTotalsRow(summary, showEstimatedCost);
 
   return [
     headerRow,

@@ -105,7 +105,7 @@ export const LlmInferenceSummary = ({
           </label>
           <CopyDataButton
             label="Copy Table"
-            getValue={() => formatLlmInferenceSummaryForCopy(records)}
+            getValue={() => formatLlmInferenceSummaryForCopy(records, showEstimatedCost)}
           />
         </div>
       </div>
