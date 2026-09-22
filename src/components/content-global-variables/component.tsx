@@ -1,5 +1,8 @@
 // External dependencies.
-import React, { ReactElement } from 'react';
+import React, {
+  ReactElement,
+  useState,
+} from 'react';
 
 // WordPress dependencies.
 import { __, sprintf } from '@wordpress/i18n';
@@ -9,6 +12,7 @@ import {
   CollapsibleObjectRenderer,
 } from './collapsible-object-renderer';
 import {
+  CollapsibleControlSignal,
   ContentGlobalVariablesProps,
   GlobalVariableType,
   GlobalVariablesData,
@@ -49,20 +53,16 @@ const hasGlobalVariableData = (globalVariables: GlobalVariablesData | null): boo
 export const ContentGlobalVariables = ({
   globalVariables,
 }: ContentGlobalVariablesProps): ReactElement => {
-  if (!hasGlobalVariableData(globalVariables)) {
-    return (
-      <div className="d5-dev-tool-global-variables">
-        <div className="d5-dev-tool-global-variables-header">
-          <div className="d5-dev-tool-global-variables-header-title">
-            {__('Global Variables', 'divi-5-dev-tool')}
-          </div>
-        </div>
-        <div className="d5-dev-tool-global-variables-empty">
-          {__('No global variables found', 'divi-5-dev-tool')}
-        </div>
-      </div>
-    );
-  }
+  const [treeControl, setTreeControl] = useState<CollapsibleControlSignal | null>(null);
+  const hasData = hasGlobalVariableData(globalVariables);
+
+  const handleCollapseAll = () => {
+    setTreeControl({ action: 'collapse', token: Date.now() });
+  };
+
+  const handleExpandAll = () => {
+    setTreeControl({ action: 'expand', token: Date.now() });
+  };
 
   return (
     <div className="d5-dev-tool-global-variables">
@@ -70,50 +70,77 @@ export const ContentGlobalVariables = ({
         <div className="d5-dev-tool-global-variables-header-title">
           {__('Global Variables', 'divi-5-dev-tool')}
         </div>
+        {hasData && (
+          <div className="d5-dev-tool-global-variables-header-actions">
+            <button
+              type="button"
+              className="d5-dev-tool-global-variables__tree-button"
+              onClick={handleCollapseAll}
+              title={__('Collapse', 'divi-5-dev-tool')}
+            >
+              {__('Collapse', 'divi-5-dev-tool')}
+            </button>
+            <button
+              type="button"
+              className="d5-dev-tool-global-variables__tree-button"
+              onClick={handleExpandAll}
+              title={__('Expand', 'divi-5-dev-tool')}
+            >
+              {__('Expand', 'divi-5-dev-tool')}
+            </button>
+          </div>
+        )}
       </div>
 
-      <div className="d5-dev-tool-global-variables-content">
-        <div className="d5-dev-tool-global-variables-sections">
-          {globalVariables && GLOBAL_VARIABLE_TYPES.map((type) => {
-            const typeValues = globalVariables[type] ?? {};
-            const entryCount = getGroupEntryCount(typeValues);
-            const activeCount = getVariablesVisibleInDiviUI(typeValues).length;
-
-            if (0 === entryCount) {
-              return null;
-            }
-
-            return (
-              <div className="d5-dev-tool-global-variables-section" key={type}>
-                <h3>
-                  <span>
-                    {getTypeLabel(type)}
-                    {' '}
-                    <span className="d5-dev-tool-global-variables-section-count">
-                      {sprintf(
-                        /* translators: 1: active variable count, 2: total variable count */
-                        __('(%1$s active / %2$s total)', 'divi-5-dev-tool'),
-                        activeCount,
-                        entryCount,
-                      )}
-                    </span>
-                  </span>
-                </h3>
-                {0 === activeCount && 0 < entryCount && (
-                  <p className="d5-dev-tool-global-variables-section-note">
-                    {__('All variables in this group are archived and hidden from the Variables modal.', 'divi-5-dev-tool')}
-                  </p>
-                )}
-                <CollapsibleObjectRenderer
-                  values={typeValues}
-                  groupKey={type}
-                  maxDepth={15}
-                />
-              </div>
-            );
-          })}
+      {!hasData ? (
+        <div className="d5-dev-tool-global-variables-empty">
+          {__('No global variables found', 'divi-5-dev-tool')}
         </div>
-      </div>
+      ) : (
+        <div className="d5-dev-tool-global-variables-content">
+          <div className="d5-dev-tool-global-variables-sections">
+            {globalVariables && GLOBAL_VARIABLE_TYPES.map((type) => {
+              const typeValues = globalVariables[type] ?? {};
+              const entryCount = getGroupEntryCount(typeValues);
+              const activeCount = getVariablesVisibleInDiviUI(typeValues).length;
+
+              if (0 === entryCount) {
+                return null;
+              }
+
+              return (
+                <div className="d5-dev-tool-global-variables-section" key={type}>
+                  <h3>
+                    <span>
+                      {getTypeLabel(type)}
+                      {' '}
+                      <span className="d5-dev-tool-global-variables-section-count">
+                        {sprintf(
+                          /* translators: 1: active variable count, 2: total variable count */
+                          __('(%1$s active / %2$s total)', 'divi-5-dev-tool'),
+                          activeCount,
+                          entryCount,
+                        )}
+                      </span>
+                    </span>
+                  </h3>
+                  {0 === activeCount && 0 < entryCount && (
+                    <p className="d5-dev-tool-global-variables-section-note">
+                      {__('All variables in this group are archived and hidden from the Variables modal.', 'divi-5-dev-tool')}
+                    </p>
+                  )}
+                  <CollapsibleObjectRenderer
+                    values={typeValues}
+                    groupKey={type}
+                    maxDepth={15}
+                    parentControl={treeControl}
+                  />
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

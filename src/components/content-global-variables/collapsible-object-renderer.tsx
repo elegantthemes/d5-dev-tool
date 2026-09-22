@@ -101,6 +101,7 @@ export const CollapsibleObjectRenderer = ({
 }: CollapsibleObjectRendererProps): ReactElement => {
   const [expand, setExpand] = useState(true);
   const [descendantControl, setDescendantControl] = useState<CollapsibleControlSignal | null>(null);
+  const isGroupRoot = Boolean(groupKey && 0 === currentDepth && !propertyName);
 
   const entries = useMemo(
     () => Object.entries(values ?? {}),
@@ -117,11 +118,21 @@ export const CollapsibleObjectRenderer = ({
       return;
     }
 
+    // Group roots match their own Collapse/Expand buttons: keep the group open
+    // on collapse, expand the group on expand, and always forward the signal.
+    if (isGroupRoot) {
+      if ('expand' === parentControl.action) {
+        setExpand(true);
+      }
+
+      setDescendantControl(parentControl);
+      return;
+    }
+
     setExpand('expand' === parentControl.action);
     setDescendantControl(parentControl);
-  }, [parentControl?.action, parentControl?.token]);
+  }, [isGroupRoot, parentControl?.action, parentControl?.token]);
 
-  const isGroupRoot = Boolean(groupKey && 0 === currentDepth && !propertyName);
   const isVariableHeader = Boolean(groupKey && propertyName && variableId && 1 === currentDepth);
   const isArchived = isVariableHeader && 'archived' === getVariableStatus(values as Record<string, unknown>);
   const displayTitle = isVariableHeader
