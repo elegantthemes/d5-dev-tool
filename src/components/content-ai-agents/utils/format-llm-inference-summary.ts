@@ -1,5 +1,8 @@
 // Local dependencies.
-import { formatInferenceResponseToolCalls } from './extract-inference-tool-calls';
+import {
+  formatInferenceToolCallRef,
+  formatInferenceToolCallRefs,
+} from './extract-inference-tool-calls';
 import { formatUsdCost } from './open-router-pricing';
 import {
   summarizeInferenceRecords,
@@ -13,6 +16,7 @@ const SUMMARY_TABLE_COLUMNS = [
   { header: 'Caller', isCost: false },
   { header: 'Subagent', isCost: false },
   { header: 'Model', isCost: false },
+  { header: 'Tool Call Inputs', isCost: false },
   { header: 'Response Tool Call', isCost: false },
   { header: 'Payload Token', isCost: false },
   { header: 'Payload Cost', isCost: true },
@@ -36,12 +40,12 @@ const formatMarkdownTableRow = (cells: string[]): string => (
   `| ${cells.map(escapeMarkdownTableCell).join(' | ')} |`
 );
 
-const formatToolCallsForCopy = (toolCalls: string[]): string => {
+const formatToolCallsForCopy = (toolCalls: InferenceSummaryRow['responseToolCalls']): string => {
   if (0 === toolCalls.length) {
-    return formatInferenceResponseToolCalls(toolCalls);
+    return formatInferenceToolCallRefs(toolCalls);
   }
 
-  return toolCalls.map(name => `\`${name}\``).join(', ');
+  return toolCalls.map(toolCall => `\`${formatInferenceToolCallRef(toolCall)}\``).join(', ');
 };
 
 const formatSummaryDataRow = (
@@ -52,6 +56,7 @@ const formatSummaryDataRow = (
   row.caller,
   row.subAgent || '—',
   `\`${row.model}\``,
+  formatToolCallsForCopy(row.payloadToolCalls),
   formatToolCallsForCopy(row.responseToolCalls),
   formatTokenCount(row.payloadTokens, row.isEstimated),
   formatUsdCost(row.payloadCost),
@@ -66,6 +71,7 @@ const formatSummaryTotalsRow = (
   showEstimatedCost: boolean,
 ): string => formatMarkdownTableRow(pickVisibleCells([
   '**Totals**',
+  '',
   '',
   '',
   '',

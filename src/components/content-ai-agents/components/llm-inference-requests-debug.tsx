@@ -16,7 +16,7 @@ import {
   getLlmInferenceRequestElementId,
 } from '../utils/summarize-inference-records';
 import { CollapseControls } from './collapse-controls';
-import { CollapsiblePrompt } from './collapsible-prompt';
+import { CollapsiblePayload } from './collapsible-payload';
 import { CollapsibleResponse } from './collapsible-response';
 import { CopyDataButton } from './copy-data-button';
 import { LlmInferenceSummary } from './llm-inference-summary';
@@ -138,7 +138,7 @@ export const LlmInferenceRequestsDebug = ({
                 </div>
                 {requestExpanded && (
                   <div className="d5-dev-tool-ai-agent__llm-inference-request-body">
-                    <CollapsiblePrompt
+                    <CollapsiblePayload
                       label="Payload"
                       content={record.requestBody ?? ''}
                       variant="tool-request"

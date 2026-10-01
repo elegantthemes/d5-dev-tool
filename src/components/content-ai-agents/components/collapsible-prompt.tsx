@@ -15,6 +15,7 @@ type CollapsiblePromptProps = {
   label: string;
   content: string;
   variant: PromptVariant;
+  defaultExpanded?: boolean;
 };
 
 const variantClassMap: Record<PromptVariant, string> = {
@@ -32,8 +33,9 @@ export const CollapsiblePrompt = ({
   label,
   content,
   variant,
+  defaultExpanded = false,
 }: CollapsiblePromptProps): ReactElement => {
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(defaultExpanded);
   const [copyState, setCopyState] = useState<'idle' | 'copied' | 'error'>('idle');
   const formattedContent = useMemo(() => formatJsonContent(content), [content]);
   const hasContent = Boolean(content.trim());

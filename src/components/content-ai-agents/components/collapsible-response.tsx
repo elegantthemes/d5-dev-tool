@@ -11,8 +11,16 @@ import { copyTextToClipboard } from '../utils/copy-to-clipboard';
 import { formatJsonContent } from '../utils/format-json-content';
 import { parseSseResponseLines } from '../utils/parse-sse-response-lines';
 import { type PromptVariant } from './collapsible-prompt';
+import { ResponseFocusView } from './response-focus-view';
+import { ViewTabs } from './view-tabs';
 
-type ResponseViewMode = 'formatted' | 'plain';
+type ResponseViewMode = 'focus' | 'formatted' | 'plain';
+
+const RESPONSE_VIEW_TABS = [
+  { id: 'focus', label: 'Focus' },
+  { id: 'formatted', label: 'Formatted' },
+  { id: 'plain', label: 'Plain' },
+];
 
 type CollapsibleResponseProps = {
   label: string;
@@ -67,14 +75,14 @@ const SseEventBox = ({
 };
 
 /**
- * Response body with formatted SSE event boxes and a plain raw-text view.
+ * Response body with a focused completed-output view, formatted SSE events, and raw text.
  */
 export const CollapsibleResponse = ({
   label,
   content,
   variant,
 }: CollapsibleResponseProps): ReactElement => {
-  const [viewMode, setViewMode] = useState<ResponseViewMode>('formatted');
+  const [viewMode, setViewMode] = useState<ResponseViewMode>('focus');
   const [isPlainExpanded, setIsPlainExpanded] = useState(false);
   const [copyState, setCopyState] = useState<'idle' | 'copied' | 'error'>('idle');
   const [expandedByIndex, setExpandedByIndex] = useState<Record<number, boolean>>({});
@@ -142,34 +150,12 @@ export const CollapsibleResponse = ({
       <div className="d5-dev-tool-ai-agent__block-label-row">
         <span className="d5-dev-tool-ai-agent__block-label">{label}</span>
         <div className="d5-dev-tool-ai-agent__response-actions">
-          <div
-            className="d5-dev-tool-ai-agent__response-view-tabs"
-            role="tablist"
-            aria-label={`${label} view`}
-          >
-            <button
-              type="button"
-              role="tab"
-              aria-selected={'formatted' === viewMode}
-              className={classnames('d5-dev-tool-ai-agent__response-view-tab', {
-                'd5-dev-tool-ai-agent__response-view-tab--active': 'formatted' === viewMode,
-              })}
-              onClick={() => setViewMode('formatted')}
-            >
-              Formatted
-            </button>
-            <button
-              type="button"
-              role="tab"
-              aria-selected={'plain' === viewMode}
-              className={classnames('d5-dev-tool-ai-agent__response-view-tab', {
-                'd5-dev-tool-ai-agent__response-view-tab--active': 'plain' === viewMode,
-              })}
-              onClick={() => setViewMode('plain')}
-            >
-              Plain
-            </button>
-          </div>
+          <ViewTabs
+            ariaLabel={`${label} view`}
+            tabs={RESPONSE_VIEW_TABS}
+            value={viewMode}
+            onChange={nextMode => setViewMode(nextMode as ResponseViewMode)}
+          />
           <button
             type="button"
             className="d5-dev-tool-ai-agent__copy-button"
@@ -180,7 +166,9 @@ export const CollapsibleResponse = ({
         </div>
       </div>
 
-      {'formatted' === viewMode ? (
+      {'focus' === viewMode ? (
+        <ResponseFocusView content={content} />
+      ) : 'formatted' === viewMode ? (
         <div className="d5-dev-tool-ai-agent__sse-events">
           {0 < sseLines.length && (
             <div className="d5-dev-tool-ai-agent__sse-events-toolbar">

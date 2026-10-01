@@ -1,6 +1,12 @@
 type ParsedChunk = Record<string, unknown>;
 
 const FUNCTION_CALL_TYPES = new Set(['function_call', 'tool_use']);
+const FUNCTION_OUTPUT_TYPES = new Set(['function_call_output', 'tool_result']);
+
+export type InferenceToolCallRef = {
+  name: string;
+  id: string;
+};
 
 const parseJsonOrNull = (text: string): ParsedChunk | null => {
   try {
@@ -10,55 +16,121 @@ const parseJsonOrNull = (text: string): ParsedChunk | null => {
   }
 };
 
-const addToolName = (names: string[], seen: Set<string>, name: unknown): void => {
-  if ('string' !== typeof name) {
-    return;
+const asRecord = (value: unknown): ParsedChunk | null => {
+  if (!value || 'object' !== typeof value || Array.isArray(value)) {
+    return null;
   }
 
-  const trimmed = name.trim();
+  return value as ParsedChunk;
+};
 
-  if (!trimmed || seen.has(trimmed)) {
-    return;
+const asTrimmedString = (value: unknown): string | null => {
+  if ('string' !== typeof value) {
+    return null;
   }
 
-  seen.add(trimmed);
-  names.push(trimmed);
+  const trimmed = value.trim();
+
+  return trimmed || null;
+};
+
+const getToolCallName = (record: ParsedChunk): string | null => (
+  asTrimmedString(record.name) ?? asTrimmedString(asRecord(record.function)?.name)
+);
+
+const getFunctionCallDisplayId = (record: ParsedChunk): string => (
+  asTrimmedString(record.id)
+  ?? asTrimmedString(record.item_id)
+  ?? ''
+);
+
+const getFunctionCallPairId = (record: ParsedChunk): string => (
+  asTrimmedString(record.call_id)
+  ?? asTrimmedString(record.tool_call_id)
+  ?? asTrimmedString(record.id)
+  ?? ''
+);
+
+/**
+ * Formats a captured tool invocation as `name (id)` for the summary table.
+ */
+export const formatInferenceToolCallRef = (toolCall: InferenceToolCallRef): string => {
+  if (toolCall.id) {
+    return `${toolCall.name} (${toolCall.id})`;
+  }
+
+  return toolCall.name;
 };
 
 /**
- * Collects a tool name from a Responses API / chat-completions tool-call item.
- *
- * Available-tool definitions (`tools: [{ type: "function", name }]`) are ignored
- * because they are not invocations.
+ * Formats invoked tool refs for the summary table and clipboard export.
  */
+export const formatInferenceToolCallRefs = (toolCalls: InferenceToolCallRef[]): string => (
+  0 === toolCalls.length ? '—' : toolCalls.map(formatInferenceToolCallRef).join(', ')
+);
+
+/**
+ * @deprecated Use `formatInferenceToolCallRefs`.
+ */
+export const formatInferenceResponseToolCalls = formatInferenceToolCallRefs;
+
+const addToolCallRef = (
+  toolCalls: InferenceToolCallRef[],
+  seen: Set<string>,
+  name: string | null,
+  id: string,
+): void => {
+  if (!name) {
+    return;
+  }
+
+  const key = id || name;
+
+  if (seen.has(key)) {
+    return;
+  }
+
+  seen.add(key);
+  toolCalls.push({
+    name,
+    id,
+  });
+};
+
 const collectFromOutputItem = (
   item: unknown,
-  names: string[],
+  toolCalls: InferenceToolCallRef[],
   seen: Set<string>,
 ): void => {
-  if (!item || 'object' !== typeof item) {
+  const record = asRecord(item);
+
+  if (!record) {
     return;
   }
 
-  const record = item as ParsedChunk;
-  const type = record.type;
+  const type = asTrimmedString(record.type);
 
-  if (FUNCTION_CALL_TYPES.has(String(type))) {
-    addToolName(names, seen, record.name);
+  if (type && FUNCTION_CALL_TYPES.has(type)) {
+    addToolCallRef(toolCalls, seen, getToolCallName(record), getFunctionCallDisplayId(record));
 
     return;
   }
 
-  const fn = record.function;
+  const fn = asRecord(record.function);
 
-  if (fn && 'object' === typeof fn) {
-    addToolName(names, seen, (fn as ParsedChunk).name);
+  if (fn) {
+    addToolCallRef(
+      toolCalls,
+      seen,
+      getToolCallName(record),
+      getFunctionCallDisplayId(record),
+    );
   }
 };
 
 const collectFromChunk = (
   chunk: ParsedChunk,
-  names: string[],
+  toolCalls: InferenceToolCallRef[],
   seen: Set<string>,
 ): void => {
   const type = chunk.type;
@@ -67,20 +139,23 @@ const collectFromChunk = (
     'response.output_item.added' === type
     || 'response.output_item.done' === type
   ) {
-    collectFromOutputItem(chunk.item, names, seen);
+    collectFromOutputItem(chunk.item, toolCalls, seen);
   }
 
   if ('response.function_call_arguments.done' === type) {
-    addToolName(names, seen, chunk.name);
+    addToolCallRef(
+      toolCalls,
+      seen,
+      getToolCallName(chunk),
+      getFunctionCallDisplayId(chunk),
+    );
   }
 
-  const response = chunk.response && 'object' === typeof chunk.response
-    ? chunk.response as ParsedChunk
-    : null;
+  const response = asRecord(chunk.response);
   const output = response?.output ?? chunk.output;
 
   if (Array.isArray(output)) {
-    output.forEach(item => collectFromOutputItem(item, names, seen));
+    output.forEach(item => collectFromOutputItem(item, toolCalls, seen));
   }
 
   const choices = chunk.choices;
@@ -90,21 +165,17 @@ const collectFromChunk = (
   }
 
   choices.forEach(choice => {
-    if (!choice || 'object' !== typeof choice) {
+    const record = asRecord(choice);
+
+    if (!record) {
       return;
     }
 
-    const record = choice as ParsedChunk;
-    const message = record.message ?? record.delta;
+    const message = asRecord(record.message) ?? asRecord(record.delta);
+    const nestedToolCalls = message?.tool_calls;
 
-    if (!message || 'object' !== typeof message) {
-      return;
-    }
-
-    const toolCalls = (message as ParsedChunk).tool_calls;
-
-    if (Array.isArray(toolCalls)) {
-      toolCalls.forEach(item => collectFromOutputItem(item, names, seen));
+    if (Array.isArray(nestedToolCalls)) {
+      nestedToolCalls.forEach(item => collectFromOutputItem(item, toolCalls, seen));
     }
   });
 };
@@ -151,24 +222,98 @@ const collectChunksFromText = (text: string): ParsedChunk[] => {
  * Reads which tools the model invoked from a captured inference response body.
  *
  * Streaming Responses API events and completed JSON payloads are both supported.
- * Tool names are unique and keep first-seen order.
+ * Entries keep first-seen order and are unique by function-call id.
  */
 export const extractInferenceResponseToolCalls = (
   responseBody: string | null | undefined,
-): string[] => {
-  const names: string[] = [];
+): InferenceToolCallRef[] => {
+  const toolCalls: InferenceToolCallRef[] = [];
   const seen = new Set<string>();
 
   collectChunksFromText(responseBody ?? '').forEach(chunk => {
-    collectFromChunk(chunk, names, seen);
+    collectFromChunk(chunk, toolCalls, seen);
   });
 
-  return names;
+  return toolCalls;
+};
+
+const collectPayloadInputToolCall = (
+  record: ParsedChunk,
+  ordered: Array<InferenceToolCallRef & { pairId: string }>,
+  outputPairIds: Set<string>,
+): void => {
+  const type = asTrimmedString(record.type);
+  const role = asTrimmedString(record.role);
+
+  if (
+    (type && FUNCTION_CALL_TYPES.has(type))
+    || ('function' === type && getToolCallName(record))
+  ) {
+    ordered.push({
+      name: getToolCallName(record) ?? 'Unknown tool',
+      id: getFunctionCallDisplayId(record),
+      pairId: getFunctionCallPairId(record),
+    });
+
+    return;
+  }
+
+  if (Array.isArray(record.tool_calls)) {
+    record.tool_calls.forEach(item => {
+      const nested = asRecord(item);
+
+      if (!nested) {
+        return;
+      }
+
+      collectPayloadInputToolCall(nested, ordered, outputPairIds);
+    });
+  }
+
+  if ((type && FUNCTION_OUTPUT_TYPES.has(type)) || 'tool' === role) {
+    const pairId = getFunctionCallPairId(record);
+
+    if (pairId) {
+      outputPairIds.add(pairId);
+    }
+  }
 };
 
 /**
- * Formats invoked tool names for the summary table and clipboard export.
+ * Reads prior tool calls from a captured inference payload `input` array.
+ *
+ * Only function calls that also have a matching output are included.
  */
-export const formatInferenceResponseToolCalls = (toolCalls: string[]): string => (
-  0 === toolCalls.length ? '—' : toolCalls.join(', ')
-);
+export const extractInferencePayloadToolCalls = (
+  requestBody: string | null | undefined,
+): InferenceToolCallRef[] => {
+  const parsed = parseJsonOrNull(requestBody ?? '');
+
+  if (!parsed || !Array.isArray(parsed.input)) {
+    return [];
+  }
+
+  const ordered: Array<InferenceToolCallRef & { pairId: string }> = [];
+  const outputPairIds = new Set<string>();
+
+  parsed.input.forEach(value => {
+    const record = asRecord(value);
+
+    if (!record) {
+      return;
+    }
+
+    collectPayloadInputToolCall(record, ordered, outputPairIds);
+  });
+
+  if (0 === outputPairIds.size) {
+    return [];
+  }
+
+  return ordered
+    .filter(toolCall => outputPairIds.has(toolCall.pairId))
+    .map(({ name, id }) => ({
+      name,
+      id,
+    }));
+};

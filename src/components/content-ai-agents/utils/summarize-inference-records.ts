@@ -3,7 +3,11 @@ import {
   extractInferenceMetadata,
   isInferenceRecordComplete,
 } from './extract-inference-metadata';
-import { extractInferenceResponseToolCalls } from './extract-inference-tool-calls';
+import {
+  extractInferencePayloadToolCalls,
+  extractInferenceResponseToolCalls,
+  type InferenceToolCallRef,
+} from './extract-inference-tool-calls';
 import { resolveInferenceUsage } from './extract-inference-usage';
 import { calculateInferenceCosts } from './open-router-pricing';
 import { type NetworkRecord } from './network-recorder';
@@ -14,7 +18,8 @@ export type InferenceSummaryRow = {
   caller: string;
   subAgent: string;
   model: string;
-  responseToolCalls: string[];
+  payloadToolCalls: InferenceToolCallRef[];
+  responseToolCalls: InferenceToolCallRef[];
   payloadTokens: number;
   payloadCost: number | null;
   responseTokens: number;
@@ -82,6 +87,7 @@ export const buildInferenceRecordSummary = (
     caller,
     subAgent,
     model,
+    payloadToolCalls: extractInferencePayloadToolCalls(record.requestBody),
     responseToolCalls: extractInferenceResponseToolCalls(record.responseBody),
     payloadTokens: inputTokens,
     payloadCost: costs.payloadCost,

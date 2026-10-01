@@ -7,7 +7,11 @@ import React, {
 
 // Local dependencies.
 import { OPEN_ROUTER_PRICING_LAST_UPDATED } from '../constants/open-router-model-pricing';
-import { formatInferenceResponseToolCalls } from '../utils/extract-inference-tool-calls';
+import {
+  formatInferenceToolCallRef,
+  formatInferenceToolCallRefs,
+  type InferenceToolCallRef,
+} from '../utils/extract-inference-tool-calls';
 import { formatLlmInferenceSummaryForCopy } from '../utils/format-llm-inference-summary';
 import { formatUsdCost } from '../utils/open-router-pricing';
 import {
@@ -22,9 +26,70 @@ type LlmInferenceSummaryProps = {
   records: NetworkRecord[];
 };
 
+const SUBAGENT_PREVIEW_LENGTH = 50;
+
 const formatTokenCount = (count: number, isEstimated = false): string => (
   `${isEstimated ? '~' : ''}${count.toLocaleString()}`
 );
+
+const ToolCallRefsCell = ({ toolCalls }: { toolCalls: InferenceToolCallRef[] }): ReactElement => {
+  if (0 === toolCalls.length) {
+    return <>{formatInferenceToolCallRefs(toolCalls)}</>;
+  }
+
+  return (
+    <>
+      {toolCalls.map((toolCall, index) => (
+        <React.Fragment key={`${toolCall.id || toolCall.name}-${index}`}>
+          {0 < index && ', '}
+          <code>{formatInferenceToolCallRef(toolCall)}</code>
+        </React.Fragment>
+      ))}
+    </>
+  );
+};
+
+const SubagentCell = ({ text }: { text: string }): ReactElement => {
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  if (!text) {
+    return <>{'—'}</>;
+  }
+
+  if (text.length <= SUBAGENT_PREVIEW_LENGTH) {
+    return <>{text}</>;
+  }
+
+  if (isExpanded) {
+    return (
+      <span className="d5-dev-tool-ai-agent__subagent-cell">
+        {text}
+        {' '}
+        <button
+          type="button"
+          className="d5-dev-tool-ai-agent__subagent-collapse"
+          onClick={() => setIsExpanded(false)}
+        >
+          collapse
+        </button>
+      </span>
+    );
+  }
+
+  return (
+    <span className="d5-dev-tool-ai-agent__subagent-cell">
+      {text.slice(0, SUBAGENT_PREVIEW_LENGTH)}
+      <button
+        type="button"
+        className="d5-dev-tool-ai-agent__subagent-ellipsis"
+        onClick={() => setIsExpanded(true)}
+        aria-label="Expand subagent prompt"
+      >
+        ...
+      </button>
+    </span>
+  );
+};
 
 const SummaryTableRow = ({
   row,
@@ -44,20 +109,10 @@ const SummaryTableRow = ({
       </button>
     </td>
     <td><code>{row.caller}</code></td>
-    <td>{row.subAgent || '—'}</td>
+    <td><SubagentCell text={row.subAgent} /></td>
     <td><code>{row.model}</code></td>
-    <td>
-      {0 === row.responseToolCalls.length ? (
-        formatInferenceResponseToolCalls(row.responseToolCalls)
-      ) : (
-        row.responseToolCalls.map((name, index) => (
-          <React.Fragment key={name}>
-            {0 < index && ', '}
-            <code>{name}</code>
-          </React.Fragment>
-        ))
-      )}
-    </td>
+    <td><ToolCallRefsCell toolCalls={row.payloadToolCalls} /></td>
+    <td><ToolCallRefsCell toolCalls={row.responseToolCalls} /></td>
     <td>{formatTokenCount(row.payloadTokens, row.isEstimated)}</td>
     {showEstimatedCost && <td>{formatUsdCost(row.payloadCost)}</td>}
     <td>{formatTokenCount(row.responseTokens, row.isEstimated)}</td>
@@ -116,6 +171,7 @@ export const LlmInferenceSummary = ({
             <th>Caller</th>
             <th>Subagent</th>
             <th>Model</th>
+            <th>Tool Call Inputs</th>
             <th>Response Tool Call</th>
             <th>Payload Token</th>
             {showEstimatedCost && <th>Payload Cost</th>}
@@ -136,7 +192,7 @@ export const LlmInferenceSummary = ({
         </tbody>
         <tfoot>
           <tr>
-            <th colSpan={5}>Totals</th>
+            <th colSpan={6}>Totals</th>
             <th>{formatTokenCount(summary.totals.payloadTokens)}</th>
             {showEstimatedCost && <th>{formatUsdCost(summary.totals.payloadCost)}</th>}
             <th>{formatTokenCount(summary.totals.responseTokens)}</th>

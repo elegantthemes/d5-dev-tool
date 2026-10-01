@@ -8,6 +8,7 @@ export type SseResponseLine = {
   sequenceNumber: number | null;
   formattedJson: string;
   summary: string;
+  parsed: ParsedChunk | null;
 };
 
 const parseJsonOrNull = (text: string): ParsedChunk | null => {
@@ -40,6 +41,7 @@ const buildJsonLine = (
     sequenceNumber,
     formattedJson: JSON.stringify(parsed, null, 2),
     summary: 0 < summaryParts.length ? summaryParts.join(' · ') : `Event ${lineNumber}`,
+    parsed,
   };
 };
 
@@ -51,6 +53,7 @@ const buildDoneLine = (lineNumber: number, rawLine: string): SseResponseLine => 
   sequenceNumber: null,
   formattedJson: '[DONE]',
   summary: '[DONE]',
+  parsed: null,
 });
 
 const buildOtherLine = (lineNumber: number, rawLine: string): SseResponseLine => {
@@ -65,6 +68,7 @@ const buildOtherLine = (lineNumber: number, rawLine: string): SseResponseLine =>
     sequenceNumber: null,
     formattedJson: trimmed,
     summary: summary || `Line ${lineNumber}`,
+    parsed: null,
   };
 };
 

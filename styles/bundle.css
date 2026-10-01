@@ -957,6 +957,7 @@
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 3;
+  max-height: 4.5em;
   overflow: hidden;
 }
 .d5-dev-tool-ai-agent__prompt--json {
@@ -965,6 +966,7 @@
 }
 .d5-dev-tool-ai-agent__prompt--collapsed.d5-dev-tool-ai-agent__prompt--json {
   -webkit-line-clamp: 8;
+  max-height: 12em;
   overflow: hidden;
 }
 .d5-dev-tool-ai-agent__prompt-hint {
@@ -979,14 +981,14 @@
   gap: 8px;
   flex-shrink: 0;
 }
-.d5-dev-tool-ai-agent__response-view-tabs {
+.d5-dev-tool-ai-agent__view-tabs, .d5-dev-tool-ai-agent__response-view-tabs {
   display: inline-flex;
   border: 1px solid #c9c9c9;
   border-radius: 4px;
   overflow: hidden;
   background: #fff;
 }
-.d5-dev-tool-ai-agent__response-view-tab {
+.d5-dev-tool-ai-agent__view-tab, .d5-dev-tool-ai-agent__response-view-tab {
   padding: 2px 8px;
   border: 0;
   background: transparent;
@@ -997,15 +999,118 @@
   letter-spacing: normal;
   cursor: pointer;
 }
-.d5-dev-tool-ai-agent__response-view-tab + .d5-dev-tool-ai-agent__response-view-tab {
+.d5-dev-tool-ai-agent__view-tab + .d5-dev-tool-ai-agent__view-tab, .d5-dev-tool-ai-agent__view-tab + .d5-dev-tool-ai-agent__response-view-tab, .d5-dev-tool-ai-agent__response-view-tab + .d5-dev-tool-ai-agent__view-tab, .d5-dev-tool-ai-agent__response-view-tab + .d5-dev-tool-ai-agent__response-view-tab {
   border-left: 1px solid #c9c9c9;
 }
-.d5-dev-tool-ai-agent__response-view-tab:hover {
+.d5-dev-tool-ai-agent__view-tab:hover, .d5-dev-tool-ai-agent__response-view-tab:hover {
   background: #f7f7f7;
 }
-.d5-dev-tool-ai-agent__response-view-tab--active {
+.d5-dev-tool-ai-agent__view-tab--active, .d5-dev-tool-ai-agent__response-view-tab--active {
   background: #eef2ff;
   color: #312e81;
+}
+.d5-dev-tool-ai-agent__focus {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 8px 10px 10px;
+}
+.d5-dev-tool-ai-agent__focus-section {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.d5-dev-tool-ai-agent__focus-section-title {
+  margin: 0;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #444;
+}
+.d5-dev-tool-ai-agent__focus-model {
+  display: inline-block;
+  padding: 2px 6px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.8);
+  font-size: 11px;
+  word-break: break-all;
+}
+.d5-dev-tool-ai-agent__focus-tool-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.d5-dev-tool-ai-agent__focus-tool-list code {
+  display: inline-block;
+  padding: 2px 6px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.8);
+  font-size: 10px;
+}
+.d5-dev-tool-ai-agent__focus-value {
+  display: block;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  width: 100%;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+}
+.d5-dev-tool-ai-agent__focus-value--collapsed {
+  max-height: 12em;
+  overflow: hidden;
+}
+.d5-dev-tool-ai-agent__focus-input {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.d5-dev-tool-ai-agent__focus-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.65);
+  overflow: hidden;
+}
+.d5-dev-tool-ai-agent__focus-item-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 6px 8px 0;
+}
+.d5-dev-tool-ai-agent__focus-item-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: #333;
+  word-break: break-word;
+}
+.d5-dev-tool-ai-agent__focus-item-meta {
+  padding: 0 8px;
+}
+.d5-dev-tool-ai-agent__focus-item .d5-dev-tool-ai-agent__block {
+  margin: 0 8px 8px;
+}
+.d5-dev-tool-ai-agent__focus-empty {
+  margin: 0;
+  padding: 10px;
+  color: #666;
+  font-size: 11px;
+}
+.d5-dev-tool-ai-agent__focus-empty-inline {
+  margin: 0;
+  color: #666;
+  font-size: 11px;
+}
+.d5-dev-tool-ai-agent__focus-item .d5-dev-tool-ai-agent__focus-empty-inline {
+  padding: 0 8px 8px;
 }
 .d5-dev-tool-ai-agent__sse-events {
   display: flex;
@@ -1516,6 +1621,38 @@
 .d5-dev-tool-ai-agent__llm-inference-summary-table code {
   font-size: 10px;
   word-break: break-word;
+}
+.d5-dev-tool-ai-agent__subagent-cell {
+  display: inline;
+  word-break: break-word;
+}
+.d5-dev-tool-ai-agent__subagent-ellipsis {
+  padding: 0;
+  border: 0;
+  margin: 0;
+  background: transparent;
+  color: #6c2eb9;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+.d5-dev-tool-ai-agent__subagent-ellipsis:hover {
+  text-decoration: underline;
+}
+.d5-dev-tool-ai-agent__subagent-collapse {
+  display: inline-block;
+  margin-left: 4px;
+  padding: 1px 6px;
+  border: 1px solid #c9c9c9;
+  border-radius: 4px;
+  background: #fff;
+  color: #444;
+  font-size: 10px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.d5-dev-tool-ai-agent__subagent-collapse:hover {
+  background: #f7f7f7;
 }
 .d5-dev-tool-ai-agent__llm-inference-summary-notice {
   margin: 0;
